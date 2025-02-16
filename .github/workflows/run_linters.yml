@@ -32,28 +32,14 @@ jobs:
         run: |
           poetry install --with dev
 
-      - name: Run Pyright on rxconf
-        run: poetry run pyright rxconf
+      - name: Run Pyright on vaultx
+        run: poetry run pyright vaultx
 
-      - name: Run Ruff on rxconf
-        run: poetry run ruff check rxconf
+      - name: Run Ruff on vaultx
+        run: poetry run ruff check vaultx
 
-      - name: Run Mypy on rxconf
-        run: poetry run mypy rxconf
-
-      - name: Run Pyright on docs_src
-        run: poetry run pyright docs_src
-
-      - name: Run Ruff on docs_src
-        run: poetry run ruff check docs_src
-
-      - name: Run Mypy on docs_src
-        run: |
-          if [ -n "$(find docs_src -name '*.py' -o -name '*.pyi')" ]; then
-            poetry run mypy docs_src
-          else
-            echo "No .py or .pyi files found in docs_src directory. Skipping Mypy."
-          fi
+      - name: Run Mypy on vaultx
+        run: poetry run mypy vaultx
 
       - name: Run Pyright on tests
         run: poetry run pyright tests

@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "vaultx"
+version = "0.0.0"
+description = "Python 3.x httpx client for HashiCorp's Vault"
+authors = ["klukashka <klukin0202@yandex.ru>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9, <4.0"
+
+[tool.poetry.dev-dependencies]
+black = "^25.1.0"
+isort = "^6.0.0"
+pyright = "^1.1.394"
+ruff = "^0.9.6"
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+skip-string-normalization = true
+exclude = '''
+(
+  | \.\*
+  | files
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+multi_line_output = 3
+default_section = "THIRDPARTY"
+lines_after_imports = 2
+no_lines_before = "LOCALFOLDER"
+include_trailing_comma = true
+
+[tool.pyright]
+typeCheckingMode = "standard"
+reportUnusedImport = true
+reportUnnecessaryTypeIgnoreComment = false
+reportMissingImports = true
+reportGeneralTypeIssues = true
+
+[tool.ruff]
+line-length = 120
+preview = true
+
+[tool.ruff.lint]
+exclude = []
+ignore = []
+select = ["A", "B", "C", "E", "F", "N", "Q", "W"]
+extend-select = ["UP035", "SIM", "ISC", "RET", "PIE"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

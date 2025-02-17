@@ -35,6 +35,7 @@ class VaultxError(Exception):
 class HTTPError(Exception):
     """
     Vaultx exception for handling http errors
+    HTTP status codes used throughout the API: https://www.vaultproject.io/api-docs
     """
 
     def __init__(

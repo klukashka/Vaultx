@@ -32,7 +32,7 @@ class VaultxError(Exception):
         super().__init__(message)
 
 
-class HTTPException(Exception):
+class HTTPError(Exception):
     """
     Vaultx exception for handling http errors
     """

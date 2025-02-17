@@ -3,6 +3,7 @@ import http
 import sys
 import typing as tp
 from collections.abc import Mapping
+from typing import Optional
 
 
 if sys.version_info >= (3, 10):
@@ -36,7 +37,9 @@ class HTTPException(Exception):
     Vaultx exception for handling http errors
     """
 
-    def __init__(self, status_code: int, detail: str | None = None, headers: Mapping[str, str] | None = None) -> None:
+    def __init__(
+        self, status_code: int, detail: Optional[str] = None, headers: Optional[Mapping[str, str]] = None
+    ) -> None:
         if detail is None:
             detail = http.HTTPStatus(status_code).phrase
         self.status_code = status_code

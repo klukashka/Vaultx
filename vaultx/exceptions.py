@@ -39,16 +39,23 @@ class HTTPError(Exception):
     """
 
     def __init__(
-        self, status_code: int, detail: Optional[str] = None, headers: Optional[Mapping[str, str]] = None
+        self,
+        status_code: int,
+        method: Optional[str] = None,
+        url: Optional[str] = None,
+        detail: Optional[str] = None,
+        headers: Optional[Mapping[str, str]] = None,
     ) -> None:
         if detail is None:
             detail = http.HTTPStatus(status_code).phrase
         self.status_code = status_code
+        self.method = method
+        self.url = url
         self.detail = detail
         self.headers = headers
 
     def __str__(self) -> str:
-        return f"{self.status_code}: {self.detail}"
+        return f"{self.status_code}: {self.detail}, method: {self.method}, URL: {self.url}"
 
     def __repr__(self) -> str:
         class_name = self.__class__.__name__

@@ -2,7 +2,7 @@
 Some definitions for type checking purposes
 """
 
-from typing import Tuple, Union
+from typing import Union
 
 
-CertTypes = Union[str, Tuple[str, str], Tuple[str, str, str]]
+CertTypes = Union[str, tuple[str, str], tuple[str, str, str]]

@@ -6,9 +6,9 @@ from typing import Any, Optional, Union
 
 import httpx
 from httpx import Response
-from utils import replace_double_slashes_to_single, urljoin
 
 from vaultx.constants.client import DEFAULT_URL
+from vaultx.utils import replace_double_slashes_to_single, urljoin
 from . import _types, exceptions
 from .exceptions import VaultxError
 
@@ -87,7 +87,7 @@ class Adapter(MetaAdapter):
         self.strict_http = strict_http
         self.request_header = request_header
 
-        self._kwargs = {
+        self._kwargs: dict[str, Any] = {
             "cert": cert,
             "verify": verify,
             "timeout": timeout,
@@ -104,13 +104,13 @@ class Adapter(MetaAdapter):
             return cls(
                 base_uri=adapter.base_uri,
                 token=adapter.token,
-                **adapter._kwargs,
                 follow_redirects=adapter.follow_redirects,
                 client=adapter.client,
                 namespace=adapter.namespace,
                 ignore_exceptions=adapter.ignore_exceptions,
                 strict_http=adapter.strict_http,
                 request_header=adapter.request_header,
+                **adapter._kwargs,
             )
         raise exceptions.VaultxError(
             "'from_adapter' method of Adapter class should receive Adapter instance as a parameter"
@@ -189,12 +189,12 @@ class Adapter(MetaAdapter):
         Performs a login request.
 
         Associated request is typically to a path prefixed with "/v1/auth" and optionally stores the client token sent
-            in the resulting Vault response for use by the :py:meth:`hvac.adapters.Adapter` instance under the _adapter
+            in the resulting Vault response for use by the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter
             Client attribute.
 
         :param url: Path to send the authentication request to.
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
-            attribute on the :py:meth:`hvac.adapters.Adapter` instance under the _adapter Client attribute.
+            attribute on the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
         :param kwargs: Additional keyword arguments to include in the params sent with the request.
         """
         response = self.post(url, **kwargs)
@@ -295,7 +295,7 @@ class RawAdapter(Adapter):
         if wrap_ttl:
             headers["X-Vault-Wrap-TTL"] = str(wrap_ttl)
 
-        _kwargs = self._kwargs.get("timeout", {})
+        _kwargs: dict[Any, Any] = {"timeout": self._kwargs.get("timeout")}
         _kwargs.update(kwargs)
 
         if self.strict_http and method.lower() in ("list",):
@@ -419,7 +419,7 @@ class AsyncAdapter(MetaAdapter):
         self.strict_http = strict_http
         self.request_header = request_header
 
-        self._kwargs = {
+        self._kwargs: dict[str, Any] = {
             "cert": cert,
             "verify": verify,
             "timeout": timeout,
@@ -432,17 +432,17 @@ class AsyncAdapter(MetaAdapter):
         cls: tp.Type["AsyncAdapter"],
         adapter: object,
     ) -> "AsyncAdapter":
-        if isinstance(adapter, AsyncAdapter) and not isinstance(adapter.token, CoroutineType):
+        if isinstance(adapter, AsyncAdapter):
             return cls(
                 base_uri=adapter.base_uri,
                 token=adapter.token,
-                **adapter._kwargs,
                 follow_redirects=adapter.follow_redirects,
                 client=adapter.client,
                 namespace=adapter.namespace,
                 ignore_exceptions=adapter.ignore_exceptions,
                 strict_http=adapter.strict_http,
                 request_header=adapter.request_header,
+                **adapter._kwargs,
             )
         raise exceptions.VaultxError(
             "'from_adapter' method of AsyncAdapter class should receive AsyncAdapter instance as a parameter"
@@ -522,17 +522,17 @@ class AsyncAdapter(MetaAdapter):
 
         Associated request is typically sent to a path prefixed with "/v1/auth"
             and optionally stores the client token sent in the resulting Vault response
-            for use by the :py:meth:`hvac.adapters.Adapter` instance under the _adapter Client attribute.
+            for use by the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
 
         :param url: Path to send the authentication request to.
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
-            attribute on the :py:meth:`hvac.adapters.Adapter` instance under the _adapter Client attribute.
+            attribute on the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
         :param kwargs: Additional keyword arguments to include in the params sent with the request.
         """
         response = await self.post(url, **kwargs)
 
         if use_token:
-            self.token = self.get_login_token(response)
+            self.token = await self.get_login_token(response)
 
         return response
 
@@ -622,7 +622,7 @@ class AsyncRawAdapter(AsyncAdapter):
         if wrap_ttl:
             headers["X-Vault-Wrap-TTL"] = str(wrap_ttl)
 
-        _kwargs = self._kwargs.get("timeout", {})
+        _kwargs: dict[Any, Any] = {"timeout": self._kwargs.get("timeout")}
         _kwargs.update(kwargs)
 
         if self.strict_http and method.lower() in ("list",):

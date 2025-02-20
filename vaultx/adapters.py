@@ -189,8 +189,8 @@ class Adapter(MetaAdapter):
         Performs a login request.
 
         Associated request is typically to a path prefixed with "/v1/auth" and optionally stores the client token sent
-            in the resulting Vault response for use by the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter
-            Client attribute.
+            in the resulting Vault response for use by the :py:meth:`vaultx.adapters.Adapter` instance
+            under the _adapter Client attribute.
 
         :param url: Path to send the authentication request to.
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
@@ -232,8 +232,7 @@ class Adapter(MetaAdapter):
         :param headers: Additional headers to include with the request.
         :type headers: dict
         :param kwargs: Additional keyword arguments to include in the requests call.
-        :param raise_exception: If True, raise an exception via utils.raise_for_error(). Set this parameter to False to
-            bypass this functionality.
+        :param raise_exception: If True, raise an exception via utils.raise_for_error().
         """
         raise NotImplementedError()
 
@@ -272,7 +271,7 @@ class RawAdapter(Adapter):
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception. If False, bypass this functionality.
+        :param raise_exception: If True, raise an exception via utils.raise_for_error().
         :param kwargs: Additional keyword arguments to include in the requests call.
         """
 
@@ -350,7 +349,7 @@ class JsonAdapter(RawAdapter):
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception. If False, bypass this functionality.
+        :param raise_exception: If True, raise an exception via utils.raise_for_error().
         :param kwargs: Keyword arguments to pass to RawAdapter.request.
         """
         response = super().request(method=method, url=url, headers=headers, raise_exception=raise_exception, **kwargs)
@@ -599,7 +598,7 @@ class AsyncRawAdapter(AsyncAdapter):
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception. If False, bypass this functionality.
+        :param raise_exception: If True, raise an exception via utils.raise_for_error().
         :param kwargs: Additional keyword arguments to include in the requests call.
         """
 
@@ -675,7 +674,7 @@ class AsyncJsonAdapter(AsyncRawAdapter):
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception. If False, bypass this functionality.
+        :param raise_exception: If True, raise an exception via utils.raise_for_error().
         :param kwargs: Keyword arguments to pass to AsyncRawAdapter.request.
         """
         response = await super().request(

@@ -51,6 +51,7 @@ class HTTPError(Exception):
         self.status_code = status_code
         self.method = method
         self.url = url
+
         self.detail = detail
         self.headers = headers
 

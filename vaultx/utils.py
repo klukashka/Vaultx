@@ -1,8 +1,11 @@
 import os
+import warnings
 from typing import Any, Optional
 
 from vaultx import exceptions
-import warnings
+
+
+_sentinel = object()
 
 
 def get_token_from_env() -> Optional[str]:
@@ -52,14 +55,12 @@ def remove_nones(params: dict[Any, Any]) -> dict[Any, Any]:
     return {key: value for key, value in params.items() if value is not None}
 
 
-def validate_list_of_strings_param(param_name, param_argument):
+def validate_list_of_strings_param(param_name: str, param_argument: list[str]):
     """Validate that an argument is a list of strings.
     Returns nothing if valid, raises ParamValidationException if invalid.
 
     :param param_name: The name of the parameter being validated. Used in any resulting exception messages.
-    :type param_name: str | unicode
     :param param_argument: The argument to validate.
-    :type param_argument: list
     """
     if param_argument is None:
         param_argument = []
@@ -90,24 +91,24 @@ def list_to_comma_delimited(list_param):
 
 
 def _smart_pop(
-    dict: dict,
+    some_dict: dict,
     member: str,
-    default: Any = object(),
+    default: Any = _sentinel,
     *,
-    posvalue: Any = object(),
+    posvalue: Any = _sentinel,
     method: str = "write",
     replacement_method: str = "write_data",
 ):
     try:
-        value = dict.pop(member)
-    except KeyError:
-        if posvalue is not object():
+        value = some_dict.pop(member)
+    except KeyError as e:
+        if posvalue is not _sentinel:
             return posvalue
-        if default is not object():
+        if default is not _sentinel:
             return default
-        raise TypeError(f"{method}() missing one required positional argument: '{member}'")
+        raise TypeError(f"{method}() missing one required positional argument: '{member}'") from e
     else:
-        if posvalue is not object():
+        if posvalue is not _sentinel:
             raise TypeError(f"{method}() got multiple values for argument '{member}'")
 
         warnings.warn(

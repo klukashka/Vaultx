@@ -1,11 +1,5 @@
 import os
-import warnings
-from typing import Any, Optional
-
-from vaultx import exceptions
-
-
-_sentinel = object()
+from typing import Optional
 
 
 def get_token_from_env() -> Optional[str]:

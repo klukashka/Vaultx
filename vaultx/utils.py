@@ -1,5 +1,11 @@
 import os
-from typing import Optional
+import warnings
+from typing import Any, Optional
+
+from vaultx import exceptions
+
+
+_sentinel = object()
 
 
 def get_token_from_env() -> Optional[str]:
@@ -17,7 +23,7 @@ def get_token_from_env() -> Optional[str]:
 
 def urljoin(*args: str) -> str:
     """
-    Joins given arguments into url. Trailing and leading slashes are stripped for each argument.
+    Join given arguments into url. Trailing and leading slashes are stripped for each argument.
     :param args: Multiple parts of a URL to be combined into one string.
     :return: Full URL combining all provided arguments
     """
@@ -36,3 +42,47 @@ def replace_double_slashes_to_single(url: str) -> str:
     while "//" in url:
         url = url.replace("//", "/")
     return url
+
+
+def remove_nones(params: dict[Any, Any]) -> dict[Any, Any]:
+    """
+    Remove None values from optional arguments in a parameter dictionary.
+
+    :param params: The dictionary of parameters to be filtered.
+    :return: A filtered copy of the parameter dictionary.
+    """
+
+    return {key: value for key, value in params.items() if value is not None}
+
+
+def validate_list_of_strings_param(param_name: str, param_arg: list[str]):
+    """
+    Validate that an argument is a list of strings.
+    Returns nothing if valid, raises ParamValidationException if invalid.
+
+    :param param_name: The name of the parameter being validated. Used in any resulting exception messages.
+    :param param_arg: The argument to validate.
+    """
+    if param_arg is None:
+        param_arg = []
+    if isinstance(param_arg, str):
+        param_arg = param_arg.split(",")
+    if not isinstance(param_arg, list) or not all(isinstance(p, str) for p in param_arg):
+        error_msg = 'unsupported {param} argument provided "{arg}" ({arg_type}), required type: List[str]'
+        raise exceptions.VaultxError(
+            f'unsupported {param_name} argument provided "{param_arg}" ({type(param_arg)}), required type: List[str]'
+        )
+
+
+def list_to_comma_delimited(list_param):
+    """
+    Convert a list of strings into a comma-delimited list / string.
+
+    :param list_param: A list of strings.
+    :type list_param: list
+    :return: Comma-delimited string.
+    :rtype: str
+    """
+    if list_param is None:
+        list_param = []
+    return ",".join(list_param)

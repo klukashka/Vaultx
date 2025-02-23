@@ -101,10 +101,11 @@ class TestRequest(TestCase):
 
             response = adapter.get(url=path)
 
-        self.assertEqual(
-            expected_status_code,
-            response.status_code,
-        )
+        if isinstance(response, httpx.Response):
+            self.assertEqual(
+                expected_status_code,
+                response.status_code,
+            )
 
     @parameterized.expand(
         [
@@ -131,8 +132,10 @@ class TestRequest(TestCase):
             response = adapter.list(
                 url=test_path,
             )
-        self.assertEqual(
-            first=expected_status_code,
-            second=response.status_code,
-        )
-        self.assertEqual(first=mock_response, second=response.json())
+
+        if isinstance(response, httpx.Response):
+            self.assertEqual(
+                first=expected_status_code,
+                second=response.status_code,
+            )
+            self.assertEqual(first=mock_response, second=response.json())

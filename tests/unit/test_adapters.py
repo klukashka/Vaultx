@@ -3,7 +3,7 @@ from unittest import TestCase
 import httpx
 import pytest
 import respx
-from parameterized import parameterized
+from parameterized import parameterized  # type: ignore
 
 from vaultx import adapters
 from vaultx.constants.client import DEFAULT_URL

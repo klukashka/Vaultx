@@ -67,7 +67,6 @@ def validate_list_of_strings_param(param_name: str, param_arg: list[str]):
     if isinstance(param_arg, str):
         param_arg = param_arg.split(",")
     if not isinstance(param_arg, list) or not all(isinstance(p, str) for p in param_arg):
-        error_msg = 'unsupported {param} argument provided "{arg}" ({arg_type}), required type: List[str]'
         raise exceptions.VaultxError(
             f'unsupported {param_name} argument provided "{param_arg}" ({type(param_arg)}), required type: List[str]'
         )

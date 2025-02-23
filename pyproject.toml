@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.9, <4.0"
 httpx = "^0.28.1"
+parameterized = "^0.9.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
@@ -16,6 +17,8 @@ isort = "^6.0.0"
 pyright = "^1.1.394"
 ruff = "^0.9.6"
 mypy = "^1.15.0"
+pytest = "^8.3.4"
+respx = "^0.22.0"
 
 [tool.black]
 line-length = 120

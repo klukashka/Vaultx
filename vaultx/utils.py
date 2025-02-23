@@ -2,9 +2,6 @@ import os
 from typing import Optional
 
 
-_sentinel = object()
-
-
 def get_token_from_env() -> Optional[str]:
     """
     Get the token from env var, VAULT_TOKEN. If not set, attempt to get the token from, ~/.vault-token

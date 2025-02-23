@@ -14,9 +14,7 @@ from .exceptions import VaultxError
 
 
 class MetaAdapter(metaclass=abc.ABCMeta):
-    """
-    Abstract adapter class
-    """
+    """Abstract adapter class"""
 
     @classmethod
     @abc.abstractmethod
@@ -52,7 +50,8 @@ class Adapter(MetaAdapter):
         strict_http: bool = False,
         request_header: bool = True,
     ) -> None:
-        """Creates a new request adapter instance.
+        """
+        Create a new request adapter instance.
 
         :param base_uri: Base URL for the Vault instance being addressed.
         :param token: Authentication token to include in requests sent to Vault.
@@ -113,18 +112,18 @@ class Adapter(MetaAdapter):
                 **adapter._kwargs,
             )
         raise exceptions.VaultxError(
-            "'from_adapter' method of Adapter class should receive Adapter instance as a parameter"
+            '"from_adapter" method of Adapter class should receive Adapter instance as a parameter'
         )
 
     @exceptions.handle_unknown_exception
     def close(self):
-        """Closes the Client's underlying TCP connections."""
+        """Close the Client's underlying TCP connections."""
         self.client.close()
 
     @exceptions.handle_unknown_exception
     def get(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
         """
-        Performs a GET request.
+        Perform a GET request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -135,7 +134,7 @@ class Adapter(MetaAdapter):
     @exceptions.handle_unknown_exception
     def post(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
         """
-        Performs a POST request.
+        Perform a POST request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -145,7 +144,8 @@ class Adapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     def put(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
-        """Performs a PUT request.
+        """
+        Perform a PUT request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -155,7 +155,8 @@ class Adapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     def delete(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
-        """Performs a DELETE request.
+        """
+        Perform a DELETE request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -165,7 +166,8 @@ class Adapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     def list(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
-        """Performs a LIST request.
+        """
+        Perform a LIST request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -175,7 +177,8 @@ class Adapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     def head(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
-        """Performs a HEAD request.
+        """
+        Perform a HEAD request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -186,7 +189,7 @@ class Adapter(MetaAdapter):
     @exceptions.handle_unknown_exception
     def login(self, url: str, use_token: bool = True, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
         """
-        Performs a login request.
+        Perform a login request.
 
         Associated request is typically to a path prefixed with "/v1/auth" and optionally stores the client token sent
             in the resulting Vault response for use by the :py:meth:`vaultx.adapters.Adapter` instance
@@ -207,7 +210,7 @@ class Adapter(MetaAdapter):
     @abc.abstractmethod
     def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
         """
-        Extracts the client token from a login response.
+        Extract the client token from a login response.
 
         :param response: The response object returned by the login method.
         """
@@ -232,7 +235,7 @@ class Adapter(MetaAdapter):
         :param headers: Additional headers to include with the request.
         :type headers: dict
         :param kwargs: Additional keyword arguments to include in the requests call.
-        :param raise_exception: If True, raise an exception via utils.raise_for_error().
+        :param raise_exception: If True, raise an exception.
         """
         raise NotImplementedError()
 
@@ -247,7 +250,7 @@ class RawAdapter(Adapter):
 
     def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
         """
-        Extracts the client token from a login response.
+        Extract the client token from a login response.
 
         :param response: The response object returned by the login method.
         """
@@ -271,7 +274,7 @@ class RawAdapter(Adapter):
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception via utils.raise_for_error().
+        :param raise_exception: If True, raise an exception.
         :param kwargs: Additional keyword arguments to include in the requests call.
         """
 
@@ -294,7 +297,7 @@ class RawAdapter(Adapter):
         if wrap_ttl:
             headers["X-Vault-Wrap-TTL"] = str(wrap_ttl)
 
-        _kwargs: dict[Any, Any] = {"timeout": self._kwargs.get("timeout")}
+        _kwargs: dict[str, Any] = {"timeout": self._kwargs.get("timeout")}
         _kwargs.update(kwargs)
 
         if self.strict_http and method.lower() in ("list",):
@@ -349,7 +352,7 @@ class JsonAdapter(RawAdapter):
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception via utils.raise_for_error().
+        :param raise_exception: If True, raise an exception.
         :param kwargs: Keyword arguments to pass to RawAdapter.request.
         """
         response = super().request(method=method, url=url, headers=headers, raise_exception=raise_exception, **kwargs)
@@ -382,7 +385,8 @@ class AsyncAdapter(MetaAdapter):
         strict_http: bool = False,
         request_header: bool = True,
     ) -> None:
-        """Creates a new async request adapter instance.
+        """
+        Create a new async request adapter instance.
 
         :param base_uri: Base URL for the Vault instance being addressed.
         :param token: Authentication token to include in requests sent to Vault.
@@ -444,18 +448,18 @@ class AsyncAdapter(MetaAdapter):
                 **adapter._kwargs,
             )
         raise exceptions.VaultxError(
-            "'from_adapter' method of AsyncAdapter class should receive AsyncAdapter instance as a parameter"
+            '"from_adapter" method of AsyncAdapter class should receive AsyncAdapter instance as a parameter'
         )
 
     @exceptions.handle_unknown_exception
     async def close(self):
-        """Closes the Client's underlying TCP connections."""
+        """Close the Client's underlying TCP connections."""
         await self.client.aclose()
 
     @exceptions.handle_unknown_exception
     async def get(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
         """
-        Performs an async GET request.
+        Perform an async GET request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -466,7 +470,7 @@ class AsyncAdapter(MetaAdapter):
     @exceptions.handle_unknown_exception
     async def post(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
         """
-        Performs an async POST request.
+        Perform an async POST request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -476,7 +480,8 @@ class AsyncAdapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     async def put(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
-        """Performs an async PUT request.
+        """
+        Perform an async PUT request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -486,7 +491,8 @@ class AsyncAdapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     async def delete(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
-        """Performs an async DELETE request.
+        """
+        Perform an async DELETE request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -496,7 +502,8 @@ class AsyncAdapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     async def list(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
-        """Performs an async LIST request.
+        """
+        Perform an async LIST request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -506,7 +513,8 @@ class AsyncAdapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     async def head(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
-        """Performs an async HEAD request.
+        """
+        Perform an async HEAD request.
 
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
@@ -517,7 +525,7 @@ class AsyncAdapter(MetaAdapter):
     @exceptions.handle_unknown_exception
     async def login(self, url: str, use_token: bool = True, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
         """
-        Performs an async login request.
+        Perform an async login request.
 
         Associated request is typically sent to a path prefixed with "/v1/auth"
             and optionally stores the client token sent in the resulting Vault response
@@ -538,7 +546,7 @@ class AsyncAdapter(MetaAdapter):
     @abc.abstractmethod
     async def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
         """
-        Extracts the async_client token from a login response.
+        Extract the async_client token from a login response.
 
         :param response: The response object returned by the login method.
         """
@@ -562,20 +570,18 @@ class AsyncAdapter(MetaAdapter):
             attribute.
         :param headers: Additional headers to include with the request.
         :param kwargs: Additional keyword arguments to include in the requests call.
-        :param raise_exception: If True, raise an exception via utils.raise_for_error().
+        :param raise_exception: If True, raise an exception.
         """
         raise NotImplementedError()
 
 
 @exceptions.handle_unknown_exception
 class AsyncRawAdapter(AsyncAdapter):
-    """
-    The AsyncRawAdapter adapter class. Mostly similar to the sync version.
-    """
+    """The AsyncRawAdapter adapter class. Mostly similar to the sync version."""
 
     async def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
         """
-        Extracts the client token from a login response.
+        Extract the client token from a login response.
 
         :param response: The response object returned by the login method.
         """
@@ -598,11 +604,11 @@ class AsyncRawAdapter(AsyncAdapter):
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception via utils.raise_for_error().
+        :param raise_exception: If True, raise an exception.
         :param kwargs: Additional keyword arguments to include in the requests call.
         """
 
-        url = replace_double_slashes_to_single(url)
+        # url = replace_double_slashes_to_single(url)
         url = urljoin(self.base_uri, url)
 
         if not headers:
@@ -621,7 +627,7 @@ class AsyncRawAdapter(AsyncAdapter):
         if wrap_ttl:
             headers["X-Vault-Wrap-TTL"] = str(wrap_ttl)
 
-        _kwargs: dict[Any, Any] = {"timeout": self._kwargs.get("timeout")}
+        _kwargs: dict[str, Any] = {"timeout": self._kwargs.get("timeout")}
         _kwargs.update(kwargs)
 
         if self.strict_http and method.lower() in ("list",):
@@ -644,13 +650,11 @@ class AsyncRawAdapter(AsyncAdapter):
 
 @exceptions.handle_unknown_exception
 class AsyncJsonAdapter(AsyncRawAdapter):
-    """
-    The AsyncJsonAdapter adapter class. Mostly similar to the sync version
-    """
+    """The AsyncJsonAdapter adapter class. Mostly similar to the sync version"""
 
     async def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
         """
-        Extracts the client token from a login response.
+        Extract the client token from a login response.
 
         :param response: The response object returned by the login method.
         """
@@ -674,7 +678,7 @@ class AsyncJsonAdapter(AsyncRawAdapter):
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception via utils.raise_for_error().
+        :param raise_exception: If True, raise an exception.
         :param kwargs: Keyword arguments to pass to AsyncRawAdapter.request.
         """
         response = await super().request(

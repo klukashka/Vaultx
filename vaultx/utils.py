@@ -1,5 +1,4 @@
 import os
-import warnings
 from typing import Any, Optional
 
 from vaultx import exceptions

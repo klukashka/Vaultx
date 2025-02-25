@@ -220,7 +220,9 @@ class Key(VaultApiBase):
             url=api_path,
         )
 
-    def rekey(self, key: str, nonce: str = None, recovery_key: bool = False) -> Union[dict[str, Any], Response]:
+    def rekey(
+        self, key: str, nonce: Optional[str] = None, recovery_key: bool = False
+    ) -> Union[dict[str, Any], Response]:
         """
         Enter a single recovery key share to progress the rekey of the Vault.
         If the threshold number of recovery key shares is reached, Vault will complete the rekey. Otherwise, this API
@@ -253,7 +255,7 @@ class Key(VaultApiBase):
 
     def rekey_multi(
         self, keys: list[str], nonce: Optional[str] = None, recovery_key: bool = False
-    ) -> Union[dict[str, Any], Response]:
+    ) -> Optional[Union[dict[str, Any], Response]]:
         """
         Enter multiple recovery key shares to progress the rekey of the Vault.
         If the threshold number of recovery key shares is reached, Vault will complete the rekey.
@@ -271,7 +273,7 @@ class Key(VaultApiBase):
                 nonce=nonce,
                 recovery_key=recovery_key,
             )
-            if result.get("complete"):
+            if isinstance(result, dict) and result.get("complete"):
                 break
 
         return result
@@ -338,7 +340,7 @@ class Key(VaultApiBase):
             json=params,
         )
 
-    def rekey_verify_multi(self, keys: list[str], nonce: str) -> Union[dict[str, Any], Response]:
+    def rekey_verify_multi(self, keys: list[str], nonce: str) -> Optional[Union[dict[str, Any], Response]]:
         """
         Enter multiple new recovery key shares to progress the rekey verification of the Vault.
         If the threshold number of new recovery key shares is reached, Vault will complete the
@@ -359,7 +361,7 @@ class Key(VaultApiBase):
                 key=key,
                 nonce=nonce,
             )
-            if result.get("complete"):
+            if isinstance(result, dict) and result.get("complete"):
                 break
 
         return result

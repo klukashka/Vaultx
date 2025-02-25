@@ -7,6 +7,7 @@ from vaultx.api.secrets_engines.kv import Kv
 from vaultx.api.secrets_engines.kv_v1 import KvV1
 from vaultx.api.secrets_engines.kv_v2 import KvV2
 from vaultx.api.vault_api_base import VaultApiBase
+from vaultx import exceptions
 
 
 __all__ = (
@@ -17,6 +18,7 @@ __all__ = (
 )
 
 
+@exceptions.handle_unknown_exception
 class SecretsEngines(VaultApiBase):
     """Secrets Engines."""
 

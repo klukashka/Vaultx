@@ -2,12 +2,12 @@
 
 import typing as tp
 
+from vaultx import exceptions
 from vaultx.adapters import Adapter
 from vaultx.api.secrets_engines.kv import Kv
 from vaultx.api.secrets_engines.kv_v1 import KvV1
 from vaultx.api.secrets_engines.kv_v2 import KvV2
 from vaultx.api.vault_api_base import VaultApiBase
-from vaultx import exceptions
 
 
 __all__ = (

@@ -33,7 +33,8 @@ __all__ = (
     "Raft",
     "Seal",
     "SystemBackend",
-    "Wrapping", "VaultApiBase",
+    "Wrapping",
+    "VaultApiBase",
 )
 
 

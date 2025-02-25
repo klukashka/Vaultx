@@ -19,8 +19,12 @@ from vaultx.constants.client import (
 from vaultx.utils import get_token_from_env
 
 
-hcl = importlib.import_module("hcl")
-has_hcl_parser = bool(hcl)
+try:
+    hcl = importlib.import_module("hcl")
+
+    has_hcl_parser = True
+except ImportError:
+    has_hcl_parser = False
 
 
 class MetaClient(metaclass=abc.ABCMeta):

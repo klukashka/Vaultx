@@ -10,7 +10,6 @@ from vaultx.exceptions import VaultxError
 DEFAULT_MOUNT_POINT = "secret"
 
 
-@exceptions.handle_unknown_exception
 class KvV2(VaultApiBase):
     """
     KV Secrets Engine - Version 2 (API).

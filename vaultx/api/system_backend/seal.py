@@ -2,6 +2,7 @@ from typing import Any, Optional, Union
 
 from httpx import Response
 
+from vaultx import exceptions
 from vaultx.api.vault_api_base import VaultApiBase
 
 
@@ -13,7 +14,9 @@ class Seal(VaultApiBase):
         :return: True if Vault is seal, False otherwise.
         """
         seal_status = self.read_seal_status()
-        return seal_status["sealed"]
+        if isinstance(seal_status, dict):
+            return seal_status["sealed"]
+        raise exceptions.VaultxError("Unexpected return of non-json response")
 
     def read_seal_status(self) -> Union[dict[str, Any], Response]:
         """
@@ -67,7 +70,7 @@ class Seal(VaultApiBase):
         :return: The JSON response of the request.
         """
 
-        params = {
+        params: dict = {
             "migrate": migrate,
         }
         if not reset and key is not None:
@@ -81,7 +84,7 @@ class Seal(VaultApiBase):
             json=params,
         )
 
-    def submit_unseal_keys(self, keys: list[str], migrate: bool = False) -> Union[dict[str, Any], Response]:
+    def submit_unseal_keys(self, keys: list[str], migrate: bool = False) -> Optional[Union[dict[str, Any], Response]]:
         """
         Enter multiple master key share to progress the unsealing of the Vault.
 
@@ -97,7 +100,7 @@ class Seal(VaultApiBase):
                 key=key,
                 migrate=migrate,
             )
-            if not result["sealed"]:
+            if isinstance(result, dict) and not result["sealed"]:
                 break
 
         return result

@@ -143,7 +143,7 @@ class Key(VaultApiBase):
         self,
         secret_shares: int = 5,
         secret_threshold: int = 3,
-        pgp_keys: Optional[list[str]] = None,
+        pgp_keys: Optional[list[int]] = None,
         backup: bool = False,
         require_verification: bool = False,
         recovery_key: bool = False,
@@ -177,7 +177,7 @@ class Key(VaultApiBase):
         :param recovery_key: If true, send requests to "rekey-recovery-key" instead of "rekey" api path.
         :return: The JSON dict of the response.
         """
-        params = {
+        params: dict = {
             "secret_shares": secret_shares,
             "secret_threshold": secret_threshold,
             "require_verification": require_verification,

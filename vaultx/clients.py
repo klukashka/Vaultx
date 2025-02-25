@@ -115,6 +115,7 @@ class MetaClient(metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
 
+@exceptions.handle_unknown_exception
 class Client(MetaClient):
     """Vaultx synchronous client"""
 

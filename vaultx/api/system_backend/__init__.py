@@ -17,6 +17,7 @@ from vaultx.api.system_backend.raft import Raft
 from vaultx.api.system_backend.seal import Seal
 from vaultx.api.system_backend.wrapping import Wrapping
 from vaultx.api.vault_api_base import VaultApiBase
+from vaultx import exceptions
 
 
 __all__ = (
@@ -38,6 +39,7 @@ __all__ = (
 )
 
 
+@exceptions.handle_unknown_exception
 class SystemBackend(
     Audit,
     Auth,

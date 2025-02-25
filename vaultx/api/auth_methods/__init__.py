@@ -1,7 +1,6 @@
 """Collection of classes for various Vault auth methods."""
 
 import typing as tp
-from typing import Union
 
 from vaultx.adapters import Adapter
 from vaultx.api.auth_methods.token import Token

@@ -69,7 +69,7 @@ class KvV2(VaultApiBase):
 
     def read_secret(
         self, path: str, mount_point: str = DEFAULT_MOUNT_POINT, raise_on_deleted_version: bool = False
-    ) -> Union[dict[str, Any], Response]:
+    ) -> Optional[Union[dict[str, Any], Response]]:
         """
         Retrieve the secret at the specified location.
 
@@ -98,8 +98,9 @@ class KvV2(VaultApiBase):
         version: Optional[int] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         raise_on_deleted_version: bool = False,
-    ) -> Union[dict[str, Any], Response]:
-        """Retrieve the secret at the specified location, with the specified version.
+    ) -> Optional[Union[dict[str, Any], Response]]:
+        """
+        Retrieve the secret at the specified location, with the specified version.
 
         Supported methods:
             GET: /{mount_point}/data/{path}. Produces: 200 application/json
@@ -126,9 +127,8 @@ class KvV2(VaultApiBase):
             )
         except exceptions.HTTPError:
             if not raise_on_deleted_version:
-                pass
-            else:
-                raise
+                return None
+            raise
 
     def create_or_update_secret(
         self, path: str, secret, cas: Optional[int] = None, mount_point: str = DEFAULT_MOUNT_POINT

@@ -5,6 +5,7 @@ import httpx
 import respx
 
 from vaultx import Client
+from vaultx.exceptions import VaultxError
 
 
 class TestAuthMethods(TestCase):
@@ -27,16 +28,19 @@ class TestAuthMethods(TestCase):
             )
             actual_request_params = json.loads(route.calls.last.request.content)
 
-        self.assertEqual(
-            first=expected_status_code,
-            second=actual_response.status_code,
-        )
+        if isinstance(actual_response, httpx.Response) and isinstance(actual_request_params, dict):
+            self.assertEqual(
+                first=expected_status_code,
+                second=actual_response.status_code,
+            )
 
-        # Ensure we sent through an optional tune parameter as expected
-        self.assertEqual(
-            first=test_description,
-            second=actual_request_params["description"],
-        )
+            # Ensure we sent through an optional tune parameter as expected
+            self.assertEqual(
+                first=test_description,
+                second=actual_request_params["description"],
+            )
+        else:
+            raise VaultxError("Unexpected response types")
 
     def test_get_auth_backend_tuning(self):
         client = Client()

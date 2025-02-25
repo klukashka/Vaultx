@@ -2,6 +2,7 @@
 
 import typing as tp
 
+from vaultx import exceptions
 from vaultx.adapters import Adapter
 from vaultx.api.system_backend.audit import Audit
 from vaultx.api.system_backend.auth import Auth
@@ -17,7 +18,6 @@ from vaultx.api.system_backend.raft import Raft
 from vaultx.api.system_backend.seal import Seal
 from vaultx.api.system_backend.wrapping import Wrapping
 from vaultx.api.vault_api_base import VaultApiBase
-from vaultx import exceptions
 
 
 __all__ = (

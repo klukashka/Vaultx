@@ -28,11 +28,11 @@ class Auth(VaultApiBase):
         self,
         method_type: str,
         description: Optional[str] = None,
-        config: dict = None,
+        config: Optional[dict] = None,
         plugin_name: Optional[str] = None,
         local: bool = False,
         path: Optional[str] = None,
-        **kwargs: dict[str, Any],
+        **kwargs,
     ) -> Union[dict[str, Any], Response]:
         """
         Enable a new auth method.
@@ -180,13 +180,13 @@ class Auth(VaultApiBase):
         }
         params = {}
         for optional_parameter, parameter_specification in optional_parameters.items():
-            if locals().get(optional_parameter) is not None:
+            argument = locals().get(optional_parameter)
+            if argument is not None:
                 if parameter_specification.get("comma_delimited_list"):
-                    argument = locals().get(optional_parameter)
                     validate_list_of_strings_param(optional_parameter, argument)
                     params[optional_parameter] = list_to_comma_delimited(argument)
                 else:
-                    params[optional_parameter] = locals().get(optional_parameter)
+                    params[optional_parameter] = argument
         params.update(kwargs)
         api_path = f"/v1/sys/auth/{path}/tune"
         return self._adapter.post(

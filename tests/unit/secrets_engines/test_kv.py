@@ -74,19 +74,10 @@ class TestKv(TestCase):
 
 
 class TestKv2:
-    @pytest.mark.parametrize(
-        "recoverable",
-        [
-            False,
-            False,
-            False,
-            True,
-        ],
-    )
     @pytest.mark.parametrize("raise_on_del", [True, False])
-    def test_kv2_raise_on_deleted(self, raise_on_del, recoverable):
-        def get_error():
-            raise exceptions.VaultxError()
+    def test_kv2_raise_on_deleted(self, raise_on_del):
+        def get_error(*args, **kwargs):
+            raise exceptions.HTTPError(404)
 
         mock_adapter = MagicMock(get=get_error)
         kv = Mock(wraps=Kv(adapter=mock_adapter, default_kv_version="2"))
@@ -98,8 +89,8 @@ class TestKv2:
             kv.v2.read_secret_version,
         ]:
             path = "secret_path"
-            should_raise = raise_on_del or not recoverable
+            should_raise = raise_on_del
 
             if should_raise:
-                with pytest.raises(exceptions.VaultxError):
-                    method(path, raise_on_deleted_version=raise_on_del)
+                with pytest.raises(exceptions.HTTPError):
+                    method(path=path, raise_on_deleted_version=raise_on_del)

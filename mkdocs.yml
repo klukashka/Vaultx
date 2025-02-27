@@ -6,76 +6,61 @@ theme:
   name: 'material'
   palette:
     - media: "(prefers-color-scheme: light)"
-      scheme: default
+      scheme: "default"
       primary: "rgb(73, 123, 167)"
       accent: "rgb(73, 123, 167)"
       toggle:
-        icon: material/lightbulb-outline
+        icon: "material/lightbulb-outline"
         name: "Switch to dark mode"
     - media: "(prefers-color-scheme: dark)"
-      scheme: slate
+      scheme: "slate"
       primary: "rgb(73, 123, 167)"
       accent: "rgb(73, 123, 167)"
       toggle:
-        icon: material/lightbulb
+        icon: "material/lightbulb"
         name: "Switch to light mode"
   features:
-    - content.tabs.link
-    - content.code.annotate
-    - content.code.copy
-    - announce.dismiss
-    - navigation.tabs
-    - navigation.instant
-    - navigation.instant.prefetch
-    - navigation.instant.preview
-    - navigation.instant.progress
-    - navigation.path
-    - navigation.sections
-    - navigation.top
-    - navigation.tracking
-    - search.suggest
-    - toc.follow
-    - palette.toggle
   favicon: assets/vaultx_logo.ico
 
 nav:
-  - Get Started:
-      - Overview: index.md
-      - Why Vaultx: get_started/why.md
+  - Overview:
+      - Welcome to Vaultx: 'index.md'
+      - Getting Started: 'overview/getting_started.md'
+      - Why Vaultx: 'overview/why_vaultx.md'
   - Usage:
       - Auth Methods:
-          - Token: usage/auth_methods/token.md
-          - Userpass: usage/auth_methods/userpass.md
+          - Token: 'usage/auth_methods/token.md'
+          - Userpass: 'usage/auth_methods/userpass.md'
       - Secrets Engines:
-          - KV: usage/secrets_engines/kv.md
-          - KV-v1: usage/secrets_engines/kv_v1.md
-          - KV-v2: usage/secrets_engines/kv_v2.md
+          - KV: 'usage/secrets_engines/kv.md'
+          - KV-v1: 'usage/secrets_engines/kv_v1.md'
+          - KV-v2: 'usage/secrets_engines/kv_v2.md'
       - System Backend:
-          - Audit: usage/system_backend/audit.md
-          - Auth: usage/system_backend/auth.md
-          - Health: usage/system_backend/audit.md
-          - Key: usage/system_backend/key.md
-          - Leader: usage/system_backend/leader.md
-          - Lease: usage/system_backend/lease.md
-          - Namespace: usage/system_backend/namespace.md
-          - Policy: usage/system_backend/policy.md
-          - Quota: usage/system_backend/quota.md
-          - Raft: usage/system_backend/raft.md
-          - Seal: usage/system_backend/seal.md
-          - Wrapping: usage/system_backend/wrapping.md
+          - Audit: 'usage/system_backend/audit.md'
+          - Auth: 'usage/system_backend/auth.md'
+          - Health: 'usage/system_backend/health.md'
+          - Key: 'usage/system_backend/key.md'
+          - Leader: 'usage/system_backend/leader.md'
+          - Lease: 'usage/system_backend/lease.md'
+          - Namespace: 'usage/system_backend/namespace.md'
+          - Policy: 'usage/system_backend/policy.md'
+          - Quota: 'usage/system_backend/quota.md'
+          - Raft: 'usage/system_backend/raft.md'
+          - Seal: 'usage/system_backend/seal.md'
+          - Wrapping: 'usage/system_backend/wrapping.md'
   - Contributing:
-      - Environment Setup: contributing/setup.md
-      - Guidelines: contributing/guidelines.md
+      - Environment Setup: 'contribute/setup.md'
+      - Guidelines: 'contribute/guidelines.md'
 
 watch:
-  - Vaultx
+  - vaultx
 
 plugins:
   - search
 
 markdown_extensions:
   - admonition
-  - codehilite
+  - codehilite:
   - tables
   - toc:
       permalink: true

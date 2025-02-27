@@ -1,4 +1,4 @@
-.PHONY: help install update test lint format
+.PHONY: help install update test lint format docs
 
 # Default target
 help: ## Show this help message
@@ -27,3 +27,6 @@ lint: ## Run linters
 	@poetry run mypy .
 	@poetry run black --check .
 	@poetry run isort --check .
+
+docs: ## Build and serve documentation with mkdocs
+	@poetry run mkdocs serve

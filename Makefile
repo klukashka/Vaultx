@@ -1,4 +1,4 @@
-.PHONY: help install update test lint format
+.PHONY: help install update test lint format docs
 
 # Default target
 help: ## Show this help message

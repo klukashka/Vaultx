@@ -27,3 +27,6 @@ lint: ## Run linters
 	@poetry run mypy .
 	@poetry run black --check .
 	@poetry run isort --check .
+
+docs: ## Build and serve documentation with mkdocs
+	@poetry run mkdocs serve

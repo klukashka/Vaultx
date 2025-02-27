@@ -1,8 +1,7 @@
 # Why Vaultx?
 
-### It is important to say, that Vaultx is inspired by [hvac](https://github.com/hvac/hvac). Architecture and interface are taken from there.
-
-### Then, why use Vaultx instead of hvac?
+!!! note
+    It is important to say, that Vaultx is inspired by [hvac](https://github.com/hvac/hvac). Architecture and interface are taken from there.
 
 ### There are several reasons for that:
 

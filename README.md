@@ -13,7 +13,8 @@
 ---
 **Documentation:** <https://klukashka.github.io/Vaultx/>
 
-**Source code:** <https://github.com/klukashka/Vaultx/>
+**Source code:**: <https://github.com/klukashka/Vaultx/>
+
 ---
 
 <h3 align="center">

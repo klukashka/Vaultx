@@ -1,10 +1,13 @@
 [tool.poetry]
 name = "vaultx"
-version = "0.0.0"
+version = "0.0.1"
 description = "Python 3.x httpx client for HashiCorp's Vault"
 authors = ["klukashka <klukin0202@yandex.ru>"]
 license = "MIT"
 readme = "README.md"
+
+[tool.poetry.urls]
+Icon = "https://github.com/klukashka/Vaultx/blob/main/docs/assets/vaultx_cropped_logo.png"
 
 [tool.poetry.dependencies]
 python = ">=3.9, <4.0"
@@ -19,6 +22,8 @@ mypy = "^1.15.0"
 pytest = "^8.3.4"
 respx = "^0.22.0"
 parameterized = "^0.9.0"
+mkdocs = "^1.6.1"
+mkdocs-material = "^9.6.5"
 
 [tool.black]
 line-length = 120

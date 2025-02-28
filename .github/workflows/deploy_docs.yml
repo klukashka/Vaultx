@@ -1,0 +1,46 @@
+name: Deploy docs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.4.0
+        with:
+          python-version: '3.x'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: poetry install --with dev
+
+      - name: Build site
+        run: |
+          mkdir -p docs
+          cp README.md docs/index.md
+          poetry run mkdocs build
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add -f site
+            git commit -m ":books: Update docs"
+            git push origin `git subtree split --prefix site main`:gh-pages --force
+          else
+            echo "No changes to commit"
+          fi

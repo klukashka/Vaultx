@@ -12,7 +12,7 @@ class MockAdapter(Adapter):
             kwargs["client"] = mock.MagicMock()
         super().__init__(*args, **kwargs)
 
-    def request(self, *args, **kwargs):
+    def request(self, *args, **kwargs):  # pyright: ignore
         return args, kwargs
 
     def get_login_token(self, response):

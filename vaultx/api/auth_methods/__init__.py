@@ -39,7 +39,6 @@ class AuthMethods(VaultApiBase):
         """
         item = f"_{item}"
         if item in self._implemented_classes:
-            print(type(getattr(self, item)))
             return getattr(self, item)
         raise AttributeError
 

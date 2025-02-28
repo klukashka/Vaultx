@@ -194,7 +194,6 @@ class Client(MetaClient):
 
         # Instantiate API classes to be exposed as properties on this class starting with auth method classes.
         self._auth = api.AuthMethods(adapter=self._adapter)
-        print("HERE", self._auth.token.__class__.__name__)
         self._secrets = api.SecretsEngines(adapter=self._adapter)
         self._sys = api.SystemBackend(adapter=self._adapter)
 

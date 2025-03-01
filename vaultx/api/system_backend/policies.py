@@ -37,7 +37,7 @@ class Policies(VaultApiBase):
         )
 
     def create_or_update_acl_policy(
-        self, name: str, policy: str, pretty_print: bool = True
+        self, name: str, policy: Union[str, dict], pretty_print: bool = True
     ) -> Union[dict[str, Any], Response]:
         """
         Add a new or update an existing acl policy.

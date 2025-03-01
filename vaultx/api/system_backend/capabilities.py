@@ -1,8 +1,14 @@
+from typing import Any, Optional, Union
+
+from httpx import Response
+
 from vaultx.api.vault_api_base import VaultApiBase
 
 
 class Capabilities(VaultApiBase):
-    def get_capabilities(self, paths, token=None, accessor=None):
+    def get_capabilities(
+        self, paths: list[str], token: Optional[str] = None, accessor: Optional[str] = None
+    ) -> Union[dict[str, Any], Response]:
         """
         Get the capabilities associated with a token.
 
@@ -12,15 +18,11 @@ class Capabilities(VaultApiBase):
             POST: /sys/capabilities-accessor. Produces: 200 application/json
 
         :param paths: Paths on which capabilities are being queried.
-        :type paths: List[str]
         :param token: Token for which capabilities are being queried.
-        :type token: str
         :param accessor: Accessor of the token for which capabilities are being queried.
-        :type accessor: str
         :return: The JSON response of the request.
-        :rtype: dict
         """
-        params = {
+        params: dict = {
             "paths": paths,
         }
 

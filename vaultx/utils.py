@@ -51,7 +51,7 @@ def remove_nones(params: dict[Any, Any]) -> dict[Any, Any]:
     return {key: value for key, value in params.items() if value is not None}
 
 
-def validate_list_of_strings_param(param_name: str, param_arg: list[str]):
+def validate_list_of_strings_param(param_name: str, param_arg: Optional[list[str]]) -> None:
     """
     Validate that an argument is a list of strings.
     Returns nothing if valid, raises ParamValidationException if invalid.
@@ -69,14 +69,13 @@ def validate_list_of_strings_param(param_name: str, param_arg: list[str]):
         )
 
 
-def list_to_comma_delimited(list_param):
+def list_to_comma_delimited(list_param) -> str:
     """
     Convert a list of strings into a comma-delimited list / string.
 
     :param list_param: A list of strings.
     :type list_param: list
     :return: Comma-delimited string.
-    :rtype: str
     """
     if list_param is None:
         list_param = []

@@ -225,7 +225,7 @@ class KvV2(VaultApiBase):
         )
 
     def delete_secret_versions(
-        self, path: str, versions: int, mount_point: str = DEFAULT_MOUNT_POINT
+        self, path: str, versions: list[int], mount_point: str = DEFAULT_MOUNT_POINT
     ) -> Union[dict[str, Any], Response]:
         """
         Issue a soft delete of the specified versions of the secret.
@@ -283,7 +283,7 @@ class KvV2(VaultApiBase):
         )
 
     def destroy_secret_versions(
-        self, path: str, versions: str, mount_point: str = DEFAULT_MOUNT_POINT
+        self, path: str, versions: list[int], mount_point: str = DEFAULT_MOUNT_POINT
     ) -> Union[dict[str, Any], Response]:
         """
         Permanently remove the specified version data and numbers for the provided path from the key-value store.
@@ -291,10 +291,8 @@ class KvV2(VaultApiBase):
         Supported methods:
             POST: /{mount_point}/destroy/{path}. Produces: 204 (empty body)
 
-        :param path: Specifies the path of the secret to destroy.
-            This is specified as part of the URL.
-        :param versions: The versions to destroy. Their data will be
-            permanently deleted.
+        :param path: Specifies the path of the secret to destroy. This is specified as part of the URL.
+        :param versions: The versions to destroy. Their data will be permanently deleted.
         :param mount_point: The "path" the secret engine was mounted on.
         :return: The response of the request.
         """

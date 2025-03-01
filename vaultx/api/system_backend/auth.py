@@ -129,7 +129,7 @@ class Auth(VaultApiBase):
         description: Optional[str] = None,
         audit_non_hmac_request_keys: Optional[list[str]] = None,
         audit_non_hmac_response_keys: Optional[list[str]] = None,
-        listing_visibility: Optional[list[str]] = None,
+        listing_visibility: Optional[str] = None,
         passthrough_request_headers: Optional[list[str]] = None,
         **kwargs,
     ) -> Union[dict[str, Any], Response]:
@@ -162,10 +162,9 @@ class Auth(VaultApiBase):
         """
 
         if listing_visibility is not None and listing_visibility not in ["unauth", ""]:
-            error_msg = 'invalid listing_visibility argument provided: "{arg}"; valid values: "unauth" or ""'.format(
-                arg=listing_visibility,
+            raise exceptions.VaultxError(
+                f'invalid listing_visibility argument provided: "{listing_visibility}"; valid values: "unauth" or ""'
             )
-            raise exceptions.VaultxError(error_msg)
 
         # All parameters are optional for this method. Until/unless we include input validation, we simply loop over the
         # parameters and add which parameters are set.

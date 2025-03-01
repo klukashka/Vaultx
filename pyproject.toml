@@ -12,6 +12,7 @@ Icon = "https://github.com/klukashka/Vaultx/blob/main/docs/assets/vaultx_cropped
 [tool.poetry.dependencies]
 python = ">=3.9, <4.0"
 httpx = "^0.28.1"
+coverage-badge = "^1.1.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"

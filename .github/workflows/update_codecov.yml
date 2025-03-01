@@ -1,0 +1,58 @@
+name: Update code coverage
+
+on:
+  workflow_run:
+    workflows: ["Deploy docs"]
+    types:
+      - completed
+
+jobs:
+  update_coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.4.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v3.0.2
+        with:
+          poetry-version: 1.8.3
+
+      - name: Install dependencies
+        run: poetry install --with dev
+
+      - name: Run tests with coverage
+        run: poetry run pytest --cov=vaultx --cov-report=xml --cov-report=term
+
+      - name: Generate coverage badge
+        run: poetry run coverage-badge -o coverage.svg -f
+
+      - name: Clone gh-pages branch
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} gh-pages
+
+      - name: Copy coverage badge to gh-pages
+        run: cp coverage.svg gh-pages/
+
+      - name: Check for changes
+        run: |
+          cd gh-pages
+          git add coverage.svg
+          if [ -n "$(git diff --cached --name-only)" ]; then
+            git commit -m ':arrow_up: Update coverage badge'
+            git push
+          else
+            echo "No changes to commit"
+          fi

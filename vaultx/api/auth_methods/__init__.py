@@ -7,10 +7,12 @@ from vaultx.adapters import Adapter
 from vaultx.api.auth_methods.token import Token
 from vaultx.api.auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import VaultApiBase
+from vaultx.api.auth_methods.approle import AppRole
 
 
 __all__ = (
     "AuthMethods",
+    "AppRole",
     "Userpass",
     "Token",
 )
@@ -21,6 +23,7 @@ class AuthMethods(VaultApiBase):
     """Auth Methods."""
 
     _implemented_classes: tp.Final[dict] = {
+        "_approle": AppRole,
         "_userpass": Userpass,
         "_token": Token,
     }

@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Leader
+from vaultx.api.system_backend.leader import Leader
 
 
 class TestLeader(unittest.TestCase):

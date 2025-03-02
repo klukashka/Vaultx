@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Policy
+from vaultx.api.system_backend.policy import Policy
 
 
 class TestPolicy(unittest.TestCase):

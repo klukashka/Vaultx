@@ -19,16 +19,25 @@ from vaultx.api.system_backend.seal import Seal
 from vaultx.api.system_backend.wrapping import Wrapping
 from vaultx.api.vault_api_base import VaultApiBase
 
+from vaultx.api.system_backend.init import Init
+from vaultx.api.system_backend.mount import Mount
+from vaultx.api.system_backend.policies import Policies
+
+
+
 
 __all__ = (
     "Audit",
     "Auth",
     "Capabilities",
     "Health",
+    "Init",
     "Key",
     "Leader",
     "Lease",
+    "Mount",
     "Namespace",
+    "Policies",
     "Policy",
     "Quota",
     "Raft",
@@ -45,10 +54,13 @@ class SystemBackend(
     Auth,
     Capabilities,
     Health,
+    Init,
     Key,
     Leader,
     Lease,
+    Mount,
     Namespace,
+    Policies,
     Policy,
     Quota,
     Raft,
@@ -60,10 +72,13 @@ class SystemBackend(
         "_auth": Auth,
         "_capabilities": Capabilities,
         "_health": Health,
+        "_init": Init,
         "_key": Key,
         "_leader": Leader,
         "_lease": Lease,
+        "_mount": Mount,
         "_namespace": Namespace,
+        "_policies": Policies,
         "_policy": Policy,
         "_quota": Quota,
         "_raft": Raft,

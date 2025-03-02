@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Wrapping
+from vaultx.api.system_backend.wrapping import Wrapping
 
 
 class TestWrapping(unittest.TestCase):

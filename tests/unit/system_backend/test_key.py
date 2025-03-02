@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Key
+from vaultx.api.system_backend.key import Key
 from vaultx.exceptions import VaultxError
 
 

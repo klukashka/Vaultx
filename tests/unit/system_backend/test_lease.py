@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Lease
+from vaultx.api.system_backend.lease import Lease
 
 
 class TestLease(unittest.TestCase):

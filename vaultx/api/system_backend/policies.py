@@ -3,7 +3,7 @@ from typing import Any, Union
 
 from httpx import Response
 
-from vaultx.api import VaultApiBase
+from vaultx.api.vault_api_base import VaultApiBase
 
 
 class Policies(VaultApiBase):

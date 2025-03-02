@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Quota
+from vaultx.api.system_backend.quota import Quota
 
 
 class TestQuota(unittest.TestCase):

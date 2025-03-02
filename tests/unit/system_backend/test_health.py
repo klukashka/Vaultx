@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Health
+from vaultx.api.system_backend.health import Health
 from vaultx.exceptions import VaultxError
 
 

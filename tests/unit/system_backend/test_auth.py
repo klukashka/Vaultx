@@ -4,7 +4,7 @@ from unittest import mock
 from httpx import Response
 
 from vaultx import exceptions
-from vaultx.api.system_backend import Auth
+from vaultx.api.system_backend.auth import Auth
 
 
 class TestAuth(unittest.TestCase):

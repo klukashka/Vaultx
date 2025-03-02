@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Audit
+from vaultx.api.system_backend.audit import Audit
 
 
 class TestAudit(unittest.TestCase):

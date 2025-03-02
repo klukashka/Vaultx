@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.system_backend import Namespace
+from vaultx.api.system_backend.namespace import Namespace
 
 
 class TestNamespace(unittest.TestCase):

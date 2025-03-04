@@ -25,6 +25,10 @@ mkdocs = "^1.6.1"
 mkdocs-material = "^9.6.5"
 coverage-badge = "^1.1.2"
 
+[tool.pytest.ini_options]
+asyncio_mode="auto"
+asyncio_default_fixture_loop_scope="function"
+
 [tool.black]
 line-length = 120
 target-version = ['py311']

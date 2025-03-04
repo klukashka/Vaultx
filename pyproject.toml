@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.9, <4.0"
 httpx = "^0.28.1"
+aiohttp = "^3.11.13"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"

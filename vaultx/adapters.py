@@ -393,7 +393,7 @@ class AiohttpTransport(httpx.AsyncBaseTransport):
         if self._closed:
             raise RuntimeError("Transport is closed")
 
-        headers = dict(request.headers)
+        aiohttp_headers = dict(request.headers)
 
         # Prepare request parameters
         method = request.method
@@ -403,12 +403,12 @@ class AiohttpTransport(httpx.AsyncBaseTransport):
         async with self._session.request(
             method=method,
             url=url,
-            headers=headers,
+            headers=aiohttp_headers,
             data=content,
             allow_redirects=False,
         ) as aiohttp_response:
             content = await aiohttp_response.read()
-            headers = [(k.lower(), v) for k, v in aiohttp_response.headers.items()]
+            headers: list = [(k.lower(), v) for k, v in aiohttp_response.headers.items()]
             return httpx.Response(
                 status_code=aiohttp_response.status, headers=headers, content=content, request=request
             )

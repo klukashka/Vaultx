@@ -1,4 +1,7 @@
-from vaultx.clients import Client
+from vaultx.clients import AsyncClient, Client
 
 
-__all__ = ("Client",)
+__all__ = (
+    "Client",
+    "AsyncClient",
+)

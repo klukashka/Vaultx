@@ -1,0 +1,108 @@
+from typing import Any, Optional, Union
+
+from httpx import Response
+
+from vaultx import exceptions
+from vaultx.api.vault_api_base import AsyncVaultApiBase
+
+
+class Seal(AsyncVaultApiBase):
+    async def is_sealed(self) -> bool:
+        """
+        Determine if  Vault is sealed.
+
+        :return: True if Vault is seal, False otherwise.
+        """
+        seal_status = await self.read_seal_status()
+        if isinstance(seal_status, dict):
+            return seal_status["sealed"]
+        raise exceptions.VaultxError("Unexpected return of non-json response")
+
+    async def read_seal_status(self) -> Union[dict[str, Any], Response]:
+        """
+        Read the seal status of the Vault.
+        This is an unauthenticated endpoint.
+
+        Supported methods:
+            GET: /sys/seal-status. Produces: 200 application/json
+
+        :return: The JSON response of the request.
+        """
+        api_path = "/v1/sys/seal-status"
+        return await self._adapter.get(
+            url=api_path,
+        )
+
+    async def seal(self) -> Union[dict[str, Any], Response]:
+        """
+        Seal the Vault.
+        In HA mode, only an active node can be sealed. Standby nodes should be restarted to get the same effect.
+        Requires a token with root policy or sudo capability on the path.
+
+        Supported methods:
+            PUT: /sys/seal. Produces: 204 (empty body)
+
+        :return: The response of the request.
+        """
+        api_path = "/v1/sys/seal"
+        return await self._adapter.put(
+            url=api_path,
+        )
+
+    async def submit_unseal_key(
+        self, key: Optional[str] = None, reset: bool = False, migrate: bool = False
+    ) -> Union[dict[str, Any], Response]:
+        """
+        Enter a single master key share to progress the unsealing of the Vault.
+
+        If the threshold number of master key shares is reached, Vault will attempt to unseal the Vault. Otherwise, this
+        API must be called multiple times until that threshold is met.
+
+        Either the key or reset parameter must be provided; if both are provided, reset takes precedence.
+
+        Supported methods:
+            PUT: /sys/unseal. Produces: 200 application/json
+
+        :param key: Specifies a single master key share. This is required unless reset is true.
+        :param reset: Specifies if previously-provided unseal keys are discarded and the unseal process is reset.
+        :param migrate: Available in 1.0 Beta - Used to migrate the seal from shamir to autoseal or autoseal to shamir.
+            Must be provided on all unseal key calls.
+        :return: The JSON response of the request.
+        """
+
+        params: dict = {
+            "migrate": migrate,
+        }
+        if not reset and key is not None:
+            params["key"] = key
+        elif reset:
+            params["reset"] = reset
+
+        api_path = "/v1/sys/unseal"
+        return await self._adapter.put(
+            url=api_path,
+            json=params,
+        )
+
+    async def submit_unseal_keys(
+        self, keys: list[str], migrate: bool = False
+    ) -> Optional[Union[dict[str, Any], Response]]:
+        """
+        Enter multiple master key share to progress the unsealing of the Vault.
+
+        :param keys: List of master key shares.
+        :param migrate: Available in 1.0 Beta - Used to migrate the seal from shamir to autoseal or autoseal to shamir.
+            Must be provided on all unseal key calls.
+        :return: The JSON response of the last unseal request.
+        """
+        result = None
+
+        for key in keys:
+            result = await self.submit_unseal_key(
+                key=key,
+                migrate=migrate,
+            )
+            if isinstance(result, dict) and not result["sealed"]:
+                break
+
+        return result

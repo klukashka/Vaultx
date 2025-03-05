@@ -2,12 +2,12 @@ from typing import Any, Optional, Union
 
 from httpx import Response
 
-from vaultx.api.vault_api_base import VaultApiBase
+from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.exceptions import VaultxError
 
 
-class Mount(VaultApiBase):
-    def list_mounted_secrets_engines(self) -> Union[dict[str, Any], Response]:
+class Mount(AsyncVaultApiBase):
+    async def list_mounted_secrets_engines(self) -> Union[dict[str, Any], Response]:
         """
         List all the mounted secrets engines.
 
@@ -16,9 +16,11 @@ class Mount(VaultApiBase):
 
         :return: JSON response of the request.
         """
-        return self._adapter.get("/v1/sys/mounts")
+        return await self._adapter.get("/v1/sys/mounts")
 
-    def retrieve_mount_option(self, mount_point: str, option_name: str, default_value: Optional[str] = None) -> Any:
+    async def retrieve_mount_option(
+        self, mount_point: str, option_name: str, default_value: Optional[str] = None
+    ) -> Any:
         """
         Retrieve a specific option for the secrets engine mounted under the path specified.
         If no matching option (or no options at all) are discovered, a default value is returned.
@@ -29,7 +31,7 @@ class Mount(VaultApiBase):
         :return: The value for the specified secrets engine's named option.
         """
         secrets_engine_path = f"{mount_point}/"
-        listed_engines = self.list_mounted_secrets_engines()
+        listed_engines = await self.list_mounted_secrets_engines()
         if isinstance(listed_engines, dict):
             secrets_engines_list = listed_engines["data"]
         else:
@@ -40,7 +42,7 @@ class Mount(VaultApiBase):
 
         return mount_options.get(option_name, default_value)
 
-    def enable_secrets_engine(
+    async def enable_secrets_engine(
         self,
         backend_type: str,
         path: Optional[str] = None,
@@ -104,12 +106,12 @@ class Mount(VaultApiBase):
         params.update(kwargs)
 
         api_path = f"/v1/sys/mounts/{path}"
-        return self._adapter.post(
+        return await self._adapter.post(
             url=api_path,
             json=params,
         )
 
-    def disable_secrets_engine(self, path: str) -> Union[dict[str, Any], Response]:
+    async def disable_secrets_engine(self, path: str) -> Union[dict[str, Any], Response]:
         """
         Disable the mount point specified by the provided path.
 
@@ -120,11 +122,11 @@ class Mount(VaultApiBase):
         :return: The response of the request.
         """
         api_path = f"/v1/sys/mounts/{path}"
-        return self._adapter.delete(
+        return await self._adapter.delete(
             url=api_path,
         )
 
-    def read_mount_configuration(self, path: str) -> Union[dict[str, Any], Response]:
+    async def read_mount_configuration(self, path: str) -> Union[dict[str, Any], Response]:
         """
         Read the given mount's configuration.
         Unlike the mounts endpoint, this will return the current time in seconds for each TTL, which may be the system
@@ -137,11 +139,11 @@ class Mount(VaultApiBase):
         :return: The JSON response of the request.
         """
         api_path = f"/v1/sys/mounts/{path}/tune"
-        return self._adapter.get(
+        return await self._adapter.get(
             url=api_path,
         )
 
-    def tune_mount_configuration(
+    async def tune_mount_configuration(
         self,
         path: str,
         default_lease_ttl: Optional[int] = None,
@@ -208,12 +210,12 @@ class Mount(VaultApiBase):
         params.update(kwargs)
 
         api_path = f"/v1/sys/mounts/{path}/tune"
-        return self._adapter.post(
+        return await self._adapter.post(
             url=api_path,
             json=params,
         )
 
-    def move_backend(self, from_path: str, to_path: str) -> Union[dict[str, Any], Response]:
+    async def move_backend(self, from_path: str, to_path: str) -> Union[dict[str, Any], Response]:
         """
         Move an already-mounted backend to a new mount point.
 
@@ -229,7 +231,7 @@ class Mount(VaultApiBase):
             "to": to_path,
         }
         api_path = "/v1/sys/remount"
-        return self._adapter.post(
+        return await self._adapter.post(
             url=api_path,
             json=params,
         )

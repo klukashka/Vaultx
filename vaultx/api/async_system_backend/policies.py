@@ -3,11 +3,11 @@ from typing import Any, Union
 
 from httpx import Response
 
-from vaultx.api.vault_api_base import VaultApiBase
+from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
-class Policies(VaultApiBase):
-    def list_acl_policies(self) -> Union[dict[str, Any], Response]:
+class Policies(AsyncVaultApiBase):
+    async def list_acl_policies(self) -> Union[dict[str, Any], Response]:
         """
         List all configured acl policies.
 
@@ -17,11 +17,11 @@ class Policies(VaultApiBase):
         :return: The JSON response of the request.
         """
         api_path = "/v1/sys/policies/acl"
-        return self._adapter.list(
+        return await self._adapter.list(
             url=api_path,
         )
 
-    def read_acl_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_acl_policy(self, name: str) -> Union[dict[str, Any], Response]:
         """
         Retrieve the policy body for the named acl policy.
 
@@ -32,11 +32,11 @@ class Policies(VaultApiBase):
         :return: The response of the request
         """
         api_path = f"/v1/sys/policies/acl/{name}"
-        return self._adapter.get(
+        return await self._adapter.get(
             url=api_path,
         )
 
-    def create_or_update_acl_policy(
+    async def create_or_update_acl_policy(
         self, name: str, policy: Union[str, dict], pretty_print: bool = True
     ) -> Union[dict[str, Any], Response]:
         """
@@ -59,12 +59,12 @@ class Policies(VaultApiBase):
             "policy": policy,
         }
         api_path = f"/v1/sys/policies/acl/{name}"
-        return self._adapter.put(
+        return await self._adapter.put(
             url=api_path,
             json=params,
         )
 
-    def delete_acl_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def delete_acl_policy(self, name: str) -> Union[dict[str, Any], Response]:
         """
         Delete the acl policy with the given name.
 
@@ -77,11 +77,11 @@ class Policies(VaultApiBase):
         :return: The response of the request.
         """
         api_path = f"/v1/sys/policies/acl/{name}"
-        return self._adapter.delete(
+        return await self._adapter.delete(
             url=api_path,
         )
 
-    def list_rgp_policies(self) -> Union[dict[str, Any], Response]:
+    async def list_rgp_policies(self) -> Union[dict[str, Any], Response]:
         """
         List all configured rgp policies.
 
@@ -91,11 +91,11 @@ class Policies(VaultApiBase):
         :return: The JSON response of the request.
         """
         api_path = "/v1/sys/policies/rgp"
-        return self._adapter.list(
+        return await self._adapter.list(
             url=api_path,
         )
 
-    def read_rgp_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_rgp_policy(self, name: str) -> Union[dict[str, Any], Response]:
         """
         Retrieve the policy body for the named rgp policy.
 
@@ -106,11 +106,11 @@ class Policies(VaultApiBase):
         :return: The response of the request
         """
         api_path = f"/v1/sys/policies/rgp/{name}"
-        return self._adapter.get(
+        return await self._adapter.get(
             url=api_path,
         )
 
-    def create_or_update_rgp_policy(
+    async def create_or_update_rgp_policy(
         self, name: str, policy: str, enforcement_level: str
     ) -> Union[dict[str, Any], Response]:
         """
@@ -128,12 +128,12 @@ class Policies(VaultApiBase):
         """
         params = {"policy": policy, "enforcement_level": enforcement_level}
         api_path = f"/v1/sys/policies/rgp/{name}"
-        return self._adapter.put(
+        return await self._adapter.put(
             url=api_path,
             json=params,
         )
 
-    def delete_rgp_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def delete_rgp_policy(self, name: str) -> Union[dict[str, Any], Response]:
         """
         Delete the rgp policy with the given name.
         This will immediately affect all users associated with this policy.
@@ -145,11 +145,11 @@ class Policies(VaultApiBase):
         :return: The response of the request.
         """
         api_path = f"/v1/sys/policies/rgp/{name}"
-        return self._adapter.delete(
+        return await self._adapter.delete(
             url=api_path,
         )
 
-    def list_egp_policies(self) -> Union[dict[str, Any], Response]:
+    async def list_egp_policies(self) -> Union[dict[str, Any], Response]:
         """
         List all configured egp policies.
 
@@ -159,11 +159,11 @@ class Policies(VaultApiBase):
         :return: The JSON response of the request.
         """
         api_path = "/v1/sys/policies/egp"
-        return self._adapter.list(
+        return await self._adapter.list(
             url=api_path,
         )
 
-    def read_egp_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_egp_policy(self, name: str) -> Union[dict[str, Any], Response]:
         """
         Retrieve the policy body for the named egp policy.
 
@@ -174,11 +174,11 @@ class Policies(VaultApiBase):
         :return: The response of the request
         """
         api_path = f"/v1/sys/policies/egp/{name}"
-        return self._adapter.get(
+        return await self._adapter.get(
             url=api_path,
         )
 
-    def create_or_update_egp_policy(
+    async def create_or_update_egp_policy(
         self, name: str, policy: str, enforcement_level: str, paths: list[str]
     ) -> Union[dict[str, Any], Response]:
         """
@@ -201,12 +201,12 @@ class Policies(VaultApiBase):
             "paths": paths,
         }
         api_path = f"/v1/sys/policies/egp/{name}"
-        return self._adapter.put(
+        return await self._adapter.put(
             url=api_path,
             json=params,
         )
 
-    def delete_egp_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def delete_egp_policy(self, name: str) -> Union[dict[str, Any], Response]:
         """
         Delete the egp policy with the given name.
         This will immediately affect all users associated with this policy.
@@ -218,6 +218,6 @@ class Policies(VaultApiBase):
         :return: The response of the request.
         """
         api_path = f"/v1/sys/policies/egp/{name}"
-        return self._adapter.delete(
+        return await self._adapter.delete(
             url=api_path,
         )

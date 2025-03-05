@@ -1,9 +1,11 @@
 import abc
 import ssl  # pragma: no cover
+import types
 import typing as tp
 from types import CoroutineType
 from typing import Any, Optional, Union
 
+import aiohttp
 import httpx
 from httpx import Response
 
@@ -92,6 +94,18 @@ class Adapter(MetaAdapter):
             "timeout": timeout,
             "proxy": proxy,
         }
+
+    def __enter__(self: "Adapter") -> "Adapter":
+        self.client.__enter__()
+        return self
+
+    def __exit__(
+        self,
+        exc_type: Optional[type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[types.TracebackType] = None,
+    ) -> None:
+        self.client.__exit__(exc_type, exc_value, traceback)
 
     @classmethod
     @exceptions.handle_unknown_exception
@@ -367,6 +381,44 @@ class JsonAdapter(RawAdapter):
         raise VaultxError("Unexpected dict return from RawAdapter's request method inside JsonAdapter's request method")
 
 
+@exceptions.handle_unknown_exception
+class AiohttpTransport(httpx.AsyncBaseTransport):
+    """Class for providing httpx requests with aiohttp transport"""
+
+    def __init__(self, session: Optional[aiohttp.ClientSession] = None):
+        self._session = session or aiohttp.ClientSession()
+        self._closed = False
+
+    async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+        if self._closed:
+            raise RuntimeError("Transport is closed")
+
+        headers = dict(request.headers)
+
+        # Prepare request parameters
+        method = request.method
+        url = str(request.url)
+        content = request.content
+
+        async with self._session.request(
+            method=method,
+            url=url,
+            headers=headers,
+            data=content,
+            allow_redirects=False,
+        ) as aiohttp_response:
+            content = await aiohttp_response.read()
+            headers = [(k.lower(), v) for k, v in aiohttp_response.headers.items()]
+            return httpx.Response(
+                status_code=aiohttp_response.status, headers=headers, content=content, request=request
+            )
+
+    async def aclose(self):
+        if not self._closed:
+            self._closed = True
+            await self._session.close()
+
+
 class AsyncAdapter(MetaAdapter):
     """Abstract asynchronous adapter class"""
 
@@ -411,7 +463,8 @@ class AsyncAdapter(MetaAdapter):
         """
 
         if not client:
-            client = httpx.AsyncClient(cert=cert, verify=verify, proxy=proxy)
+            client = httpx.AsyncClient(cert=cert, verify=verify, proxy=proxy, transport=AiohttpTransport())
+            # client = httpx.AsyncClient(cert=cert, verify=verify, proxy=proxy)
 
         self.base_uri = base_uri
         self.token = token
@@ -428,6 +481,20 @@ class AsyncAdapter(MetaAdapter):
             "timeout": timeout,
             "proxy": proxy,
         }
+
+    @exceptions.handle_unknown_exception
+    async def __aenter__(self: "AsyncAdapter") -> "AsyncAdapter":
+        await self.client.__aenter__()
+        return self
+
+    @exceptions.handle_unknown_exception
+    async def __aexit__(
+        self,
+        exc_type: Optional[type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[types.TracebackType] = None,
+    ) -> None:
+        await self.client.__aexit__(exc_type, exc_value, traceback)
 
     @classmethod
     @exceptions.handle_unknown_exception
@@ -453,7 +520,7 @@ class AsyncAdapter(MetaAdapter):
 
     @exceptions.handle_unknown_exception
     async def close(self):
-        """Close the Client's underlying TCP connections."""
+        """Close the AsyncClient's underlying TCP connections."""
         await self.client.aclose()
 
     @exceptions.handle_unknown_exception
@@ -529,11 +596,11 @@ class AsyncAdapter(MetaAdapter):
 
         Associated request is typically sent to a path prefixed with "/v1/auth"
             and optionally stores the client token sent in the resulting Vault response
-            for use by the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
+            for use by the :py:meth:`vaultx.adapters.AsyncAdapter` instance under the _adapter Client attribute.
 
         :param url: Path to send the authentication request to.
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
-            attribute on the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
+            attribute on the :py:meth:`vaultx.adapters.AsyncAdapter` instance under the _adapter Client attribute.
         :param kwargs: Additional keyword arguments to include in the params sent with the request.
         """
         response = await self.post(url, **kwargs)

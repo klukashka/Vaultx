@@ -21,14 +21,27 @@
 
 ---
 
-Install Vaultx using pip:
+## Installation
 
 ```shell
-$ pip install vaultx
+pip install vaultx
 ```
 
----
+>**Note**: Vaultx is inspired by [hvac](https://github.com/hvac/hvac). Architecture and interface are taken from there.
 
-<h3 align="center">
-Currently in develop...
-</h3>
+## Features
+
+* Supports async
+* Based on [httpx](https://github.com/encode/httpx)
+* Supports [hvac](https://github.com/hvac/hvac) interface
+* Faster than [hvac](https://github.com/hvac/hvac)
+
+## Documentation
+* [Overview](https://klukashka.github.io/Vaultx/overview/)
+* [Getting Started](https://klukashka.github.io/Vaultx/overview/getting_started)
+* [Usage](https://klukashka.github.io/Vaultx/usage/)
+* [Async Support](https://klukashka.github.io/Vaultx/overview/async_support)
+* [Contribute](https://klukashka.github.io/Vaultx/contribute/)
+
+## Contributing
+If you want to contribute, follow the [Contribution Guide](https://klukashka.github.io/Vaultx/contribute/).

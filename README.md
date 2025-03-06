@@ -3,7 +3,7 @@
     <img src="https://github.com/user-attachments/assets/f9b82311-e1ec-4cf2-8792-3c0d9a7ab8c1" alt="Vaultx"> </a>
 </p>
 <p align="center">
-    <em>Vaultx library is a Python 3.x client for HashiCorp's Vault. It is based on httpx and provides both sync and async clients</em>
+    <em>Vaultx library is a Python 3.x httpx (with aiohttp support) client for HashiCorp's Vault. It is based on httpx and provides both sync and async clients</em>
 </p>
 
 <p align="center">

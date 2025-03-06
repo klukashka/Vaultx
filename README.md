@@ -37,11 +37,11 @@ pip install vaultx
 * Faster than [hvac](https://github.com/hvac/hvac)
 
 ## Documentation
-* [Overview](https://klukashka.github.io/Vaultx/overview/)
+* [Overview](https://klukashka.github.io/Vaultx/)
 * [Getting Started](https://klukashka.github.io/Vaultx/overview/getting_started)
 * [Usage](https://klukashka.github.io/Vaultx/usage/)
 * [Async Support](https://klukashka.github.io/Vaultx/overview/async_support)
-* [Contribute](https://klukashka.github.io/Vaultx/contribute/)
+* [Contribute](https://klukashka.github.io/Vaultx/contribute/guidelines/)
 
 ## Contributing
 If you want to contribute, follow the [Contribution Guide](https://klukashka.github.io/Vaultx/contribute/).

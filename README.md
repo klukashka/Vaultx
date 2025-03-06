@@ -44,4 +44,4 @@ pip install vaultx
 * [Contribute](https://klukashka.github.io/Vaultx/contribute/guidelines/)
 
 ## Contributing
-If you want to contribute, follow the [Contribution Guide](https://klukashka.github.io/Vaultx/contribute/).
+If you want to contribute, follow the [Contribution Guide](https://klukashka.github.io/Vaultx/contribute/guidelines/).

@@ -26,11 +26,13 @@ nav:
   - Overview:
       - Welcome to Vaultx: 'index.md'
       - Getting Started: 'overview/getting_started.md'
+      - Async Support: 'overview/async_support.md'
       - Why Vaultx: 'overview/why_vaultx.md'
   - Usage:
       - Auth Methods:
           - Token: 'usage/auth_methods/token.md'
           - Userpass: 'usage/auth_methods/userpass.md'
+          - AppRole: 'usage/auth_methods/approle.md'
       - Secrets Engines:
           - KV: 'usage/secrets_engines/kv.md'
           - KV-v1: 'usage/secrets_engines/kv_v1.md'
@@ -38,11 +40,14 @@ nav:
       - System Backend:
           - Audit: 'usage/system_backend/audit.md'
           - Auth: 'usage/system_backend/auth.md'
+          - Capabilities: 'usage/system_backend/capabilities.md'
           - Health: 'usage/system_backend/health.md'
           - Key: 'usage/system_backend/key.md'
           - Leader: 'usage/system_backend/leader.md'
           - Lease: 'usage/system_backend/lease.md'
+          - Mount: 'usage/system_backend/mount.md'
           - Namespace: 'usage/system_backend/namespace.md'
+          - Policies: 'usage/system_backend/policies.md'
           - Policy: 'usage/system_backend/policy.md'
           - Quota: 'usage/system_backend/quota.md'
           - Raft: 'usage/system_backend/raft.md'

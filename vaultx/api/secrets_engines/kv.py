@@ -14,7 +14,7 @@ class Kv(VaultApiBase):
         """
         Create a new Kv instance.
 
-        :param adapter: Instance of :py:class:`hvac.adapters.Adapter`; used for performing HTTP requests.
+        :param adapter: Instance of :py:class:`vaultx.adapters.Adapter`; used for performing HTTP requests.
         :param default_kv_version: KV version number (e.g., '1') to use as the default
             when accessing attributes/methods under this class.
         """
@@ -38,7 +38,7 @@ class Kv(VaultApiBase):
     def v2(self) -> kv_v2.KvV2:
         """
         Accessor for kv version 2 class / method.
-            Provided via the :py:class:`hvac.api.secrets_engines.kv_v2.KvV2` class.
+            Provided via the :py:class:`vaultx.api.secrets_engines.kv_v2.KvV2` class.
 
         :return: This Kv instance's associated KvV2 instance.
         """
@@ -59,7 +59,7 @@ class Kv(VaultApiBase):
 
     def __getattr__(self, item: str) -> VaultApiBase:
         """
-        Overridden magic method used to direct method calls to the appropriate KV version's hvac class.
+        Overridden magic method used to direct method calls to the appropriate KV version's vaultx class.
 
         :param item: Name of the attribute/method being accessed
         :return: The selected secrets_engines class corresponding to this instance's default_kv_version setting

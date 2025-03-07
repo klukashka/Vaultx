@@ -38,7 +38,7 @@ class Kv(AsyncVaultApiBase):
     def v2(self) -> kv_v2.KvV2:
         """
         Accessor for kv version 2 class / method.
-            Provided via the :py:class:`hvac.api.secrets_engines.kv_v2.KvV2` class.
+            Provided via the :py:class:`vaultx.api.async_secrets_engines.kv_v2.KvV2` class.
 
         :return: This Kv instance's associated KvV2 instance.
         """
@@ -51,15 +51,15 @@ class Kv(AsyncVaultApiBase):
     @default_kv_version.setter
     def default_kv_version(self, default_kv_version):
         if str(default_kv_version) not in self.allowed_kv_versions:
-            error_message = 'Invalid "default_kv_version"; "{allowed}" allowed, "{provided}" provided'.format(
-                allowed=",".join(self.allowed_kv_versions), provided=default_kv_version
+            raise ValueError(
+                f'Invalid "default_kv_version"; "{",".join(self.allowed_kv_versions)}" allowed, '
+                f'"{default_kv_version}" provided'
             )
-            raise ValueError(error_message)
         self._default_kv_version = str(default_kv_version)
 
     def __getattr__(self, item: str) -> AsyncVaultApiBase:
         """
-        Overridden magic method used to direct method calls to the appropriate KV version's hvac class.
+        Overridden magic method used to direct method calls to the appropriate KV version's vaultx class.
 
         :param item: Name of the attribute/method being accessed
         :return: The selected secrets_engines class corresponding to this instance's default_kv_version setting

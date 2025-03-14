@@ -6,6 +6,7 @@ from vaultx import utils
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.exceptions import VaultxError
 
+
 DEFAULT_MOUNT_POINT = "pki"
 
 

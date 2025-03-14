@@ -3,8 +3,8 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.secrets_engines.pki import Pki
 from vaultx.api.async_secrets_engines.pki import Pki as AsyncPki
+from vaultx.api.secrets_engines.pki import Pki
 
 
 class TestPki(unittest.TestCase):
@@ -280,7 +280,9 @@ class TestPki(unittest.TestCase):
         mock_response = Response(200, json={"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.return_value = mock_response
 
-        result = self.pki.sign_certificate(name="test-role", csr="-----BEGIN CERTIFICATE REQUEST-----", common_name="example.com")
+        result = self.pki.sign_certificate(
+            name="test-role", csr="-----BEGIN CERTIFICATE REQUEST-----", common_name="example.com"
+        )
         if isinstance(result, Response):
             self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
@@ -642,7 +644,9 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         mock_response = Response(200, json={"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.return_value = mock_response
 
-        result = await self.pki.sign_certificate(name="test-role", csr="-----BEGIN CERTIFICATE REQUEST-----", common_name="example.com")
+        result = await self.pki.sign_certificate(
+            name="test-role", csr="-----BEGIN CERTIFICATE REQUEST-----", common_name="example.com"
+        )
         if isinstance(result, Response):
             self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(

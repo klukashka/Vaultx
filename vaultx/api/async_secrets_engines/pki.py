@@ -55,7 +55,9 @@ class Pki(AsyncVaultApiBase):
             return str(response.text)
         raise VaultxError("Unexpected non-Response return")
 
-    async def read_certificate(self, serial: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_certificate(
+        self, serial: str, mount_point: str = DEFAULT_MOUNT_POINT
+    ) -> Union[dict[str, Any], Response]:
         """
         Read Certificate.
         Retrieve one of a selection of certificates.
@@ -687,7 +689,9 @@ class Pki(AsyncVaultApiBase):
 
         return await self._adapter.post(url=api_path, json=params)
 
-    async def revoke_issuer(self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def revoke_issuer(
+        self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT
+    ) -> Union[dict[str, Any], Response]:
         """
         Revoke issuer.
         Revoke a given issuer.
@@ -705,7 +709,9 @@ class Pki(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_issuer(self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_issuer(
+        self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT
+    ) -> Union[dict[str, Any], Response]:
         """
         Delete issuer.
         Delete a given issuer. Deleting the default issuer will result in a warning

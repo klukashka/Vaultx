@@ -33,8 +33,7 @@ class Pki(VaultApiBase):
         )
         if isinstance(response, Response):
             return str(response.text)
-        else:
-            raise VaultxError("Unexpected non-Response return")
+        raise VaultxError("Unexpected non-Response return")
 
     def read_ca_certificate_chain(self, mount_point: str = DEFAULT_MOUNT_POINT) -> str:
         """
@@ -53,8 +52,7 @@ class Pki(VaultApiBase):
         )
         if isinstance(response, Response):
             return str(response.text)
-        else:
-            raise VaultxError("Unexpected non-Response return")
+        raise VaultxError("Unexpected non-Response return")
 
     def read_certificate(self, serial: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
         """
@@ -225,8 +223,7 @@ class Pki(VaultApiBase):
         )
         if isinstance(response, Response):
             return str(response.text)
-        else:
-            raise VaultxError("Unexpected non-Response return")
+        raise VaultxError("Unexpected non-Response return")
 
     def rotate_crl(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
         """

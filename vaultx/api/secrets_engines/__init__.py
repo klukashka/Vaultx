@@ -4,16 +4,32 @@ import typing as tp
 
 from vaultx import exceptions
 from vaultx.adapters import Adapter
+from vaultx.api.secrets_engines.active_directory import ActiveDirectory
+from vaultx.api.secrets_engines.aws import Aws
+from vaultx.api.secrets_engines.azure import Azure
+from vaultx.api.secrets_engines.consul import Consul
+from vaultx.api.secrets_engines.database import Database
+from vaultx.api.secrets_engines.gcp import Gcp
+from vaultx.api.secrets_engines.identity import Identity
 from vaultx.api.secrets_engines.kv import Kv
 from vaultx.api.secrets_engines.kv_v1 import KvV1
 from vaultx.api.secrets_engines.kv_v2 import KvV2
+from vaultx.api.secrets_engines.ldap import Ldap
 from vaultx.api.vault_api_base import VaultApiBase
 
 
 __all__ = (
+    "ActiveDirectory",
+    "Aws",
+    "Azure",
+    "Consul",
+    "Database",
+    "Gcp",
+    "Identity",
     "Kv",
     "KvV1",
     "KvV2",
+    "Ldap",
     "SecretsEngines",
 )
 

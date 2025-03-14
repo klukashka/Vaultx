@@ -16,6 +16,7 @@ from vaultx.api.async_secrets_engines.kv_v1 import KvV1
 from vaultx.api.async_secrets_engines.kv_v2 import KvV2
 from vaultx.api.async_secrets_engines.ldap import Ldap
 from vaultx.api.async_secrets_engines.pki import Pki
+from vaultx.api.async_secrets_engines.rabbitmq import RabbitMQ
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -32,6 +33,7 @@ __all__ = (
     "KvV2",
     "Ldap",
     "Pki",
+    "RabbitMQ",
     "AsyncSecretsEngines",
 )
 

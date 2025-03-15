@@ -3,8 +3,8 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx.api.secrets_engines.rabbitmq import RabbitMQ
 from vaultx.api.async_secrets_engines.rabbitmq import RabbitMQ as AsyncRabbitMQ
+from vaultx.api.secrets_engines.rabbitmq import RabbitMQ
 
 
 class TestRabbitMQ(unittest.TestCase):

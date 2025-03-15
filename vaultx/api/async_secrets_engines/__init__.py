@@ -18,6 +18,7 @@ from vaultx.api.async_secrets_engines.ldap import Ldap
 from vaultx.api.async_secrets_engines.pki import Pki
 from vaultx.api.async_secrets_engines.rabbitmq import RabbitMQ
 from vaultx.api.async_secrets_engines.ssh import Ssh
+from vaultx.api.async_secrets_engines.transform import Transform
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -36,6 +37,7 @@ __all__ = (
     "Pki",
     "RabbitMQ",
     "Ssh",
+    "Transform",
     "AsyncSecretsEngines",
 )
 

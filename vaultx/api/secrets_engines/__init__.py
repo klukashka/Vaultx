@@ -17,6 +17,7 @@ from vaultx.api.secrets_engines.kv_v2 import KvV2
 from vaultx.api.secrets_engines.ldap import Ldap
 from vaultx.api.secrets_engines.pki import Pki
 from vaultx.api.secrets_engines.rabbitmq import RabbitMQ
+from vaultx.api.secrets_engines.ssh import Ssh
 from vaultx.api.vault_api_base import VaultApiBase
 
 
@@ -34,6 +35,7 @@ __all__ = (
     "Ldap",
     "Pki",
     "RabbitMQ",
+    "Ssh",
     "SecretsEngines",
 )
 

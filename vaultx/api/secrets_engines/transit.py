@@ -809,7 +809,7 @@ class Transit(VaultApiBase):
                 f'supported types: "{allowed_types}"'
             )
         if salt_length is not None and not transit_constants.ALLOWED_SALT_LENGTHS.fullmatch(salt_length):
-            allowed_types = (transit_constants.ALLOWED_SALT_LENGTHS.pattern,)
+            allowed_types = transit_constants.ALLOWED_SALT_LENGTHS.pattern
             raise exceptions.VaultxError(
                 f'invalid salt_length argument provided "{salt_length}", supported types: "{allowed_types}"'
             )

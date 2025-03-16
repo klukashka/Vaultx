@@ -1,9 +1,11 @@
 import unittest
 from unittest import mock
+
 from httpx import Response
-from vaultx.api.async_secrets_engines.transit import Transit as AsyncTransit
-from vaultx.api.secrets_engines.transit import Transit, DEFAULT_MOUNT_POINT
+
 from vaultx import exceptions
+from vaultx.api.async_secrets_engines.transit import Transit as AsyncTransit
+from vaultx.api.secrets_engines.transit import DEFAULT_MOUNT_POINT, Transit
 
 
 class TestTransit(unittest.TestCase):
@@ -232,10 +234,7 @@ class TestTransit(unittest.TestCase):
         bits = 1024
         with self.assertRaises(exceptions.VaultxError) as context:
             self.transit.generate_data_key(name="test-key", key_type="plaintext", bits=bits)
-        self.assertIn(
-            f'invalid bits argument provided "{bits}"',
-            str(context.exception)
-        )
+        self.assertIn(f'invalid bits argument provided "{bits}"', str(context.exception))
 
     def test_generate_random_bytes(self):
         mock_response = Response(200, json={"data": {"random_bytes": "random-data"}})
@@ -698,10 +697,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         bits = 1024
         with self.assertRaises(exceptions.VaultxError) as context:
             await self.transit.generate_data_key(name="test-key", key_type="plaintext", bits=bits)
-        self.assertIn(
-            f'invalid bits argument provided "{bits}"',
-            str(context.exception)
-        )
+        self.assertIn(f'invalid bits argument provided "{bits}"', str(context.exception))
 
     async def test_generate_random_bytes(self):
         mock_response = Response(200, json={"data": {"random_bytes": "random-data"}})
@@ -812,12 +808,16 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
 
     async def test_sign_data_invalid_signature_algorithm(self):
         with self.assertRaises(exceptions.VaultxError) as context:
-            await self.transit.sign_data(name="test-key", hash_input="input-data", signature_algorithm="invalid-algorithm")
+            await self.transit.sign_data(
+                name="test-key", hash_input="input-data", signature_algorithm="invalid-algorithm"
+            )
         self.assertIn("invalid signature_algorithm argument provided", str(context.exception))
 
     async def test_sign_data_invalid_marshaling_algorithm(self):
         with self.assertRaises(exceptions.VaultxError) as context:
-            await self.transit.sign_data(name="test-key", hash_input="input-data", marshaling_algorithm="invalid-algorithm")
+            await self.transit.sign_data(
+                name="test-key", hash_input="input-data", marshaling_algorithm="invalid-algorithm"
+            )
         self.assertIn("invalid marshaling_algorithm argument provided", str(context.exception))
 
     async def test_sign_data_invalid_salt_length(self):

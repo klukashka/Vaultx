@@ -3,7 +3,7 @@
     <img src="https://github.com/user-attachments/assets/f9b82311-e1ec-4cf2-8792-3c0d9a7ab8c1" alt="Vaultx"> </a>
 </p>
 <p align="center">
-    <em>Vaultx library is a Python 3.x client for HashiCorp's Vault. It is based on httpx and provides both sync and async clients</em>
+    <em>Vaultx is a Python 3.x client for HashiCorp's Vault. It is based on httpx and provides both sync and async clients.</em>
 </p>
 
 <p align="center">
@@ -21,14 +21,27 @@
 
 ---
 
-Install Vaultx using pip:
+## Installation
 
 ```shell
-$ pip install vaultx
+pip install vaultx
 ```
 
----
+>**Note**: Vaultx is inspired by [hvac](https://github.com/hvac/hvac). Architecture and interface are taken from there.
 
-<h3 align="center">
-Currently in develop...
-</h3>
+## Features
+
+* Supports async
+* Based on [httpx](https://github.com/encode/httpx)
+* Supports [hvac](https://github.com/hvac/hvac) interface
+* Faster than [hvac](https://github.com/hvac/hvac)
+
+## Documentation
+* [Overview](https://klukashka.github.io/Vaultx/)
+* [Getting Started](https://klukashka.github.io/Vaultx/overview/getting_started)
+* [Usage](https://klukashka.github.io/Vaultx/usage/)
+* [Async Support](https://klukashka.github.io/Vaultx/overview/async_support)
+* [Contribute](https://klukashka.github.io/Vaultx/contribute/guidelines/)
+
+## Contributing
+If you want to contribute, follow the [Contribution Guide](https://klukashka.github.io/Vaultx/contribute/guidelines/).

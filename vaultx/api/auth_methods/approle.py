@@ -11,7 +11,7 @@ from vaultx.utils import list_to_comma_delimited, validate_list_of_strings_param
 
 class AppRole(VaultApiBase):
     """
-    USERPASS Auth Method (API).
+    AppRole Auth Method (API).
     Reference: https://www.vaultproject.io/api-docs/auth/approle/index.html
     """
 

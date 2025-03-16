@@ -4,16 +4,42 @@ import typing as tp
 
 from vaultx import exceptions
 from vaultx.adapters import AsyncAdapter
+from vaultx.api.async_secrets_engines.active_directory import ActiveDirectory
+from vaultx.api.async_secrets_engines.aws import Aws
+from vaultx.api.async_secrets_engines.azure import Azure
+from vaultx.api.async_secrets_engines.consul import Consul
+from vaultx.api.async_secrets_engines.database import Database
+from vaultx.api.async_secrets_engines.gcp import Gcp
+from vaultx.api.async_secrets_engines.identity import Identity
 from vaultx.api.async_secrets_engines.kv import Kv
 from vaultx.api.async_secrets_engines.kv_v1 import KvV1
 from vaultx.api.async_secrets_engines.kv_v2 import KvV2
+from vaultx.api.async_secrets_engines.ldap import Ldap
+from vaultx.api.async_secrets_engines.pki import Pki
+from vaultx.api.async_secrets_engines.rabbitmq import RabbitMQ
+from vaultx.api.async_secrets_engines.ssh import Ssh
+from vaultx.api.async_secrets_engines.transform import Transform
+from vaultx.api.async_secrets_engines.transit import Transit
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
 __all__ = (
+    "ActiveDirectory",
+    "Aws",
+    "Azure",
+    "Consul",
+    "Database",
+    "Gcp",
+    "Identity",
     "Kv",
     "KvV1",
     "KvV2",
+    "Ldap",
+    "Pki",
+    "RabbitMQ",
+    "Ssh",
+    "Transform",
+    "Transit",
     "AsyncSecretsEngines",
 )
 

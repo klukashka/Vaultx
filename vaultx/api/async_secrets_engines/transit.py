@@ -88,8 +88,8 @@ class Transit(AsyncVaultApiBase):
         """
         Read information about a named encryption key.
         The keys object shows the creation time of each key version; the values are not the keys themselves. Depending
-        on the type of key, different information may be returned, e.g. an asymmetric key will return await its public key in
-        a standard format for the type.
+        on the type of key, different information may be returned,
+        e.g. an asymmetric key will return await its public key in a standard format for the type.
 
         Supported methods:
             GET: /{mount_point}/keys/{name}. Produces: 200 application/json
@@ -443,10 +443,10 @@ class Transit(AsyncVaultApiBase):
         """
         Generate a new high-entropy key and the value encrypted with the named key.
 
-        Optionally return await the plaintext of the key as well. Whether plaintext is returned depends on the path; as a
-        result, you can use Vault ACL policies to control whether a user is allowed to retrieve the plaintext value of a
-        key. This is useful if you want an untrusted user or operation to generate keys that are then made available to
-        trusted users.
+        Optionally return await the plaintext of the key as well. Whether plaintext is returned depends on the path;
+            as a result, you can use Vault ACL policies to control whether a user is allowed to retrieve the plaintext
+            value of a key. This is useful if you want an untrusted user or operation to generate keys
+            that are then made available to trusted users.
 
         Supported methods:
             POST: /{mount_point}/datakey/{key_type}/{name}. Produces: 200 application/json

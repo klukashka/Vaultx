@@ -39,7 +39,7 @@ __all__ = (
     "RabbitMQ",
     "Ssh",
     "Transform",
-    "Transit", 
+    "Transit",
     "AsyncSecretsEngines",
 )
 

@@ -19,6 +19,7 @@ from vaultx.api.secrets_engines.pki import Pki
 from vaultx.api.secrets_engines.rabbitmq import RabbitMQ
 from vaultx.api.secrets_engines.ssh import Ssh
 from vaultx.api.secrets_engines.transform import Transform
+from vaultx.api.secrets_engines.transit import Transit
 from vaultx.api.vault_api_base import VaultApiBase
 
 
@@ -38,6 +39,7 @@ __all__ = (
     "RabbitMQ",
     "Ssh",
     "Transform",
+    "Transit",
     "SecretsEngines",
 )
 

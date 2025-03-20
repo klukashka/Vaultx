@@ -26,8 +26,7 @@ class TestAzure(unittest.TestCase):
             "environment": "AzurePublicCloud",
         }
         result = self.azure.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/azure/config",
             json=params,
@@ -62,8 +61,7 @@ class TestAzure(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.azure.delete_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/azure/config",
         )
@@ -79,8 +77,7 @@ class TestAzure(unittest.TestCase):
             "max_ttl": "24h",
         }
         result = self.azure.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "azure_roles": json.dumps(params["azure_roles"]),
@@ -130,8 +127,7 @@ class TestAsyncAzure(unittest.IsolatedAsyncioTestCase):
             "environment": "AzurePublicCloud",
         }
         result = await self.azure.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/azure/config",
             json=params,
@@ -152,8 +148,7 @@ class TestAsyncAzure(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.azure.delete_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/azure/config",
         )
@@ -169,8 +164,7 @@ class TestAsyncAzure(unittest.IsolatedAsyncioTestCase):
             "max_ttl": "24h",
         }
         result = await self.azure.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "azure_roles": json.dumps(params["azure_roles"]),

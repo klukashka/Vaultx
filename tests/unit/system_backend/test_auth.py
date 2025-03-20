@@ -5,6 +5,7 @@ from unittest.mock import AsyncMock
 from httpx import Response
 
 from vaultx import exceptions
+from vaultx.adapters import VaultxResponse
 from vaultx.api.async_system_backend.auth import Auth as AsyncAuth
 from vaultx.api.system_backend.auth import Auth
 
@@ -16,13 +17,12 @@ class TestAuth(unittest.TestCase):
 
     def test_list_auth_methods_returns_response(self):
         mock_response = Response(200, json={"data": {"token/": {"type": "token"}}})
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.auth.list_auth_methods()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"token/": {"type": "token"}}})
+        self.assertEqual(result.status, 200)
+        self.assertEqual(result.value, {"data": {"token/": {"type": "token"}}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/sys/auth",
         )
@@ -40,8 +40,7 @@ class TestAuth(unittest.TestCase):
             path="github-auth",
         )
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/auth/github-auth",
             json={
@@ -59,8 +58,7 @@ class TestAuth(unittest.TestCase):
 
         result = self.auth.enable_auth_method(method_type="token")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/auth/token",
             json={"type": "token", "local": False},
@@ -72,21 +70,19 @@ class TestAuth(unittest.TestCase):
 
         result = self.auth.disable_auth_method(path="github-auth")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/sys/auth/github-auth",
         )
 
     def test_read_auth_method_tuning_returns_response(self):
         mock_response = Response(200, json={"data": {"default_lease_ttl": 3600}})
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.auth.read_auth_method_tuning(path="github-auth")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"default_lease_ttl": 3600}})
+        self.assertEqual(result.status, 200)
+        self.assertEqual(result.value, {"data": {"default_lease_ttl": 3600}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/sys/auth/github-auth/tune",
         )
@@ -106,8 +102,7 @@ class TestAuth(unittest.TestCase):
             passthrough_request_headers=["header1", "header2"],
         )
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/auth/github-auth/tune",
             json={
@@ -127,8 +122,7 @@ class TestAuth(unittest.TestCase):
 
         result = self.auth.tune_auth_method(path="github-auth", default_lease_ttl=3600)
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/auth/github-auth/tune",
             json={"default_lease_ttl": 3600},
@@ -154,13 +148,12 @@ class TestAsyncAuth(unittest.IsolatedAsyncioTestCase):
 
     async def test_list_auth_methods_returns_response(self):
         mock_response = Response(200, json={"data": {"token/": {"type": "token"}}})
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = await self.auth.list_auth_methods()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"token/": {"type": "token"}}})
+        self.assertEqual(result.status, 200)
+        self.assertEqual(result.value, {"data": {"token/": {"type": "token"}}})
 
         self.mock_adapter.get.assert_called_once_with(url="/v1/sys/auth")
 
@@ -177,8 +170,7 @@ class TestAsyncAuth(unittest.IsolatedAsyncioTestCase):
             path="github-auth",
         )
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/auth/github-auth",
@@ -197,8 +189,7 @@ class TestAsyncAuth(unittest.IsolatedAsyncioTestCase):
 
         result = await self.auth.enable_auth_method(method_type="token")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/auth/token",
@@ -211,8 +202,7 @@ class TestAsyncAuth(unittest.IsolatedAsyncioTestCase):
 
         result = await self.auth.disable_auth_method(path="github-auth")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/auth/github-auth")
 
@@ -222,9 +212,8 @@ class TestAsyncAuth(unittest.IsolatedAsyncioTestCase):
 
         result = await self.auth.read_auth_method_tuning(path="github-auth")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"default_lease_ttl": 3600}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"default_lease_ttl": 3600}})
 
         self.mock_adapter.get.assert_called_once_with(url="/v1/sys/auth/github-auth/tune")
 
@@ -243,8 +232,7 @@ class TestAsyncAuth(unittest.IsolatedAsyncioTestCase):
             passthrough_request_headers=["header1", "header2"],
         )
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/auth/github-auth/tune",
@@ -265,8 +253,7 @@ class TestAsyncAuth(unittest.IsolatedAsyncioTestCase):
 
         result = await self.auth.tune_auth_method(path="github-auth", default_lease_ttl=3600)
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/auth/github-auth/tune",

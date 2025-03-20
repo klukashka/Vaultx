@@ -26,8 +26,7 @@ class TestTransit(unittest.TestCase):
             key_type="aes256-gcm96",
             auto_rotate_period="24h",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key",
             json={
@@ -50,8 +49,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.transit.read_key(name="test-key")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-key"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key",
         )
@@ -61,8 +59,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.transit.list_keys()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys",
         )
@@ -72,8 +69,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.transit.delete_key(name="test-key")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key",
         )
@@ -91,8 +87,7 @@ class TestTransit(unittest.TestCase):
             allow_plaintext_backup=True,
             auto_rotate_period="24h",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key/config",
             json={
@@ -110,8 +105,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.transit.rotate_key(name="test-key")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key/rotate",
         )
@@ -121,8 +115,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.transit.export_key(name="test-key", key_type="encryption-key", version="latest")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"key": "test-key"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"v1/{DEFAULT_MOUNT_POINT}/export/encryption-key/test-key/latest",
         )
@@ -145,8 +138,7 @@ class TestTransit(unittest.TestCase):
             _type="aes256-gcm96",
             convergent_encryption="convergent-data",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"ciphertext": "encrypted-data"}})
+        self.assertEqual(result.json(), {"data": {"ciphertext": "encrypted-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/encrypt/test-key",
             json={
@@ -169,8 +161,7 @@ class TestTransit(unittest.TestCase):
             context="context-data",
             nonce="nonce-data",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"plaintext": "decrypted-data"}})
+        self.assertEqual(result.json(), {"data": {"plaintext": "decrypted-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/decrypt/test-key",
             json={
@@ -191,8 +182,7 @@ class TestTransit(unittest.TestCase):
             key_version=1,
             nonce="nonce-data",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"ciphertext": "rewrapped-data"}})
+        self.assertEqual(result.json(), {"data": {"ciphertext": "rewrapped-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/rewrap/test-key",
             json={
@@ -214,8 +204,7 @@ class TestTransit(unittest.TestCase):
             nonce="nonce-data",
             bits=256,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"plaintext": "plaintext-key"}})
+        self.assertEqual(result.json(), {"data": {"plaintext": "plaintext-key"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/datakey/plaintext/test-key",
             json={
@@ -241,8 +230,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.transit.generate_random_bytes(n_bytes=32, output_format="base64")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"random_bytes": "random-data"}})
+        self.assertEqual(result.json(), {"data": {"random_bytes": "random-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/random",
             json={
@@ -260,8 +248,7 @@ class TestTransit(unittest.TestCase):
             algorithm="sha2-256",
             output_format="base64",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"hash": "hashed-data"}})
+        self.assertEqual(result.json(), {"data": {"hash": "hashed-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/hash",
             json={
@@ -291,8 +278,7 @@ class TestTransit(unittest.TestCase):
             key_version=1,
             algorithm="sha2-256",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"hmac": "hmac-data"}})
+        self.assertEqual(result.json(), {"data": {"hmac": "hmac-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/hmac/test-key",
             json={
@@ -322,8 +308,7 @@ class TestTransit(unittest.TestCase):
             marshaling_algorithm="asn1",
             salt_length="auto",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"signature": "signature-data"}})
+        self.assertEqual(result.json(), {"data": {"signature": "signature-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/sign/test-key",
             json={
@@ -373,8 +358,7 @@ class TestTransit(unittest.TestCase):
             marshaling_algorithm="asn1",
             salt_length="auto",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"valid": True}})
+        self.assertEqual(result.json(), {"data": {"valid": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/verify/test-key",
             json={
@@ -435,8 +419,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.transit.backup_key(name="test-key")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"backup": "backup-data"}})
+        self.assertEqual(result.json(), {"data": {"backup": "backup-data"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/backup/test-key",
         )
@@ -446,8 +429,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.transit.restore_key(backup="backup-data", name="test-key", force=True)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url=f"v1/{DEFAULT_MOUNT_POINT}/restore/test-key",
             json={
@@ -461,8 +443,7 @@ class TestTransit(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.transit.trim_key(name="test-key", min_version=1)
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"trimmed": True}})
+        self.assertEqual(result.json(), {"data": {"trimmed": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key/trim",
             json={
@@ -489,8 +470,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             key_type="aes256-gcm96",
             auto_rotate_period="24h",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key",
             json={
@@ -513,8 +493,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.transit.read_key(name="test-key")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-key"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key",
         )
@@ -524,8 +503,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.transit.list_keys()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys",
         )
@@ -535,8 +513,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.transit.delete_key(name="test-key")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key",
         )
@@ -554,8 +531,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             allow_plaintext_backup=True,
             auto_rotate_period="24h",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key/config",
             json={
@@ -573,8 +549,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.transit.rotate_key(name="test-key")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key/rotate",
         )
@@ -584,8 +559,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.transit.export_key(name="test-key", key_type="encryption-key", version="latest")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"key": "test-key"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"v1/{DEFAULT_MOUNT_POINT}/export/encryption-key/test-key/latest",
         )
@@ -608,8 +582,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             _type="aes256-gcm96",
             convergent_encryption="convergent-data",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"ciphertext": "encrypted-data"}})
+        self.assertEqual(result.json(), {"data": {"ciphertext": "encrypted-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/encrypt/test-key",
             json={
@@ -632,8 +605,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             context="context-data",
             nonce="nonce-data",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"plaintext": "decrypted-data"}})
+        self.assertEqual(result.json(), {"data": {"plaintext": "decrypted-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/decrypt/test-key",
             json={
@@ -654,8 +626,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             key_version=1,
             nonce="nonce-data",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"ciphertext": "rewrapped-data"}})
+        self.assertEqual(result.json(), {"data": {"ciphertext": "rewrapped-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/rewrap/test-key",
             json={
@@ -677,8 +648,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             nonce="nonce-data",
             bits=256,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"plaintext": "plaintext-key"}})
+        self.assertEqual(result.json(), {"data": {"plaintext": "plaintext-key"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/datakey/plaintext/test-key",
             json={
@@ -704,8 +674,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.transit.generate_random_bytes(n_bytes=32, output_format="base64")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"random_bytes": "random-data"}})
+        self.assertEqual(result.json(), {"data": {"random_bytes": "random-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/random",
             json={
@@ -723,8 +692,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             algorithm="sha2-256",
             output_format="base64",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"hash": "hashed-data"}})
+        self.assertEqual(result.json(), {"data": {"hash": "hashed-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/hash",
             json={
@@ -754,8 +722,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             key_version=1,
             algorithm="sha2-256",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"hmac": "hmac-data"}})
+        self.assertEqual(result.json(), {"data": {"hmac": "hmac-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/hmac/test-key",
             json={
@@ -785,8 +752,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             marshaling_algorithm="asn1",
             salt_length="auto",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"signature": "signature-data"}})
+        self.assertEqual(result.json(), {"data": {"signature": "signature-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/sign/test-key",
             json={
@@ -840,8 +806,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
             marshaling_algorithm="asn1",
             salt_length="auto",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"valid": True}})
+        self.assertEqual(result.json(), {"data": {"valid": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/verify/test-key",
             json={
@@ -902,8 +867,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.transit.backup_key(name="test-key")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"backup": "backup-data"}})
+        self.assertEqual(result.json(), {"data": {"backup": "backup-data"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/backup/test-key",
         )
@@ -913,8 +877,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.transit.restore_key(backup="backup-data", name="test-key", force=True)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url=f"v1/{DEFAULT_MOUNT_POINT}/restore/test-key",
             json={
@@ -928,8 +891,7 @@ class TestAsyncTransit(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.transit.trim_key(name="test-key", min_version=1)
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"trimmed": True}})
+        self.assertEqual(result.json(), {"data": {"trimmed": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/keys/test-key/trim",
             json={

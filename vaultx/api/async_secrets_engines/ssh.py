@@ -1,7 +1,6 @@
-from typing import Any, Optional, Union
+from typing import Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -45,7 +44,7 @@ class Ssh(AsyncVaultApiBase):
         allowed_user_key_lengths: Optional[dict[str, int]] = None,
         algorithm_signer: str = "",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint creates or updates a named role.
 
@@ -130,7 +129,7 @@ class Ssh(AsyncVaultApiBase):
         self,
         name: str = "",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint queries a named role.
 
@@ -144,7 +143,7 @@ class Ssh(AsyncVaultApiBase):
     async def list_roles(
         self,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint returns a list of available roles. Only the role names are returned, not any values.
 
@@ -154,9 +153,7 @@ class Ssh(AsyncVaultApiBase):
         api_path = f"/v1/{mount_point}/roles"
         return await self._adapter.list(url=api_path)
 
-    async def delete_role(
-        self, name: str = "", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_role(self, name: str = "", mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes a named role.
 
@@ -170,7 +167,7 @@ class Ssh(AsyncVaultApiBase):
     async def list_zeroaddress_roles(
         self,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint returns the list of configured zero-address roles.
 
@@ -184,7 +181,7 @@ class Ssh(AsyncVaultApiBase):
         self,
         roles: str = "",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint configures zero-address roles.
 
@@ -204,7 +201,7 @@ class Ssh(AsyncVaultApiBase):
             json=params,
         )
 
-    async def delete_zeroaddress_role(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_zeroaddress_role(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes the zero-address roles configuration.
 
@@ -223,7 +220,7 @@ class Ssh(AsyncVaultApiBase):
         username: str = "",
         ip: str = "",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint creates credentials for a specific username and IP with the parameters defined in the given role.
 
@@ -245,7 +242,7 @@ class Ssh(AsyncVaultApiBase):
         self,
         ip: str = "",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint lists all the roles with which the given IP is associated.
 
@@ -267,7 +264,7 @@ class Ssh(AsyncVaultApiBase):
         self,
         otp: str,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint verifies if the given OTP is valid. This is an unauthenticated endpoint.
 
@@ -294,7 +291,7 @@ class Ssh(AsyncVaultApiBase):
         key_type: str = "ssh-rsa",
         key_bits: int = 0,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint allows submitting the CA information for the secrets engine via an SSH key pair.
 
@@ -326,7 +323,7 @@ class Ssh(AsyncVaultApiBase):
     async def delete_ca_information(
         self,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint deletes the CA information for the backend via an SSH key pair.
 
@@ -340,7 +337,7 @@ class Ssh(AsyncVaultApiBase):
     async def read_public_key(
         self,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint reads the configured/generated public key.
 
@@ -362,7 +359,7 @@ class Ssh(AsyncVaultApiBase):
         critical_options: Optional[dict] = None,
         extensions: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint signs an SSH public key based on the supplied parameters,
         subject to the restrictions contained in the role named in the endpoint.

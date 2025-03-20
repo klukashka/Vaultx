@@ -1,13 +1,12 @@
 import json
-from typing import Any, Union
+from typing import Union
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
 class Policy(VaultApiBase):
-    def list_policies(self) -> Union[dict[str, Any], Response]:
+    def list_policies(self) -> VaultxResponse:
         """
         List all configured policies.
 
@@ -21,7 +20,7 @@ class Policy(VaultApiBase):
             url=api_path,
         )
 
-    def read_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    def read_policy(self, name: str) -> VaultxResponse:
         """
         Retrieve the policy body for the named policy.
 
@@ -36,9 +35,7 @@ class Policy(VaultApiBase):
             url=api_path,
         )
 
-    def create_or_update_policy(
-        self, name: str, policy: Union[str, dict], pretty_print: bool = True
-    ) -> Union[dict[str, Any], Response]:
+    def create_or_update_policy(self, name: str, policy: Union[str, dict], pretty_print: bool = True) -> VaultxResponse:
         """
         Add a new or update an existing policy.
         Once a policy is updated, it takes effect immediately to all associated users.
@@ -63,7 +60,7 @@ class Policy(VaultApiBase):
             json=params,
         )
 
-    def delete_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    def delete_policy(self, name: str) -> VaultxResponse:
         """
         Delete the policy with the given name.
         This will immediately affect all users associated with this policy.

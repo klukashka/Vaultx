@@ -1,12 +1,9 @@
-from typing import Any, Union
-
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
 class Leader(VaultApiBase):
-    def read_leader_status(self) -> Union[dict[str, Any], Response]:
+    def read_leader_status(self) -> VaultxResponse:
         """
         Read the high availability status and current leader instance of Vault.
 
@@ -20,7 +17,7 @@ class Leader(VaultApiBase):
             url=api_path,
         )
 
-    def step_down(self) -> Union[dict[str, Any], Response]:
+    def step_down(self) -> VaultxResponse:
         """
         Force the node to give up active status.
         When executed against a non-active node, i.e. a standby or performance

@@ -22,8 +22,7 @@ class TestRabbitMQ(unittest.TestCase):
             password="password",
             verify_connection=True,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/rabbitmq/config/connection",
             json={
@@ -39,8 +38,7 @@ class TestRabbitMQ(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.rabbitmq.configure_lease(ttl=3600, max_ttl=7200)
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"ttl": 3600, "max_ttl": 7200}})
+        self.assertEqual(result.json(), {"data": {"ttl": 3600, "max_ttl": 7200}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/rabbitmq/config/lease",
             json={"ttl": 3600, "max_ttl": 7200},
@@ -56,10 +54,9 @@ class TestRabbitMQ(unittest.TestCase):
             vhosts="vhost1",
             vhost_topics="topic1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.post.assert_called_once_with(
-            url="/v1/rabbitmq/roles/rabbitmq",
+            url="/v1/rabbitmq/roles/test-role",
             json={"tags": "administrator", "vhosts": "vhost1", "vhost_topics": "topic1"},
         )
 
@@ -68,8 +65,7 @@ class TestRabbitMQ(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.rabbitmq.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/rabbitmq/roles/test-role",
         )
@@ -79,8 +75,7 @@ class TestRabbitMQ(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.rabbitmq.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/rabbitmq/roles/test-role",
         )
@@ -90,8 +85,7 @@ class TestRabbitMQ(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.rabbitmq.generate_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/rabbitmq/creds/test-role",
         )
@@ -112,8 +106,7 @@ class TestAsyncRabbitMQ(unittest.IsolatedAsyncioTestCase):
             password="password",
             verify_connection=True,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/rabbitmq/config/connection",
             json={
@@ -129,8 +122,7 @@ class TestAsyncRabbitMQ(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.rabbitmq.configure_lease(ttl=3600, max_ttl=7200)
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"ttl": 3600, "max_ttl": 7200}})
+        self.assertEqual(result.json(), {"data": {"ttl": 3600, "max_ttl": 7200}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/rabbitmq/config/lease",
             json={"ttl": 3600, "max_ttl": 7200},
@@ -146,10 +138,9 @@ class TestAsyncRabbitMQ(unittest.IsolatedAsyncioTestCase):
             vhosts="vhost1",
             vhost_topics="topic1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.post.assert_called_once_with(
-            url="/v1/rabbitmq/roles/rabbitmq",
+            url="/v1/rabbitmq/roles/test-role",
             json={"tags": "administrator", "vhosts": "vhost1", "vhost_topics": "topic1"},
         )
 
@@ -158,8 +149,7 @@ class TestAsyncRabbitMQ(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.rabbitmq.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/rabbitmq/roles/test-role",
         )
@@ -169,8 +159,7 @@ class TestAsyncRabbitMQ(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.rabbitmq.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/rabbitmq/roles/test-role",
         )
@@ -180,8 +169,7 @@ class TestAsyncRabbitMQ(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.rabbitmq.generate_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/rabbitmq/creds/test-role",
         )

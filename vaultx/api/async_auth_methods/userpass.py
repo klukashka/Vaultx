@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Any, Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -22,7 +21,7 @@ class Userpass(AsyncVaultApiBase):
         policies: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         **kwargs: dict[Any, Any],
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create/update user in userpass.
 
@@ -44,7 +43,7 @@ class Userpass(AsyncVaultApiBase):
             json=params,
         )
 
-    async def list_user(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_user(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List existing users that have been created in the auth method
 
@@ -58,7 +57,7 @@ class Userpass(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_user(self, username: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_user(self, username: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read user in the auth method.
 
@@ -74,9 +73,7 @@ class Userpass(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_user(
-        self, username: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_user(self, username: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete user in the auth method.
 
@@ -94,7 +91,7 @@ class Userpass(AsyncVaultApiBase):
 
     async def update_password_on_user(
         self, username: str, password: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         update password for the user in userpass.
 
@@ -114,7 +111,7 @@ class Userpass(AsyncVaultApiBase):
 
     async def login(
         self, username: str, password: str, use_token: bool = True, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Log in with USERPASS credentials.
 

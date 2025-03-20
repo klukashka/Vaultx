@@ -1,13 +1,12 @@
-from typing import Any, Optional, Union
+from typing import Any, Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.exceptions import VaultxError
 
 
 class Mount(VaultApiBase):
-    def list_mounted_secrets_engines(self) -> Union[dict[str, Any], Response]:
+    def list_mounted_secrets_engines(self) -> VaultxResponse:
         """
         List all the mounted secrets engines.
 
@@ -51,7 +50,7 @@ class Mount(VaultApiBase):
         local: bool = False,
         seal_wrap: bool = False,
         **kwargs,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Enable a new secrets engine at the given path.
 
@@ -109,7 +108,7 @@ class Mount(VaultApiBase):
             json=params,
         )
 
-    def disable_secrets_engine(self, path: str) -> Union[dict[str, Any], Response]:
+    def disable_secrets_engine(self, path: str) -> VaultxResponse:
         """
         Disable the mount point specified by the provided path.
 
@@ -124,7 +123,7 @@ class Mount(VaultApiBase):
             url=api_path,
         )
 
-    def read_mount_configuration(self, path: str) -> Union[dict[str, Any], Response]:
+    def read_mount_configuration(self, path: str) -> VaultxResponse:
         """
         Read the given mount's configuration.
         Unlike the mounts endpoint, this will return the current time in seconds for each TTL, which may be the system
@@ -213,7 +212,7 @@ class Mount(VaultApiBase):
             json=params,
         )
 
-    def move_backend(self, from_path: str, to_path: str) -> Union[dict[str, Any], Response]:
+    def move_backend(self, from_path: str, to_path: str) -> VaultxResponse:
         """
         Move an already-mounted backend to a new mount point.
 

@@ -23,8 +23,7 @@ class TestGcp(unittest.TestCase):
             "max_ttl": "24h",
         }
         result = self.gcp.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/config",
             json=params,
@@ -35,8 +34,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.gcp.rotate_root_credentials()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"new_key": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"new_key": "test-key"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/config/rotate-root",
         )
@@ -46,8 +44,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.gcp.read_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"ttl": "1h"}})
+        self.assertEqual(result.json(), {"data": {"ttl": "1h"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/config",
         )
@@ -64,8 +61,7 @@ class TestGcp(unittest.TestCase):
             "token_scopes": ["https://www.googleapis.com/auth/cloud-platform"],
         }
         result = self.gcp.create_or_update_roleset(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "project": "test-project",
@@ -98,8 +94,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.gcp.rotate_roleset_account(name="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/roleset/test-roleset/rotate",
         )
@@ -109,8 +104,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.gcp.rotate_roleset_account_key(name="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/roleset/test-roleset/rotate-key",
         )
@@ -120,8 +114,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.gcp.read_roleset(name="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-roleset"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-roleset"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/roleset/test-roleset",
         )
@@ -131,8 +124,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.gcp.list_rolesets()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["roleset1", "roleset2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["roleset1", "roleset2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/gcp/rolesets",
         )
@@ -142,8 +134,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.gcp.delete_roleset(name="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/gcp/roleset/test-roleset",
         )
@@ -153,8 +144,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.gcp.generate_oauth2_access_token(roleset="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "test-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "test-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/token/test-roleset",
         )
@@ -164,8 +154,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.gcp.generate_service_account_key(roleset="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"key": "test-key"}})
 
         expected_params = {
             "key_algorithm": "KEY_ALG_RSA_2048",
@@ -197,8 +186,7 @@ class TestGcp(unittest.TestCase):
             "token_scopes": ["https://www.googleapis.com/auth/cloud-platform"],
         }
         result = self.gcp.create_or_update_static_account(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "service_account_email": "test@example.com",
@@ -216,8 +204,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.gcp.rotate_static_account_key(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/static-account/test-static-account/rotate-key",
         )
@@ -227,8 +214,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.gcp.read_static_account(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-static-account"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-static-account"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/static-account/test-static-account",
         )
@@ -238,8 +224,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.gcp.list_static_accounts()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["static-account1", "static-account2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["static-account1", "static-account2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/gcp/static-accounts",
         )
@@ -249,8 +234,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.gcp.delete_static_account(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/gcp/static-account/test-static-account",
         )
@@ -260,8 +244,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.gcp.generate_static_account_oauth2_access_token(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "test-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "test-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/static-account/test-static-account/token",
         )
@@ -271,8 +254,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.gcp.generate_static_account_service_account_key(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"key": "test-key"}})
 
         expected_params = {
             "key_algorithm": "KEY_ALG_RSA_2048",
@@ -294,8 +276,7 @@ class TestGcp(unittest.TestCase):
             "ttl": "1h",
         }
         result = self.gcp.create_or_update_impersonated_account(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "service_account_email": "test@example.com",
@@ -312,8 +293,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.gcp.read_impersonated_account(name="test-impersonated-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-impersonated-account"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-impersonated-account"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/impersonated-account/test-impersonated-account",
         )
@@ -323,8 +303,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.gcp.list_impersonated_accounts()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["impersonated-account1", "impersonated-account2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["impersonated-account1", "impersonated-account2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/gcp/impersonated-accounts",
         )
@@ -334,8 +313,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.gcp.delete_impersonated_account(name="test-impersonated-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/gcp/impersonated-account/test-impersonated-account",
         )
@@ -345,8 +323,7 @@ class TestGcp(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.gcp.generate_impersonated_account_oauth2_access_token(name="test-impersonated-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "test-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "test-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/impersonated-account/test-impersonated-account/token",
         )
@@ -367,8 +344,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
             "max_ttl": "24h",
         }
         result = await self.gcp.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/config",
             json=params,
@@ -379,8 +355,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.gcp.rotate_root_credentials()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"new_key": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"new_key": "test-key"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/config/rotate-root",
         )
@@ -390,8 +365,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.gcp.read_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"ttl": "1h"}})
+        self.assertEqual(result.json(), {"data": {"ttl": "1h"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/config",
         )
@@ -408,8 +382,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
             "token_scopes": ["https://www.googleapis.com/auth/cloud-platform"],
         }
         result = await self.gcp.create_or_update_roleset(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "project": "test-project",
@@ -442,8 +415,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.gcp.rotate_roleset_account(name="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/roleset/test-roleset/rotate",
         )
@@ -453,8 +425,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.gcp.rotate_roleset_account_key(name="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/roleset/test-roleset/rotate-key",
         )
@@ -464,8 +435,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.gcp.read_roleset(name="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-roleset"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-roleset"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/roleset/test-roleset",
         )
@@ -475,8 +445,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.gcp.list_rolesets()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["roleset1", "roleset2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["roleset1", "roleset2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/gcp/rolesets",
         )
@@ -486,8 +455,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.gcp.delete_roleset(name="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/gcp/roleset/test-roleset",
         )
@@ -497,8 +465,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.gcp.generate_oauth2_access_token(roleset="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "test-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "test-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/token/test-roleset",
         )
@@ -508,8 +475,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.gcp.generate_service_account_key(roleset="test-roleset")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"key": "test-key"}})
 
         expected_params = {
             "key_algorithm": "KEY_ALG_RSA_2048",
@@ -541,8 +507,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
             "token_scopes": ["https://www.googleapis.com/auth/cloud-platform"],
         }
         result = await self.gcp.create_or_update_static_account(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "service_account_email": "test@example.com",
@@ -560,8 +525,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.gcp.rotate_static_account_key(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/gcp/static-account/test-static-account/rotate-key",
         )
@@ -571,8 +535,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.gcp.read_static_account(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-static-account"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-static-account"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/static-account/test-static-account",
         )
@@ -582,8 +545,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.gcp.list_static_accounts()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["static-account1", "static-account2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["static-account1", "static-account2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/gcp/static-accounts",
         )
@@ -593,8 +555,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.gcp.delete_static_account(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/gcp/static-account/test-static-account",
         )
@@ -604,8 +565,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.gcp.generate_static_account_oauth2_access_token(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "test-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "test-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/static-account/test-static-account/token",
         )
@@ -615,8 +575,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.gcp.generate_static_account_service_account_key(name="test-static-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "test-key"}})
+        self.assertEqual(result.json(), {"data": {"key": "test-key"}})
 
         expected_params = {
             "key_algorithm": "KEY_ALG_RSA_2048",
@@ -638,8 +597,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
             "ttl": "1h",
         }
         result = await self.gcp.create_or_update_impersonated_account(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "service_account_email": "test@example.com",
@@ -656,8 +614,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.gcp.read_impersonated_account(name="test-impersonated-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-impersonated-account"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-impersonated-account"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/impersonated-account/test-impersonated-account",
         )
@@ -667,8 +624,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.gcp.list_impersonated_accounts()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["impersonated-account1", "impersonated-account2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["impersonated-account1", "impersonated-account2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/gcp/impersonated-accounts",
         )
@@ -678,8 +634,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.gcp.delete_impersonated_account(name="test-impersonated-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/gcp/impersonated-account/test-impersonated-account",
         )
@@ -689,8 +644,7 @@ class TestAsyncGcp(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.gcp.generate_impersonated_account_oauth2_access_token(name="test-impersonated-account")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "test-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "test-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/gcp/impersonated-account/test-impersonated-account/token",
         )

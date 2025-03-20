@@ -1,15 +1,12 @@
-"""Support for "Audit"-related System Backend Methods."""
-
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
 class Audit(VaultApiBase):
-    def list_enabled_audit_devices(self) -> Union[dict[str, Any], Response]:
+    def list_enabled_audit_devices(self) -> VaultxResponse:
         """
         List enabled audit devices.
 
@@ -30,7 +27,7 @@ class Audit(VaultApiBase):
         options: Optional[str] = None,
         path: Optional[str] = None,
         local: Optional[bool] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """Enable a new audit device at the supplied path.
 
         The path can be a single word name or a more complex, nested path.
@@ -67,7 +64,7 @@ class Audit(VaultApiBase):
         api_path = f"/v1/sys/audit/{path}"
         return self._adapter.post(url=api_path, json=params)
 
-    def disable_audit_device(self, path: str) -> Union[dict[str, Any], Response]:
+    def disable_audit_device(self, path: str) -> VaultxResponse:
         """
         Disable the audit device at the given path.
 
@@ -82,7 +79,7 @@ class Audit(VaultApiBase):
             url=api_path,
         )
 
-    def calculate_hash(self, path: str, input_to_hash: str) -> Union[dict[str, Any], Response]:
+    def calculate_hash(self, path: str, input_to_hash: str) -> VaultxResponse:
         """
         Hash the given input data with the specified audit device's hash function and salt.
         This endpoint can be used to discover whether a given plaintext string (the input parameter) appears in the

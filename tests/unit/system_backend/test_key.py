@@ -57,8 +57,7 @@ class TestKey(unittest.TestCase):
     def test_cancel_root_generation(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.key.cancel_root_generation()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/generate-root/attempt")
 
     def test_get_encryption_key_status(self):
@@ -70,8 +69,7 @@ class TestKey(unittest.TestCase):
     def test_rotate_encryption_key(self):
         self.mock_adapter.put.return_value = Response(204)
         result = self.key.rotate_encryption_key()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(url="/v1/sys/rotate")
 
     def test_read_rekey_progress(self):
@@ -134,15 +132,13 @@ class TestKey(unittest.TestCase):
     def test_cancel_rekey(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.key.cancel_rekey()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/rekey/init")
 
     def test_cancel_rekey_recovery_key(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.key.cancel_rekey(recovery_key=True)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/rekey-recovery-key/init")
 
     def test_rekey(self):
@@ -181,8 +177,7 @@ class TestKey(unittest.TestCase):
     def test_cancel_rekey_verify(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.key.cancel_rekey_verify()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/rekey/verify")
 
     def test_rekey_verify(self):
@@ -251,8 +246,7 @@ class TestAsyncKey(unittest.IsolatedAsyncioTestCase):
     async def test_cancel_root_generation(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.key.cancel_root_generation()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/generate-root/attempt")
 
     async def test_get_encryption_key_status(self):
@@ -264,8 +258,7 @@ class TestAsyncKey(unittest.IsolatedAsyncioTestCase):
     async def test_rotate_encryption_key(self):
         self.mock_adapter.put.return_value = Response(204)
         result = await self.key.rotate_encryption_key()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(url="/v1/sys/rotate")
 
     async def test_read_rekey_progress(self):
@@ -311,15 +304,13 @@ class TestAsyncKey(unittest.IsolatedAsyncioTestCase):
     async def test_cancel_rekey(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.key.cancel_rekey()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/rekey/init")
 
     async def test_cancel_rekey_recovery_key(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.key.cancel_rekey(recovery_key=True)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/rekey-recovery-key/init")
 
     async def test_rekey(self):
@@ -353,8 +344,7 @@ class TestAsyncKey(unittest.IsolatedAsyncioTestCase):
     async def test_cancel_rekey_verify(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.key.cancel_rekey_verify()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/rekey/verify")
 
     async def test_rekey_verify(self):

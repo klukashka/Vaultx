@@ -22,8 +22,7 @@ class TestConsul(unittest.TestCase):
             "scheme": "http",
         }
         result = self.consul.configure_access(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/consul/config/access",
             json=params,
@@ -43,8 +42,7 @@ class TestConsul(unittest.TestCase):
             "max_ttl": "24h",
         }
         result = self.consul.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "token_type": "client",
@@ -64,8 +62,7 @@ class TestConsul(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.consul.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/consul/roles/test-role",
         )
@@ -75,8 +72,7 @@ class TestConsul(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.consul.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/consul/roles",
         )
@@ -86,8 +82,7 @@ class TestConsul(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.consul.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/consul/roles/test-role",
         )
@@ -97,8 +92,7 @@ class TestConsul(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.consul.generate_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "test-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "test-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/consul/creds/test-role",
         )
@@ -119,8 +113,7 @@ class TestAsyncConsul(unittest.IsolatedAsyncioTestCase):
             "scheme": "http",
         }
         result = await self.consul.configure_access(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/consul/config/access",
             json=params,
@@ -140,8 +133,7 @@ class TestAsyncConsul(unittest.IsolatedAsyncioTestCase):
             "max_ttl": "24h",
         }
         result = await self.consul.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "token_type": "client",
@@ -161,8 +153,7 @@ class TestAsyncConsul(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.consul.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/consul/roles/test-role",
         )
@@ -172,8 +163,7 @@ class TestAsyncConsul(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.consul.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/consul/roles",
         )
@@ -183,8 +173,7 @@ class TestAsyncConsul(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.consul.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/consul/roles/test-role",
         )
@@ -194,8 +183,7 @@ class TestAsyncConsul(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.consul.generate_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "test-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "test-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/consul/creds/test-role",
         )

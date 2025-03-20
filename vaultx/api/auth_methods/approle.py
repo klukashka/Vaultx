@@ -1,9 +1,8 @@
 import json
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import exceptions, utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.constants.approle import ALLOWED_TOKEN_TYPES, DEFAULT_MOUNT_POINT
 from vaultx.utils import list_to_comma_delimited, validate_list_of_strings_param
@@ -108,7 +107,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}"
         return self._adapter.post(url=api_path, json=params)
 
-    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List existing roles created in the auth method.
 
@@ -121,7 +120,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role"
         return self._adapter.list(url=api_path)
 
-    def read_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read role in the auth method.
 
@@ -135,7 +134,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}"
         return self._adapter.get(url=api_path)
 
-    def delete_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete role in the auth method.
 
@@ -149,7 +148,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}"
         return self._adapter.delete(url=api_path)
 
-    def read_role_id(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role_id(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the Role ID of a role in the auth method.
 
@@ -163,9 +162,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/role-id"
         return self._adapter.get(url=api_path)
 
-    def update_role_id(
-        self, role_name: str, role_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def update_role_id(self, role_name: str, role_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Update the Role ID of a role in the auth method.
 
@@ -190,7 +187,7 @@ class AppRole(VaultApiBase):
         token_bound_cidrs: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate and issue a new Secret ID on a role in the auth method.
 
@@ -240,7 +237,7 @@ class AppRole(VaultApiBase):
         token_bound_cidrs: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate and issue a new Secret ID on a role in the auth method.
 
@@ -283,9 +280,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/custom-secret-id"
         return self._adapter.post(url=api_path, json=params, wrap_ttl=wrap_ttl)
 
-    def read_secret_id(
-        self, role_name: str, secret_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def read_secret_id(self, role_name: str, secret_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the properties of a Secret ID for a role in the auth method.
 
@@ -303,7 +298,7 @@ class AppRole(VaultApiBase):
 
     def destroy_secret_id(
         self, role_name: str, secret_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Destroy a Secret ID for a role in the auth method.
 
@@ -318,9 +313,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/secret-id/destroy"
         return self._adapter.post(url=api_path, json=params)
 
-    def list_secret_id_accessors(
-        self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def list_secret_id_accessors(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List accessors of all issued Secret IDs for a role in the auth method.
 
@@ -336,7 +329,7 @@ class AppRole(VaultApiBase):
 
     def read_secret_id_accessor(
         self, role_name: str, secret_id_accessor: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Read the properties of a Secret ID for a role in the auth method.
 
@@ -354,7 +347,7 @@ class AppRole(VaultApiBase):
 
     def destroy_secret_id_accessor(
         self, role_name: str, secret_id_accessor: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Destroy a Secret ID for a role in the auth method.
 
@@ -371,7 +364,7 @@ class AppRole(VaultApiBase):
 
     def login(
         self, role_id: str, secret_id: Optional[str] = None, use_token: bool = True, mount_point=DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Login with APPROLE credentials.
 

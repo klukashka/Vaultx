@@ -1,13 +1,12 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
 class Quota(VaultApiBase):
-    def read_quota(self, name: str) -> Union[dict[str, Any], Response]:
+    def read_quota(self, name: str) -> VaultxResponse:
         """
         Read quota. Only works when calling on the root namespace.
 
@@ -20,7 +19,7 @@ class Quota(VaultApiBase):
         api_path = f"/v1/sys/quotas/rate-limit/{name}"
         return self._adapter.get(url=api_path)
 
-    def list_quotas(self) -> Union[dict[str, Any], Response]:
+    def list_quotas(self) -> VaultxResponse:
         """
         Retrieve a list of quotas by name. Only works when calling on the root namespace.
 
@@ -44,7 +43,7 @@ class Quota(VaultApiBase):
         role: Optional[str] = None,
         rate_limit_type: Optional[str] = None,
         inheritable: Optional[bool] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """Create quota if it doesn't exist or update if already created. Only works when calling on the root namespace.
 
         Supported methods:
@@ -78,7 +77,7 @@ class Quota(VaultApiBase):
             json=params,
         )
 
-    def delete_quota(self, name: str) -> Union[dict[str, Any], Response]:
+    def delete_quota(self, name: str) -> VaultxResponse:
         """
         Delete a given quota. Only works when calling on the root namespace.
 

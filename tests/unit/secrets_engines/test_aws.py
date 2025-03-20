@@ -26,8 +26,7 @@ class TestAws(unittest.TestCase):
             "max_retries": 3,
         }
         result = self.aws.configure_root_iam_credentials(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/aws/config/root",
             json=params,
@@ -38,8 +37,7 @@ class TestAws(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.aws.rotate_root_iam_credentials()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"access_key": "new-access-key"}})
+        self.assertEqual(result.json(), {"data": {"access_key": "new-access-key"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/aws/config/rotate-root",
         )
@@ -53,8 +51,7 @@ class TestAws(unittest.TestCase):
             "lease_max": "24h",
         }
         result = self.aws.configure_lease(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/aws/config/lease",
             json=params,
@@ -65,8 +62,7 @@ class TestAws(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.aws.read_lease_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"lease": "1h", "lease_max": "24h"}})
+        self.assertEqual(result.json(), {"data": {"lease": "1h", "lease_max": "24h"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/aws/config/lease",
         )
@@ -89,8 +85,7 @@ class TestAws(unittest.TestCase):
             "iam_tags": ["key=value"],
         }
         result = self.aws.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
     def test_create_or_update_role_with_invalid_credential_type_raises_error(self):
         with self.assertRaises(VaultxError) as context:
@@ -107,8 +102,7 @@ class TestAws(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.aws.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/aws/roles/test-role",
         )
@@ -118,8 +112,7 @@ class TestAws(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.aws.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/aws/roles",
         )
@@ -129,8 +122,7 @@ class TestAws(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.aws.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/aws/roles/test-role",
         )
@@ -140,10 +132,7 @@ class TestAws(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.aws.generate_credentials(name="test-role", endpoint="creds")
-        if isinstance(result, Response):
-            self.assertEqual(
-                result.json(), {"data": {"access_key": "test-access-key", "secret_key": "test-secret-key"}}
-            )
+        self.assertEqual(result.json(), {"data": {"access_key": "test-access-key", "secret_key": "test-secret-key"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/aws/creds/test-role",
             params={},
@@ -159,10 +148,7 @@ class TestAws(unittest.TestCase):
             "role_session_name": "test-session",
         }
         result = self.aws.generate_credentials(name="test-role", endpoint="sts", **params)
-        if isinstance(result, Response):
-            self.assertEqual(
-                result.json(), {"data": {"access_key": "test-access-key", "secret_key": "test-secret-key"}}
-            )
+        self.assertEqual(result.json(), {"data": {"access_key": "test-access-key", "secret_key": "test-secret-key"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/aws/sts/test-role",
             json=params,
@@ -196,8 +182,7 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
             "max_retries": 3,
         }
         result = await self.aws.configure_root_iam_credentials(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/aws/config/root",
             json=params,
@@ -208,8 +193,7 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.aws.rotate_root_iam_credentials()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"access_key": "new-access-key"}})
+        self.assertEqual(result.json(), {"data": {"access_key": "new-access-key"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/aws/config/rotate-root",
         )
@@ -223,8 +207,7 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
             "lease_max": "24h",
         }
         result = await self.aws.configure_lease(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/aws/config/lease",
             json=params,
@@ -235,8 +218,7 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.aws.read_lease_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"lease": "1h", "lease_max": "24h"}})
+        self.assertEqual(result.json(), {"data": {"lease": "1h", "lease_max": "24h"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/aws/config/lease",
         )
@@ -257,16 +239,14 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
             "iam_tags": ["key=value"],
         }
         result = await self.aws.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
     async def test_read_role_returns_response(self):
         mock_response = Response(200, json={"data": {"name": "test-role"}})
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.aws.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/aws/roles/test-role",
         )
@@ -276,8 +256,7 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.aws.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/aws/roles",
         )
@@ -287,8 +266,7 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.aws.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/aws/roles/test-role",
         )
@@ -298,10 +276,7 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.aws.generate_credentials(name="test-role", endpoint="creds")
-        if isinstance(result, Response):
-            self.assertEqual(
-                result.json(), {"data": {"access_key": "test-access-key", "secret_key": "test-secret-key"}}
-            )
+        self.assertEqual(result.json(), {"data": {"access_key": "test-access-key", "secret_key": "test-secret-key"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/aws/creds/test-role",
             params={},
@@ -317,10 +292,7 @@ class TestAsyncAws(unittest.IsolatedAsyncioTestCase):
             "role_session_name": "test-session",
         }
         result = await self.aws.generate_credentials(name="test-role", endpoint="sts", **params)
-        if isinstance(result, Response):
-            self.assertEqual(
-                result.json(), {"data": {"access_key": "test-access-key", "secret_key": "test-secret-key"}}
-            )
+        self.assertEqual(result.json(), {"data": {"access_key": "test-access-key", "secret_key": "test-secret-key"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/aws/sts/test-role",
             json=params,

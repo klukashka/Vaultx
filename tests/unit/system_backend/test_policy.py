@@ -20,9 +20,8 @@ class TestPolicy(unittest.TestCase):
 
         result = self.policy.list_policies()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"policies": ["default", "admin"]}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"policies": ["default", "admin"]}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/sys/policy",
         )
@@ -35,11 +34,10 @@ class TestPolicy(unittest.TestCase):
 
         result = self.policy.read_policy(name="admin")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(
-                result.json(), {"data": {"name": "admin", "rules": "path '/*' { capabilities = ['create', 'read'] }"}}
-            )
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(
+            result.json(), {"data": {"name": "admin", "rules": "path '/*' { capabilities = ['create', 'read'] }"}}
+        )
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/sys/policy/admin",
         )
@@ -51,8 +49,7 @@ class TestPolicy(unittest.TestCase):
         policy = 'path "/*" { capabilities = ["create", "read"] }'
         result = self.policy.create_or_update_policy(name="admin", policy=policy)
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/policy/admin",
             json={"policy": 'path "/*" { capabilities = ["create", "read"] }'},
@@ -64,8 +61,7 @@ class TestPolicy(unittest.TestCase):
 
         result = self.policy.delete_policy(name="admin")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/sys/policy/admin",
         )
@@ -88,7 +84,6 @@ async def test_list_policies_returns_response(async_policy, mock_async_adapter):
 
     result = await async_policy.list_policies()
 
-    assert isinstance(result, Response)
     assert result.status_code == 200
     assert result.json() == {"data": {"policies": ["default", "admin"]}}
     mock_async_adapter.get.assert_called_once_with(url="/v1/sys/policy")
@@ -103,7 +98,6 @@ async def test_read_policy_returns_response(async_policy, mock_async_adapter):
 
     result = await async_policy.read_policy(name="admin")
 
-    assert isinstance(result, Response)
     assert result.status_code == 200
     assert result.json() == {"data": {"name": "admin", "rules": "path '/*' { capabilities = ['create', 'read'] }"}}
     mock_async_adapter.get.assert_called_once_with(url="/v1/sys/policy/admin")
@@ -117,7 +111,6 @@ async def test_create_or_update_policy_with_string_policy_returns_response(async
     policy_data = 'path "/*" { capabilities = ["create", "read"] }'
     result = await async_policy.create_or_update_policy(name="admin", policy=policy_data)
 
-    assert isinstance(result, Response)
     assert result.status_code == 204
     mock_async_adapter.put.assert_called_once_with(
         url="/v1/sys/policy/admin", json={"policy": 'path "/*" { capabilities = ["create", "read"] }'}
@@ -131,6 +124,5 @@ async def test_delete_policy_returns_response(async_policy, mock_async_adapter):
 
     result = await async_policy.delete_policy(name="admin")
 
-    assert isinstance(result, Response)
     assert result.status_code == 204
     mock_async_adapter.delete.assert_called_once_with(url="/v1/sys/policy/admin")

@@ -28,7 +28,7 @@ class TestClientWriteData:
     @pytest.mark.parametrize("wrap_ttl", [None, "3m"])
     def test_write_data(self, client: Client, wrap_ttl: str):
         response = client.write(self.test_path, data={"data": "cool"}, wrap_ttl=wrap_ttl)
-        assert response == self.response
+        assert response.value == self.response
 
 
 class TestSystemBackendMethods(IsolatedAsyncioTestCase):
@@ -60,7 +60,7 @@ class TestSystemBackendMethods(IsolatedAsyncioTestCase):
             )
             self.assertEqual(
                 first=mock_response,
-                second=response,
+                second=response.value,
             )
 
 
@@ -84,7 +84,7 @@ class TestAsyncClientWriteData:
     @pytest.mark.parametrize("wrap_ttl", [None, "3m"])
     async def test_write_data(self, client: AsyncClient, wrap_ttl: str):
         response = await client.write(self.test_path, data={"data": "cool"}, wrap_ttl=wrap_ttl)
-        assert response == self.response
+        assert response.value == self.response
 
 
 class TestAsyncSystemBackendMethods(IsolatedAsyncioTestCase):
@@ -116,5 +116,5 @@ class TestAsyncSystemBackendMethods(IsolatedAsyncioTestCase):
             )
             self.assertEqual(
                 first=mock_response,
-                second=response,
+                second=response.value,
             )

@@ -1,64 +1,11 @@
 from unittest import IsolatedAsyncioTestCase, TestCase
 
 import httpx
-import pytest
 import respx
 from parameterized import parameterized  # type: ignore
 
 from vaultx import adapters
 from vaultx.constants.client import DEFAULT_URL
-
-
-class TestAdapters:
-    CONSTRUCTOR_ARGS = (
-        "base_uri",
-        "token",
-        "cert",
-        "verify",
-        "timeout",
-        "proxy",
-        "follow_redirects",
-        "client",
-        "namespace",
-        "ignore_exceptions",
-        "strict_http",
-        "request_header",
-    )
-
-    INTERNAL_KWARGS = (
-        "cert",
-        "verify",
-        "timeout",
-        "proxy",
-    )
-
-    @pytest.mark.parametrize(
-        "conargs",
-        [
-            {arg: arg.capitalize() for arg in CONSTRUCTOR_ARGS},
-            {arg: arg.upper() for arg in CONSTRUCTOR_ARGS},
-        ],
-    )
-    def test_from_adapter(self, conargs):
-        # set client to None so that the adapter will create its own internally
-        conargs["client"] = None
-        conargs["proxy"] = None
-        conargs["cert"] = None
-        conargs["verify"] = None
-        expected = conargs.copy()
-        for internal_kwarg in self.INTERNAL_KWARGS:
-            expected.setdefault("_kwargs", {})[internal_kwarg] = expected.pop(internal_kwarg)
-
-        # let's start with a JsonAdapter, and make a RawAdapter out of it
-        json_adapter = adapters.JsonAdapter(**conargs)
-
-        # reset the expected client to be the one created by the JsonAdapter
-        expected["client"] = json_adapter.client
-
-        raw_adapter = adapters.RawAdapter.from_adapter(json_adapter)
-
-        for property_key, value in expected.items():
-            assert getattr(raw_adapter, property_key) == value
 
 
 class TestRequest(TestCase):
@@ -81,7 +28,7 @@ class TestRequest(TestCase):
         path = path.replace("//", "/") if path else "v1/sys/health"
         mock_url = f"{url}/{path}"
         expected_status_code = 200
-        adapter = adapters.RawAdapter(base_uri=url)
+        adapter = adapters.VaultxAdapter(base_uri=url)
         response_headers = {}
         response_status_code = 200
         if redirect_url is not None:
@@ -101,11 +48,10 @@ class TestRequest(TestCase):
 
             response = adapter.get(url=path)
 
-        if isinstance(response, httpx.Response):
-            self.assertEqual(
-                expected_status_code,
-                response.status_code,
-            )
+        self.assertEqual(
+            expected_status_code,
+            response.status,
+        )
 
     @parameterized.expand(
         [
@@ -128,69 +74,16 @@ class TestRequest(TestCase):
         with respx.mock:
             resp_json = httpx.Response(status_code=expected_status_code, json=mock_response)
             respx.request(method="LIST", url=mock_url).mock(return_value=resp_json)
-            adapter = adapters.RawAdapter()
+            adapter = adapters.VaultxAdapter()
             response = adapter.list(
                 url=test_path,
             )
 
-        if isinstance(response, httpx.Response):
-            self.assertEqual(
-                first=expected_status_code,
-                second=response.status_code,
-            )
-            self.assertEqual(first=mock_response, second=response.json())
-
-
-class TestAsyncAdapters:
-    CONSTRUCTOR_ARGS = (
-        "base_uri",
-        "token",
-        "cert",
-        "verify",
-        "timeout",
-        "proxy",
-        "follow_redirects",
-        "client",
-        "namespace",
-        "ignore_exceptions",
-        "strict_http",
-        "request_header",
-    )
-
-    INTERNAL_KWARGS = (
-        "cert",
-        "verify",
-        "timeout",
-        "proxy",
-    )
-
-    @pytest.mark.parametrize(
-        "conargs",
-        [
-            {arg: arg.capitalize() for arg in CONSTRUCTOR_ARGS},
-            {arg: arg.upper() for arg in CONSTRUCTOR_ARGS},
-        ],
-    )
-    async def test_from_adapter(self, conargs):
-        # set client to None so that the adapter will create its own internally
-        conargs["client"] = None
-        conargs["proxy"] = None
-        conargs["cert"] = None
-        conargs["verify"] = None
-        expected = conargs.copy()
-        for internal_kwarg in self.INTERNAL_KWARGS:
-            expected.setdefault("_kwargs", {})[internal_kwarg] = expected.pop(internal_kwarg)
-
-        # let's start with a JsonAdapter, and make a RawAdapter out of it
-        json_adapter = adapters.AsyncJsonAdapter(**conargs)
-
-        # reset the expected client to be the one created by the JsonAdapter
-        expected["client"] = json_adapter.client
-
-        raw_adapter = adapters.AsyncRawAdapter.from_adapter(json_adapter)
-
-        for property_key, value in expected.items():
-            assert getattr(raw_adapter, property_key) == value
+        self.assertEqual(
+            first=expected_status_code,
+            second=response.status,
+        )
+        self.assertEqual(first=mock_response, second=response.value)
 
 
 class TestAsyncRequest(IsolatedAsyncioTestCase):
@@ -213,7 +106,7 @@ class TestAsyncRequest(IsolatedAsyncioTestCase):
         path = path.replace("//", "/") if path else "v1/sys/health"
         mock_url = f"{url}/{path}"
         expected_status_code = 200
-        adapter = adapters.AsyncRawAdapter(base_uri=url, client=httpx.AsyncClient())
+        adapter = adapters.AsyncVaultxAdapter(base_uri=url, client=httpx.AsyncClient())
         response_headers = {}
         response_status_code = 200
         if redirect_url is not None:
@@ -233,11 +126,10 @@ class TestAsyncRequest(IsolatedAsyncioTestCase):
 
             response = await adapter.get(url=path)
 
-        if isinstance(response, httpx.Response):
-            self.assertEqual(
-                expected_status_code,
-                response.status_code,
-            )
+        self.assertEqual(
+            expected_status_code,
+            response.status,
+        )
 
     @parameterized.expand(
         [
@@ -260,14 +152,13 @@ class TestAsyncRequest(IsolatedAsyncioTestCase):
         async with respx.mock:
             resp_json = httpx.Response(status_code=expected_status_code, json=mock_response)
             respx.request(method="LIST", url=mock_url).mock(return_value=resp_json)
-            adapter = adapters.AsyncRawAdapter(client=httpx.AsyncClient())
+            adapter = adapters.AsyncVaultxAdapter(client=httpx.AsyncClient())
             response = await adapter.list(
                 url=test_path,
             )
 
-        if isinstance(response, httpx.Response):
-            self.assertEqual(
-                first=expected_status_code,
-                second=response.status_code,
-            )
-            self.assertEqual(first=mock_response, second=response.json())
+        self.assertEqual(
+            first=expected_status_code,
+            second=response.status,
+        )
+        self.assertEqual(first=mock_response, second=response.value)

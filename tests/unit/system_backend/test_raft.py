@@ -21,8 +21,7 @@ class TestRaft(unittest.TestCase):
             leader_client_cert="client_cert",
             leader_client_key="client_key",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/join",
             json={
@@ -37,15 +36,13 @@ class TestRaft(unittest.TestCase):
     def test_read_raft_config(self):
         self.mock_adapter.get.return_value = {"data": {"nodes": []}}
         result = self.raft.read_raft_config()
-        if isinstance(result, Response):
-            self.assertEqual(result, {"data": {"nodes": []}})
+        self.assertEqual(result, {"data": {"nodes": []}})
         self.mock_adapter.get.assert_called_once_with(url="/v1/sys/storage/raft/configuration")
 
     def test_remove_raft_node(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.raft.remove_raft_node(server_id="node1")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/remove-peer",
             json={"server_id": "node1"},
@@ -54,8 +51,7 @@ class TestRaft(unittest.TestCase):
     def test_restore_raft_snapshot(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.raft.restore_raft_snapshot(snapshot=b"snapshot_data")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/snapshot",
             data=b"snapshot_data",
@@ -64,8 +60,7 @@ class TestRaft(unittest.TestCase):
     def test_force_restore_raft_snapshot(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.raft.force_restore_raft_snapshot(snapshot=b"snapshot_data")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/snapshot-force",
             data=b"snapshot_data",
@@ -97,8 +92,7 @@ class TestRaft(unittest.TestCase):
             storage_type="local",
             retain=2,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/snapshot-auto/config/config1",
             json={
@@ -111,8 +105,7 @@ class TestRaft(unittest.TestCase):
     def test_delete_raft_auto_snapshot_config(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.raft.delete_raft_auto_snapshot_config(name="config1")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/storage/raft/snapshot-auto/config/config1")
 
 
@@ -130,8 +123,7 @@ class TestAsyncRaft(unittest.IsolatedAsyncioTestCase):
             leader_client_cert="client_cert",
             leader_client_key="client_key",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/join",
             json={
@@ -146,15 +138,13 @@ class TestAsyncRaft(unittest.IsolatedAsyncioTestCase):
     async def test_read_raft_config(self):
         self.mock_adapter.get.return_value = {"data": {"nodes": []}}
         result = await self.raft.read_raft_config()
-        if isinstance(result, Response):
-            self.assertEqual(result, {"data": {"nodes": []}})
+        self.assertEqual(result, {"data": {"nodes": []}})
         self.mock_adapter.get.assert_called_once_with(url="/v1/sys/storage/raft/configuration")
 
     async def test_remove_raft_node(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.raft.remove_raft_node(server_id="node1")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/remove-peer",
             json={"server_id": "node1"},
@@ -163,8 +153,7 @@ class TestAsyncRaft(unittest.IsolatedAsyncioTestCase):
     async def test_restore_raft_snapshot(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.raft.restore_raft_snapshot(snapshot=b"snapshot_data")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/snapshot",
             data=b"snapshot_data",
@@ -173,8 +162,7 @@ class TestAsyncRaft(unittest.IsolatedAsyncioTestCase):
     async def test_force_restore_raft_snapshot(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.raft.force_restore_raft_snapshot(snapshot=b"snapshot_data")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/snapshot-force",
             data=b"snapshot_data",
@@ -206,8 +194,7 @@ class TestAsyncRaft(unittest.IsolatedAsyncioTestCase):
             storage_type="local",
             retain=2,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/storage/raft/snapshot-auto/config/config1",
             json={
@@ -220,6 +207,5 @@ class TestAsyncRaft(unittest.IsolatedAsyncioTestCase):
     async def test_delete_raft_auto_snapshot_config(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.raft.delete_raft_auto_snapshot_config(name="config1")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/sys/storage/raft/snapshot-auto/config/config1")

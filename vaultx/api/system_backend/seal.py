@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import exceptions
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
@@ -18,7 +17,7 @@ class Seal(VaultApiBase):
             return seal_status["sealed"]
         raise exceptions.VaultxError("Unexpected return of non-json response")
 
-    def read_seal_status(self) -> Union[dict[str, Any], Response]:
+    def read_seal_status(self) -> VaultxResponse:
         """
         Read the seal status of the Vault.
         This is an unauthenticated endpoint.
@@ -33,7 +32,7 @@ class Seal(VaultApiBase):
             url=api_path,
         )
 
-    def seal(self) -> Union[dict[str, Any], Response]:
+    def seal(self) -> VaultxResponse:
         """
         Seal the Vault.
         In HA mode, only an active node can be sealed. Standby nodes should be restarted to get the same effect.
@@ -51,7 +50,7 @@ class Seal(VaultApiBase):
 
     def submit_unseal_key(
         self, key: Optional[str] = None, reset: bool = False, migrate: bool = False
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Enter a single master key share to progress the unsealing of the Vault.
 
@@ -84,7 +83,7 @@ class Seal(VaultApiBase):
             json=params,
         )
 
-    def submit_unseal_keys(self, keys: list[str], migrate: bool = False) -> Optional[Union[dict[str, Any], Response]]:
+    def submit_unseal_keys(self, keys: list[str], migrate: bool = False) -> Optional[VaultxResponse]:
         """
         Enter multiple master key share to progress the unsealing of the Vault.
 

@@ -1,12 +1,11 @@
-from typing import Any, Optional, Union
+from typing import Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
 class Wrapping(AsyncVaultApiBase):
-    async def unwrap(self, token: Optional[str] = None) -> Union[dict[str, Any], Response]:
+    async def unwrap(self, token: Optional[str] = None) -> VaultxResponse:
         """
         Return the original response inside the given wrapping token.
 
@@ -31,7 +30,7 @@ class Wrapping(AsyncVaultApiBase):
             json=params,
         )
 
-    async def wrap(self, payload: Optional[dict] = None, ttl: int = 60) -> Union[dict[str, Any], Response]:
+    async def wrap(self, payload: Optional[dict] = None, ttl: int = 60) -> VaultxResponse:
         """
         Wraps a serializable dictionary inside a wrapping token.
 

@@ -1,13 +1,12 @@
-from typing import Any, Optional, Union
+from typing import Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.exceptions import VaultxError
 
 
 class Key(AsyncVaultApiBase):
-    async def read_root_generation_progress(self) -> Union[dict[str, Any], Response]:
+    async def read_root_generation_progress(self) -> VaultxResponse:
         """
         Read the configuration and process of the current root generation attempt.
 
@@ -23,7 +22,7 @@ class Key(AsyncVaultApiBase):
 
     async def start_root_token_generation(
         self, otp: Optional[str] = None, pgp_key: Optional[str] = None
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Initialize a new root generation attempt.
         Only a single root generation attempt can take place at a time. One (and only one) of otp or pgp_key are
@@ -49,7 +48,7 @@ class Key(AsyncVaultApiBase):
         api_path = "/v1/sys/generate-root/attempt"
         return await self._adapter.put(url=api_path, json=params)
 
-    async def generate_root(self, key: str, nonce: str) -> Union[dict[str, Any], Response]:
+    async def generate_root(self, key: str, nonce: str) -> VaultxResponse:
         """
         Enter a single master key share to progress the root generation attempt.
         If the threshold number of master key shares is reached, Vault will complete the root generation and issue the
@@ -73,7 +72,7 @@ class Key(AsyncVaultApiBase):
             json=params,
         )
 
-    async def cancel_root_generation(self) -> Union[dict[str, Any], Response]:
+    async def cancel_root_generation(self) -> VaultxResponse:
         """
         Cancel any in-progress root generation attempt.
         This clears any progress made. This must be called to change the OTP or PGP key being used.
@@ -88,7 +87,7 @@ class Key(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def get_encryption_key_status(self) -> Union[dict[str, Any], Response]:
+    async def get_encryption_key_status(self) -> VaultxResponse:
         """
         Read information about the current encryption key used by Vault.
 
@@ -102,7 +101,7 @@ class Key(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def rotate_encryption_key(self) -> Union[dict[str, Any], Response]:
+    async def rotate_encryption_key(self) -> VaultxResponse:
         """
         Trigger a rotation of the backend encryption key.
         This is the key that is used to encrypt data written to the storage backend, and is not provided to operators.
@@ -121,7 +120,7 @@ class Key(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_rekey_progress(self, recovery_key: bool = False) -> Union[dict[str, Any], Response]:
+    async def read_rekey_progress(self, recovery_key: bool = False) -> VaultxResponse:
         """
         Read the configuration and progress of the current rekey attempt.
 
@@ -147,7 +146,7 @@ class Key(AsyncVaultApiBase):
         backup: bool = False,
         require_verification: bool = False,
         recovery_key: bool = False,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Initializes a new rekey attempt.
 
@@ -198,7 +197,7 @@ class Key(AsyncVaultApiBase):
             json=params,
         )
 
-    async def cancel_rekey(self, recovery_key: bool = False) -> Union[dict[str, Any], Response]:
+    async def cancel_rekey(self, recovery_key: bool = False) -> VaultxResponse:
         """
         Cancel any in-progress rekey.
         This clears the rekey settings as well as any progress made. This must be called to change the parameters of the
@@ -220,9 +219,7 @@ class Key(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def rekey(
-        self, key: str, nonce: Optional[str] = None, recovery_key: bool = False
-    ) -> Union[dict[str, Any], Response]:
+    async def rekey(self, key: str, nonce: Optional[str] = None, recovery_key: bool = False) -> VaultxResponse:
         """
         Enter a single recovery key share to progress the rekey of the Vault.
         If the threshold number of recovery key shares is reached, Vault will complete the rekey. Otherwise, this API
@@ -255,7 +252,7 @@ class Key(AsyncVaultApiBase):
 
     async def rekey_multi(
         self, keys: list[str], nonce: Optional[str] = None, recovery_key: bool = False
-    ) -> Optional[Union[dict[str, Any], Response]]:
+    ) -> Optional[VaultxResponse]:
         """
         Enter multiple recovery key shares to progress the rekey of the Vault.
         If the threshold number of recovery key shares is reached, Vault will complete the rekey.
@@ -278,7 +275,7 @@ class Key(AsyncVaultApiBase):
 
         return result
 
-    async def read_backup_keys(self, recovery_key: bool = False) -> Union[dict[str, Any], Response]:
+    async def read_backup_keys(self, recovery_key: bool = False) -> VaultxResponse:
         """
         Retrieve the backup copy of PGP-encrypted unseal keys.
         The returned value is the nonce of the rekey operation and a map of PGP key fingerprint to hex-encoded
@@ -298,7 +295,7 @@ class Key(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def cancel_rekey_verify(self) -> Union[dict[str, Any], Response]:
+    async def cancel_rekey_verify(self) -> VaultxResponse:
         """
         Cancel any in-progress rekey verification.
         This clears any progress made and resets the nonce. Unlike cancel_rekey, this only resets
@@ -315,7 +312,7 @@ class Key(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def rekey_verify(self, key: str, nonce: str) -> Union[dict[str, Any], Response]:
+    async def rekey_verify(self, key: str, nonce: str) -> VaultxResponse:
         """
         Enter a single new recovery key share to progress the rekey verification of the Vault.
         If the threshold number of new recovery key shares is reached, Vault will complete the
@@ -340,7 +337,7 @@ class Key(AsyncVaultApiBase):
             json=params,
         )
 
-    async def rekey_verify_multi(self, keys: list[str], nonce: str) -> Optional[Union[dict[str, Any], Response]]:
+    async def rekey_verify_multi(self, keys: list[str], nonce: str) -> Optional[VaultxResponse]:
         """
         Enter multiple new recovery key shares to progress the rekey verification of the Vault.
         If the threshold number of new recovery key shares is reached, Vault will complete the
@@ -366,7 +363,7 @@ class Key(AsyncVaultApiBase):
 
         return result
 
-    async def read_rekey_verify_progress(self) -> Union[dict[str, Any], Response]:
+    async def read_rekey_verify_progress(self) -> VaultxResponse:
         """
         Read the configuration and progress of the current rekey verify attempt.
 

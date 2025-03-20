@@ -1,10 +1,9 @@
 import json
 import logging
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional, Union
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.constants.gcp import (
     ALLOWED_SECRETS_TYPES,
@@ -30,7 +29,7 @@ class Gcp(AsyncVaultApiBase):
         ttl: Optional[Union[str, int]] = None,
         max_ttl: Optional[Union[str, int]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure shared information for the Gcp secrets engine.
 
@@ -59,7 +58,7 @@ class Gcp(AsyncVaultApiBase):
             json=params,
         )
 
-    async def rotate_root_credentials(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def rotate_root_credentials(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the GCP service account credentials used by Vault for this mount.
 
@@ -78,7 +77,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the configured shared information for the Gcp secrets engine.
 
@@ -151,9 +150,7 @@ class Gcp(AsyncVaultApiBase):
             json=params,
         )
 
-    async def rotate_roleset_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def rotate_roleset_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the service account this roleset uses to generate secrets.
 
@@ -173,9 +170,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def rotate_roleset_account_key(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def rotate_roleset_account_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the service account key this roleset uses to generate access tokens.
 
@@ -193,7 +188,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_roleset(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_roleset(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read a roleset.
 
@@ -209,7 +204,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_rolesets(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_rolesets(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List configured rolesets.
 
@@ -224,9 +219,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_roleset(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_roleset(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing roleset by the given name.
 
@@ -244,7 +237,7 @@ class Gcp(AsyncVaultApiBase):
 
     async def generate_oauth2_access_token(
         self, roleset: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate an OAuth2 token with the scopes defined on the roleset.
 
@@ -269,7 +262,7 @@ class Gcp(AsyncVaultApiBase):
         key_type: str = "TYPE_GOOGLE_CREDENTIALS_FILE",
         method: str = "POST",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate Secret (IAM Service Account Creds): Service Account Key
 
@@ -297,7 +290,7 @@ class Gcp(AsyncVaultApiBase):
         secret_type: Optional[str] = None,
         token_scopes: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create a static account or update an existing static account.
 
@@ -345,9 +338,7 @@ class Gcp(AsyncVaultApiBase):
             json=params,
         )
 
-    async def rotate_static_account_key(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def rotate_static_account_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the service account key this static account uses to generate access tokens.
 
@@ -365,9 +356,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_static_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def read_static_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read a static account.
 
@@ -383,7 +372,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_static_accounts(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_static_accounts(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List configured static accounts.
 
@@ -398,9 +387,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_static_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_static_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing static account by the given name.
 
@@ -418,7 +405,7 @@ class Gcp(AsyncVaultApiBase):
 
     async def generate_static_account_oauth2_access_token(
         self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate an OAuth2 token with the scopes defined on the static account.
 
@@ -471,7 +458,7 @@ class Gcp(AsyncVaultApiBase):
         token_scopes: Optional[list[str]] = None,
         ttl: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create an impersonated account or update an existing impersonated account.
 
@@ -506,9 +493,7 @@ class Gcp(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_impersonated_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def read_impersonated_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read an impersonated account.
 
@@ -524,9 +509,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_impersonated_accounts(
-        self, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def list_impersonated_accounts(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List configured impersonated accounts.
 
@@ -541,9 +524,7 @@ class Gcp(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_impersonated_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_impersonated_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing impersonated account by the given name.
 
@@ -561,7 +542,7 @@ class Gcp(AsyncVaultApiBase):
 
     async def generate_impersonated_account_oauth2_access_token(
         self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate an OAuth2 token with the scopes defined on the impersonated account.
 
@@ -585,7 +566,7 @@ class Gcp(AsyncVaultApiBase):
         key_algorithm: str = "KEY_ALG_RSA_2048",
         key_type: str = "TYPE_GOOGLE_CREDENTIALS_FILE",
         method: str = "POST",
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         if method == "POST":
             if key_algorithm not in SERVICE_ACCOUNT_KEY_ALGORITHMS:
                 raise VaultxError(

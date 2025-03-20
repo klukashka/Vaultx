@@ -16,8 +16,7 @@ class TestHealth(unittest.TestCase):
     def test_read_health_status_head(self):
         self.mock_adapter.head.return_value = Response(200)
         result = self.health.read_health_status(method="HEAD")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 200)
         self.mock_adapter.head.assert_called_once_with(
             url="/v1/sys/health",
             raise_exception=False,
@@ -77,8 +76,7 @@ class TestAsyncHealth(IsolatedAsyncioTestCase):
     async def test_read_health_status_head(self):
         self.mock_adapter.head.return_value = Response(200)
         result = await self.health.read_health_status(method="HEAD")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 200)
         self.mock_adapter.head.assert_called_once_with(
             url="/v1/sys/health",
             raise_exception=False,

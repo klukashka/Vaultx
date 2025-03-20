@@ -96,25 +96,6 @@ class VaultxResponse(HttpxAdapterResponse):
         return self.value.__contains__(__o)
 
 
-# class MetaAdapter(metaclass=abc.ABCMeta):
-#     """Abstract adapter class"""
-#
-#     @classmethod
-#     @abc.abstractmethod
-#     def from_adapter(
-#         cls: tp.Type["MetaAdapter"],
-#         adapter: object,
-#     ) -> "MetaAdapter":
-#         """
-#         Creates a new adapter based on an existing Adapter instance.
-#         This can be used to create a new type of adapter that inherits the properties of an existing one.
-#
-#         :param adapter: The existing Adapter instance.
-#         """
-#
-#         raise NotImplementedError()
-
-
 class Adapter:
     """Abstract synchronous adapter class"""
 
@@ -187,28 +168,6 @@ class Adapter:
         traceback: Optional[types.TracebackType] = None,
     ) -> None:
         self.client.__exit__(exc_type, exc_value, traceback)
-
-    # @classmethod
-    # @exceptions.handle_unknown_exception
-    # def from_adapter(
-    #     cls: tp.Type["Adapter"],
-    #     adapter: object,
-    # ) -> "Adapter":
-    #     if isinstance(adapter, Adapter):
-    #         return cls(
-    #             base_uri=adapter.base_uri,
-    #             token=adapter.token,
-    #             follow_redirects=adapter.follow_redirects,
-    #             client=adapter.client,
-    #             namespace=adapter.namespace,
-    #             ignore_exceptions=adapter.ignore_exceptions,
-    #             strict_http=adapter.strict_http,
-    #             request_header=adapter.request_header,
-    #             **adapter._kwargs,
-    #         )
-    #     raise exceptions.VaultxError(
-    #         '"from_adapter" method of Adapter class should receive Adapter instance as a parameter'
-    #     )
 
     @exceptions.handle_unknown_exception
     def close(self):
@@ -524,28 +483,6 @@ class AsyncAdapter:
         traceback: Optional[types.TracebackType] = None,
     ) -> None:
         await self.client.__aexit__(exc_type, exc_value, traceback)
-
-    # @classmethod
-    # @exceptions.handle_unknown_exception
-    # def from_adapter(
-    #     cls: tp.Type["AsyncAdapter"],
-    #     adapter: object,
-    # ) -> "AsyncAdapter":
-    #     if isinstance(adapter, AsyncAdapter):
-    #         return cls(
-    #             base_uri=adapter.base_uri,
-    #             token=adapter.token,
-    #             follow_redirects=adapter.follow_redirects,
-    #             client=adapter.client,
-    #             namespace=adapter.namespace,
-    #             ignore_exceptions=adapter.ignore_exceptions,
-    #             strict_http=adapter.strict_http,
-    #             request_header=adapter.request_header,
-    #             **adapter._kwargs,
-    #         )
-    #     raise exceptions.VaultxError(
-    #         '"from_adapter" method of AsyncAdapter class should receive AsyncAdapter instance as a parameter'
-    #     )
 
     @exceptions.handle_unknown_exception
     async def close(self):

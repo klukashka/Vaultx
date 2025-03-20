@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Any, Optional
 
 from vaultx import exceptions
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.exceptions import VaultxError
 
@@ -23,7 +22,7 @@ class KvV2(VaultApiBase):
         cas_required: Optional[bool] = None,
         delete_version_after: str = "0s",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure backend level settings that are applied to every key in the key-value store.
 
@@ -52,7 +51,7 @@ class KvV2(VaultApiBase):
             json=params,
         )
 
-    def read_configuration(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_configuration(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the KV Version 2 configuration.
 
@@ -68,7 +67,7 @@ class KvV2(VaultApiBase):
 
     def read_secret(
         self, path: str, mount_point: str = DEFAULT_MOUNT_POINT, raise_on_deleted_version: bool = False
-    ) -> Optional[Union[dict[str, Any], Response]]:
+    ) -> Optional[VaultxResponse]:
         """
         Retrieve the secret at the specified location.
 
@@ -97,7 +96,7 @@ class KvV2(VaultApiBase):
         version: Optional[int] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         raise_on_deleted_version: bool = False,
-    ) -> Optional[Union[dict[str, Any], Response]]:
+    ) -> Optional[VaultxResponse]:
         """
         Retrieve the secret at the specified location, with the specified version.
 
@@ -131,7 +130,7 @@ class KvV2(VaultApiBase):
 
     def create_or_update_secret(
         self, path: str, secret, cas: Optional[int] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create a new version of a secret at the specified location.
 
@@ -162,9 +161,7 @@ class KvV2(VaultApiBase):
             json=params,
         )
 
-    def patch(
-        self, path: str, secret: dict[Any, Any], mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def patch(self, path: str, secret: dict[Any, Any], mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Set or update data in the KV store without overwriting.
 
@@ -179,7 +176,9 @@ class KvV2(VaultApiBase):
                 path=path,
                 mount_point=mount_point,
             )
-            if isinstance(current_secret_version, Response) and current_secret_version.status_code == 404:
+            if current_secret_version is None:
+                raise VaultxError(f"Failed to read secret version from {path}")
+            if current_secret_version.status == 404:
                 raise exceptions.HTTPError(
                     status_code=404,
                     method="GET",
@@ -189,11 +188,8 @@ class KvV2(VaultApiBase):
             raise VaultxError() from e
 
         # Update existing secret dict.
-        if isinstance(current_secret_version, dict):
-            patched_secret = current_secret_version["data"]["data"]
-            patched_secret.update(secret)
-        else:
-            raise VaultxError("OK response was not converted to dict")
+        patched_secret = current_secret_version["data"]["data"]
+        patched_secret.update(secret)
 
         # Write back updated secret.
         return self.create_or_update_secret(
@@ -203,9 +199,7 @@ class KvV2(VaultApiBase):
             mount_point=mount_point,
         )
 
-    def delete_latest_version_of_secret(
-        self, path: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def delete_latest_version_of_secret(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Issue a soft delete of the secret's latest version at the specified location.
 
@@ -226,7 +220,7 @@ class KvV2(VaultApiBase):
 
     def delete_secret_versions(
         self, path: str, versions: list[int], mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Issue a soft delete of the specified versions of the secret.
 
@@ -256,7 +250,7 @@ class KvV2(VaultApiBase):
 
     def undelete_secret_versions(
         self, path: str, versions: list[int], mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Undelete the data for the provided version and path in the key-value store.
 
@@ -284,7 +278,7 @@ class KvV2(VaultApiBase):
 
     def destroy_secret_versions(
         self, path: str, versions: list[int], mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Permanently remove the specified version data and numbers for the provided path from the key-value store.
 
@@ -307,7 +301,7 @@ class KvV2(VaultApiBase):
             json=params,
         )
 
-    def list_secrets(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_secrets(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Return a list of key names at the specified location.
 
@@ -327,9 +321,7 @@ class KvV2(VaultApiBase):
             url=api_path,
         )
 
-    def read_secret_metadata(
-        self, path: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def read_secret_metadata(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Retrieve the metadata and versions for the secret at the specified path.
 
@@ -394,9 +386,7 @@ class KvV2(VaultApiBase):
             json=params,
         )
 
-    def delete_metadata_and_all_versions(
-        self, path: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def delete_metadata_and_all_versions(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete (permanently) the key metadata and all version data for the specified key.
         All version history will be removed.

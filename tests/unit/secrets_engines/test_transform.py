@@ -17,8 +17,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.transform.create_or_update_role(name="test-role", transformations=["transformation1"])
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/role/test-role",
             json={"transformations": ["transformation1"]},
@@ -29,8 +28,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.transform.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/role/test-role",
         )
@@ -40,8 +38,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.transform.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/role",
         )
@@ -51,8 +48,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.transform.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/role/test-role",
         )
@@ -69,8 +65,7 @@ class TestTransform(unittest.TestCase):
             masking_character="*",
             allowed_roles=["role1"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-transformation"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformation/test-transformation",
             json={
@@ -87,8 +82,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.transform.read_transformation(name="test-transformation")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-transformation"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformation/test-transformation",
         )
@@ -98,8 +92,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.transform.list_transformations()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"transformations": ["trans1", "trans2"]}})
+        self.assertEqual(result.json(), {"data": {"transformations": ["trans1", "trans2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformation",
         )
@@ -109,8 +102,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.transform.delete_transformation(name="test-transformation")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformation/test-transformation",
         )
@@ -125,8 +117,7 @@ class TestTransform(unittest.TestCase):
             pattern="pattern1",
             alphabet="alphabet1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-template"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-template"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/template/test-template",
             json={
@@ -141,8 +132,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.transform.read_template(name="test-template")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-template"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-template"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/template/test-template",
         )
@@ -152,8 +142,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.transform.list_templates()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"templates": ["template1", "template2"]}})
+        self.assertEqual(result.json(), {"data": {"templates": ["template1", "template2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/template",
         )
@@ -163,8 +152,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.transform.delete_template(name="test-template")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/template/test-template",
             json={"name": "test-template"},
@@ -175,8 +163,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.transform.create_or_update_alphabet(name="test-alphabet", alphabet="alphabet1")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-alphabet"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-alphabet"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/alphabet/test-alphabet",
             json={"alphabet": "alphabet1"},
@@ -187,8 +174,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.transform.read_alphabet(name="test-alphabet")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-alphabet"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-alphabet"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/alphabet/test-alphabet",
         )
@@ -198,8 +184,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.transform.list_alphabets()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"alphabets": ["alphabet1", "alphabet2"]}})
+        self.assertEqual(result.json(), {"data": {"alphabets": ["alphabet1", "alphabet2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/alphabet",
         )
@@ -209,8 +194,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.transform.delete_alphabet(name="test-alphabet")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/alphabet/test-alphabet",
         )
@@ -220,8 +204,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.transform.encode(role_name="test-role", value="value1", transformation="transformation1")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"encoded_value": "encoded"}})
+        self.assertEqual(result.json(), {"data": {"encoded_value": "encoded"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/encode/test-role",
             json={"value": "value1", "transformation": "transformation1"},
@@ -232,8 +215,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.transform.decode(role_name="test-role", value="value1", transformation="transformation1")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"decoded_value": "decoded"}})
+        self.assertEqual(result.json(), {"data": {"decoded_value": "decoded"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/decode/test-role",
             json={"value": "value1", "transformation": "transformation1"},
@@ -249,8 +231,7 @@ class TestTransform(unittest.TestCase):
             tweak_source="supplied",
             allowed_roles=["role1"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-fpe-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-fpe-transformation"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/fpe/test-fpe-transformation",
             json={
@@ -270,8 +251,7 @@ class TestTransform(unittest.TestCase):
             masking_character="*",
             allowed_roles=["role1"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-masking-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-masking-transformation"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/masking/test-masking-transformation",
             json={
@@ -292,8 +272,7 @@ class TestTransform(unittest.TestCase):
             allowed_roles=["role1"],
             stores=["store1"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-tokenization-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-tokenization-transformation"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/tokenization/test-tokenization-transformation",
             json={
@@ -313,8 +292,7 @@ class TestTransform(unittest.TestCase):
             value="token-value",
             transformation="transformation1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"valid": True}})
+        self.assertEqual(result.json(), {"data": {"valid": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/validate/test-role",
             json={
@@ -332,8 +310,7 @@ class TestTransform(unittest.TestCase):
             value="token-value",
             transformation="transformation1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"exists": True}})
+        self.assertEqual(result.json(), {"data": {"exists": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenized/test-role",
             json={
@@ -351,8 +328,7 @@ class TestTransform(unittest.TestCase):
             value="token-value",
             transformation="transformation1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"metadata": {"key": "value"}}})
+        self.assertEqual(result.json(), {"data": {"metadata": {"key": "value"}}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/metadata/test-role",
             json={
@@ -370,8 +346,7 @@ class TestTransform(unittest.TestCase):
             limit=1000,
             continuation="continuation-token",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"snapshot": "snapshot-data"}})
+        self.assertEqual(result.json(), {"data": {"snapshot": "snapshot-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/tokenization/snapshot/test-transformation",
             json={
@@ -388,8 +363,7 @@ class TestTransform(unittest.TestCase):
             name="test-transformation",
             values="snapshot-data",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"restored": True}})
+        self.assertEqual(result.json(), {"data": {"restored": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/tokenization/restore/test-transformation",
             json={
@@ -406,8 +380,7 @@ class TestTransform(unittest.TestCase):
             limit=1000,
             continuation="continuation-token",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"export": "export-data"}})
+        self.assertEqual(result.json(), {"data": {"export": "export-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/tokenization/export-decoded/test-transformation",
             json={
@@ -423,8 +396,7 @@ class TestTransform(unittest.TestCase):
         result = self.transform.rotate_tokenization_key(
             transform_name="test-transformation",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"rotated": True}})
+        self.assertEqual(result.json(), {"data": {"rotated": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/test-transformation/rotate",
         )
@@ -437,8 +409,7 @@ class TestTransform(unittest.TestCase):
             transform_name="test-transformation",
             min_decryption_version=1,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"updated": True}})
+        self.assertEqual(result.json(), {"data": {"updated": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/test-transformation/config",
             json={
@@ -452,8 +423,7 @@ class TestTransform(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.transform.list_tokenization_key_configuration()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/",
         )
@@ -465,8 +435,7 @@ class TestTransform(unittest.TestCase):
         result = self.transform.read_tokenization_key_configuration(
             transform_name="test-transformation",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "key1"}})
+        self.assertEqual(result.json(), {"data": {"key": "key1"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/test-transformation",
         )
@@ -479,8 +448,7 @@ class TestTransform(unittest.TestCase):
             transform_name="test-transformation",
             min_available_version=1,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"trimmed": True}})
+        self.assertEqual(result.json(), {"data": {"trimmed": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/test-transformation/trim",
             json={
@@ -499,8 +467,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.transform.create_or_update_role(name="test-role", transformations=["transformation1"])
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/role/test-role",
             json={"transformations": ["transformation1"]},
@@ -511,8 +478,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.transform.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/role/test-role",
         )
@@ -522,8 +488,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.transform.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/role",
         )
@@ -533,8 +498,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.transform.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/role/test-role",
         )
@@ -551,8 +515,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             masking_character="*",
             allowed_roles=["role1"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-transformation"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformation/test-transformation",
             json={
@@ -569,8 +532,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.transform.read_transformation(name="test-transformation")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-transformation"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformation/test-transformation",
         )
@@ -580,8 +542,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.transform.list_transformations()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"transformations": ["trans1", "trans2"]}})
+        self.assertEqual(result.json(), {"data": {"transformations": ["trans1", "trans2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformation",
         )
@@ -591,8 +552,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.transform.delete_transformation(name="test-transformation")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformation/test-transformation",
         )
@@ -607,8 +567,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             pattern="pattern1",
             alphabet="alphabet1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-template"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-template"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/template/test-template",
             json={
@@ -623,8 +582,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.transform.read_template(name="test-template")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-template"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-template"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/template/test-template",
         )
@@ -634,8 +592,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.transform.list_templates()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"templates": ["template1", "template2"]}})
+        self.assertEqual(result.json(), {"data": {"templates": ["template1", "template2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/template",
         )
@@ -645,8 +602,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.transform.delete_template(name="test-template")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/template/test-template",
             json={"name": "test-template"},
@@ -657,8 +613,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.transform.create_or_update_alphabet(name="test-alphabet", alphabet="alphabet1")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-alphabet"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-alphabet"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/alphabet/test-alphabet",
             json={"alphabet": "alphabet1"},
@@ -669,8 +624,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.transform.read_alphabet(name="test-alphabet")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-alphabet"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-alphabet"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/alphabet/test-alphabet",
         )
@@ -680,8 +634,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.transform.list_alphabets()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"alphabets": ["alphabet1", "alphabet2"]}})
+        self.assertEqual(result.json(), {"data": {"alphabets": ["alphabet1", "alphabet2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/alphabet",
         )
@@ -691,8 +644,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.transform.delete_alphabet(name="test-alphabet")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/alphabet/test-alphabet",
         )
@@ -702,8 +654,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.transform.encode(role_name="test-role", value="value1", transformation="transformation1")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"encoded_value": "encoded"}})
+        self.assertEqual(result.json(), {"data": {"encoded_value": "encoded"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/encode/test-role",
             json={"value": "value1", "transformation": "transformation1"},
@@ -714,8 +665,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.transform.decode(role_name="test-role", value="value1", transformation="transformation1")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"decoded_value": "decoded"}})
+        self.assertEqual(result.json(), {"data": {"decoded_value": "decoded"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/decode/test-role",
             json={"value": "value1", "transformation": "transformation1"},
@@ -731,8 +681,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             tweak_source="supplied",
             allowed_roles=["role1"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-fpe-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-fpe-transformation"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/fpe/test-fpe-transformation",
             json={
@@ -752,8 +701,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             masking_character="*",
             allowed_roles=["role1"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-masking-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-masking-transformation"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/masking/test-masking-transformation",
             json={
@@ -774,8 +722,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             allowed_roles=["role1"],
             stores=["store1"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-tokenization-transformation"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-tokenization-transformation"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/tokenization/test-tokenization-transformation",
             json={
@@ -795,8 +742,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             value="token-value",
             transformation="transformation1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"valid": True}})
+        self.assertEqual(result.json(), {"data": {"valid": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/validate/test-role",
             json={
@@ -814,8 +760,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             value="token-value",
             transformation="transformation1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"exists": True}})
+        self.assertEqual(result.json(), {"data": {"exists": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenized/test-role",
             json={
@@ -833,8 +778,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             value="token-value",
             transformation="transformation1",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"metadata": {"key": "value"}}})
+        self.assertEqual(result.json(), {"data": {"metadata": {"key": "value"}}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/metadata/test-role",
             json={
@@ -852,8 +796,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             limit=1000,
             continuation="continuation-token",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"snapshot": "snapshot-data"}})
+        self.assertEqual(result.json(), {"data": {"snapshot": "snapshot-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/tokenization/snapshot/test-transformation",
             json={
@@ -870,8 +813,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             name="test-transformation",
             values="snapshot-data",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"restored": True}})
+        self.assertEqual(result.json(), {"data": {"restored": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/tokenization/restore/test-transformation",
             json={
@@ -888,8 +830,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             limit=1000,
             continuation="continuation-token",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"export": "export-data"}})
+        self.assertEqual(result.json(), {"data": {"export": "export-data"}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/transformations/tokenization/export-decoded/test-transformation",
             json={
@@ -905,8 +846,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         result = await self.transform.rotate_tokenization_key(
             transform_name="test-transformation",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"rotated": True}})
+        self.assertEqual(result.json(), {"data": {"rotated": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/test-transformation/rotate",
         )
@@ -919,8 +859,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             transform_name="test-transformation",
             min_decryption_version=1,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"updated": True}})
+        self.assertEqual(result.json(), {"data": {"updated": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/test-transformation/config",
             json={
@@ -934,8 +873,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.transform.list_tokenization_key_configuration()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/",
         )
@@ -947,8 +885,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
         result = await self.transform.read_tokenization_key_configuration(
             transform_name="test-transformation",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "key1"}})
+        self.assertEqual(result.json(), {"data": {"key": "key1"}})
         self.mock_adapter.get.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/test-transformation",
         )
@@ -961,8 +898,7 @@ class TestAsyncTransform(unittest.IsolatedAsyncioTestCase):
             transform_name="test-transformation",
             min_available_version=1,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"trimmed": True}})
+        self.assertEqual(result.json(), {"data": {"trimmed": True}})
         self.mock_adapter.post.assert_called_once_with(
             url=f"/v1/{DEFAULT_MOUNT_POINT}/tokenization/keys/test-transformation/trim",
             json={

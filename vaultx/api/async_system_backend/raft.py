@@ -1,10 +1,7 @@
-"""Raft methods module."""
+from typing import Optional
 
-from typing import Any, Optional, Union
-
-from httpx import Response
-
-from vaultx import adapters, utils
+from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -28,7 +25,7 @@ class Raft(AsyncVaultApiBase):
         leader_ca_cert: Optional[str] = None,
         leader_client_cert: Optional[str] = None,
         leader_client_key: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Join a new server node to the Raft cluster.
 
@@ -63,7 +60,7 @@ class Raft(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_raft_config(self) -> Union[dict[str, Any], Response]:
+    async def read_raft_config(self) -> VaultxResponse:
         """
         Read the details of all the nodes in the raft cluster.
 
@@ -77,7 +74,7 @@ class Raft(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def remove_raft_node(self, server_id: str) -> Union[dict[str, Any], Response]:
+    async def remove_raft_node(self, server_id: str) -> VaultxResponse:
         """
         Remove a node from the raft cluster.
 
@@ -96,11 +93,10 @@ class Raft(AsyncVaultApiBase):
             json=params,
         )
 
-    async def take_raft_snapshot(self) -> Union[dict[str, Any], Response]:
+    async def take_raft_snapshot(self) -> VaultxResponse:
         """
         Return a snapshot of the current state of the raft cluster.
         The snapshot is returned as binary data and should be redirected to a file.
-        This endpoint will ignore your chosen adapter and always uses a AsyncRawAdapter.
 
         Supported methods:
             GET: /sys/storage/raft/snapshot.
@@ -108,13 +104,12 @@ class Raft(AsyncVaultApiBase):
         :return: The response of the snapshot request.
         """
         api_path = "/v1/sys/storage/raft/snapshot"
-        raw_adapter = adapters.AsyncRawAdapter.from_adapter(self._adapter)
-        return await raw_adapter.get(
+        return await self._adapter.get(
             url=api_path,
             stream=True,
         )
 
-    async def restore_raft_snapshot(self, snapshot: bytes) -> Union[dict[str, Any], Response]:
+    async def restore_raft_snapshot(self, snapshot: bytes) -> VaultxResponse:
         """
         Install the provided snapshot, returning the cluster to the state defined in it.
 
@@ -130,7 +125,7 @@ class Raft(AsyncVaultApiBase):
             data=snapshot,
         )
 
-    async def force_restore_raft_snapshot(self, snapshot: bytes) -> Union[dict[str, Any], Response]:
+    async def force_restore_raft_snapshot(self, snapshot: bytes) -> VaultxResponse:
         """
         Install the provided snapshot, returning the cluster to the state defined in it.
         This is same as writing to /sys/storage/raft/snapshot except that this bypasses checks
@@ -148,7 +143,7 @@ class Raft(AsyncVaultApiBase):
             data=snapshot,
         )
 
-    async def read_raft_auto_snapshot_status(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_raft_auto_snapshot_status(self, name: str) -> VaultxResponse:
         """
         Read the status of the raft auto snapshot.
 
@@ -163,7 +158,7 @@ class Raft(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_raft_auto_snapshot_config(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_raft_auto_snapshot_config(self, name: str) -> VaultxResponse:
         """
         Read the configuration of the raft auto snapshot.
 
@@ -178,7 +173,7 @@ class Raft(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_raft_auto_snapshot_configs(self) -> Union[dict[str, Any], Response]:
+    async def list_raft_auto_snapshot_configs(self) -> VaultxResponse:
         """
         List the configurations of the raft auto snapshot.
 
@@ -194,7 +189,7 @@ class Raft(AsyncVaultApiBase):
 
     async def create_or_update_raft_auto_snapshot_config(
         self, name: str, interval: str, storage_type: str, retain: int = 1, **kwargs
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update the configuration of the raft auto snapshot.
 
@@ -223,7 +218,7 @@ class Raft(AsyncVaultApiBase):
             json=params,
         )
 
-    async def delete_raft_auto_snapshot_config(self, name: str) -> Union[dict[str, Any], Response]:
+    async def delete_raft_auto_snapshot_config(self, name: str) -> VaultxResponse:
         """
         Delete the configuration of the raft auto snapshot.
 

@@ -1,10 +1,8 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
-from vaultx.exceptions import VaultxError
 
 
 DEFAULT_MOUNT_POINT = "pki"
@@ -32,9 +30,7 @@ class Pki(AsyncVaultApiBase):
         response = await self._adapter.get(
             url=api_path,
         )
-        if isinstance(response, Response):
-            return str(response.text)
-        raise VaultxError("Unexpected non-Response return")
+        return str(response.raw.text)
 
     async def read_ca_certificate_chain(self, mount_point: str = DEFAULT_MOUNT_POINT) -> str:
         """
@@ -51,13 +47,9 @@ class Pki(AsyncVaultApiBase):
         response = await self._adapter.get(
             url=api_path,
         )
-        if isinstance(response, Response):
-            return str(response.text)
-        raise VaultxError("Unexpected non-Response return")
+        return str(response.raw.text)
 
-    async def read_certificate(
-        self, serial: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def read_certificate(self, serial: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read Certificate.
         Retrieve one of a selection of certificates.
@@ -74,7 +66,7 @@ class Pki(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_certificates(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_certificates(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List Certificates.
         The list of the current certificates by serial number only.
@@ -90,9 +82,7 @@ class Pki(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def submit_ca_information(
-        self, pem_bundle: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def submit_ca_information(self, pem_bundle: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Submit CA Information.
         Submitting the CA information for the backend.
@@ -113,7 +103,7 @@ class Pki(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_crl_configuration(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_crl_configuration(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read CRL Configuration.
         Getting the duration for which the generated CRL should be marked valid.
@@ -135,7 +125,7 @@ class Pki(AsyncVaultApiBase):
         disable: Optional[bool] = None,
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Set CRL Configuration.
 
@@ -170,7 +160,7 @@ class Pki(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_urls(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_urls(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read URLs.
         Fetch the URLs to be encoded in generated certificates.
@@ -186,7 +176,7 @@ class Pki(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def set_urls(self, params: dict, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def set_urls(self, params: dict, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Set URLs.
 
@@ -224,11 +214,9 @@ class Pki(AsyncVaultApiBase):
         response = await self._adapter.get(
             url=api_path,
         )
-        if isinstance(response, Response):
-            return str(response.text)
-        raise VaultxError("Unexpected non-Response return")
+        return str(response.raw.text)
 
-    async def rotate_crl(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def rotate_crl(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate CRLs.
         Force a rotation of the CRL.
@@ -251,7 +239,7 @@ class Pki(AsyncVaultApiBase):
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate Intermediate.
         Generate a new private key and a CSR for signing.
@@ -279,9 +267,7 @@ class Pki(AsyncVaultApiBase):
             wrap_ttl=wrap_ttl,
         )
 
-    async def set_signed_intermediate(
-        self, certificate: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def set_signed_intermediate(self, certificate: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Set Signed Intermediate.
         Allow submitting the signed CA certificate corresponding to a private key generated via "Generate Intermediate"
@@ -307,7 +293,7 @@ class Pki(AsyncVaultApiBase):
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate Certificate.
         Generates a new set of credentials (private key and certificate) based on the role named in the endpoint.
@@ -335,9 +321,7 @@ class Pki(AsyncVaultApiBase):
             wrap_ttl=wrap_ttl,
         )
 
-    async def revoke_certificate(
-        self, serial_number: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def revoke_certificate(self, serial_number: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Revoke Certificate.
         Revoke a certificate using its serial number.
@@ -358,7 +342,7 @@ class Pki(AsyncVaultApiBase):
 
     async def create_or_update_role(
         self, name: str, extra_params: Optional[dict] = None, mount_point=DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create/Update Role.
         Create or updates the role definition.
@@ -383,7 +367,7 @@ class Pki(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read Role.
         Query the role definition.
@@ -400,7 +384,7 @@ class Pki(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List Roles.
         Get a list of available roles.
@@ -416,7 +400,7 @@ class Pki(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete Role.
         Delete the role definition.
@@ -441,7 +425,7 @@ class Pki(AsyncVaultApiBase):
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate Root.
         Generate a new self-signed CA certificate and private key.
@@ -469,7 +453,7 @@ class Pki(AsyncVaultApiBase):
             wrap_ttl=wrap_ttl,
         )
 
-    async def delete_root(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_root(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete Root.
         Delete the current CA key.
@@ -488,7 +472,7 @@ class Pki(AsyncVaultApiBase):
 
     async def sign_intermediate(
         self, csr: str, common_name: str, extra_params: Optional[dict] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Sign Intermediate.
         Issue a certificate with appropriate values for acting as an intermediate CA.
@@ -515,9 +499,7 @@ class Pki(AsyncVaultApiBase):
             json=params,
         )
 
-    async def sign_self_issued(
-        self, certificate: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def sign_self_issued(self, certificate: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Sign Self-Issued.
         Sign a self-issued certificate.
@@ -545,7 +527,7 @@ class Pki(AsyncVaultApiBase):
         common_name: str,
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Sign Certificate.
         Sign a new certificate based upon the provided CSR and the supplied parameters.
@@ -580,7 +562,7 @@ class Pki(AsyncVaultApiBase):
         name: Optional[str] = None,
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Sign Verbatim.
         Sign a new certificate based upon the provided CSR.
@@ -608,9 +590,7 @@ class Pki(AsyncVaultApiBase):
             json=params,
         )
 
-    async def tidy(
-        self, extra_params: Optional[dict] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def tidy(self, extra_params: Optional[dict] = None, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Tidy.
         Allow tidying up the storage backend and/or CRL by removing certificates that have
@@ -633,7 +613,7 @@ class Pki(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_issuer(self, issuer_ref, mount_point=DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_issuer(self, issuer_ref, mount_point=DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read issuer.
         Get configuration of an issuer by its reference ID.
@@ -651,7 +631,7 @@ class Pki(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_issuers(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_issuers(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List issuers.
         Get list of all issuers for a given pki mount.
@@ -670,7 +650,7 @@ class Pki(AsyncVaultApiBase):
 
     async def update_issuer(
         self, issuer_ref: str, extra_params: Optional[dict] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Update issuer.
         Update a given issuer.
@@ -689,9 +669,7 @@ class Pki(AsyncVaultApiBase):
 
         return await self._adapter.post(url=api_path, json=params)
 
-    async def revoke_issuer(
-        self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def revoke_issuer(self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Revoke issuer.
         Revoke a given issuer.
@@ -709,9 +687,7 @@ class Pki(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_issuer(
-        self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_issuer(self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete issuer.
         Delete a given issuer. Deleting the default issuer will result in a warning

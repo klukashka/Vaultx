@@ -1,9 +1,8 @@
 import json
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional, Union
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.constants.aws import (
     ALLOWED_CREDS_ENDPOINTS,
@@ -29,7 +28,7 @@ class Aws(AsyncVaultApiBase):
         sts_endpoint: Optional[str] = None,
         max_retries: Optional[int] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure the root IAM credentials to communicate with AWS.
         There are multiple ways to pass root IAM credentials to the Vault server, specified below with the highest
@@ -79,9 +78,7 @@ class Aws(AsyncVaultApiBase):
             json=params,
         )
 
-    async def rotate_root_iam_credentials(
-        self, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def rotate_root_iam_credentials(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate static root IAM credentials.
 
@@ -105,7 +102,7 @@ class Aws(AsyncVaultApiBase):
 
     async def configure_lease(
         self, lease: str, lease_max: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure lease settings for the AWS secrets engine.
 
@@ -131,7 +128,7 @@ class Aws(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_lease_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_lease_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """Read the current lease settings for the AWS secrets engine.
 
         Supported methods:
@@ -156,7 +153,7 @@ class Aws(AsyncVaultApiBase):
         policy_arns: Optional[list] = None,
         iam_tags: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update the role with the given name.
 
@@ -219,7 +216,7 @@ class Aws(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query an existing role by the given name.
 
@@ -237,7 +234,7 @@ class Aws(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List all existing roles in the secrets engine.
 
@@ -252,7 +249,7 @@ class Aws(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing role by the given name.
 
@@ -280,7 +277,7 @@ class Aws(AsyncVaultApiBase):
         endpoint: str = "creds",
         mount_point: str = DEFAULT_MOUNT_POINT,
         role_session_name: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate credential based on the named role.
 

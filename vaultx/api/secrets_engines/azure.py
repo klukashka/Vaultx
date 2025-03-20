@@ -1,9 +1,8 @@
 import json
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Any, Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.constants.azure import VALID_ENVIRONMENTS
 from vaultx.exceptions import VaultxError
@@ -27,7 +26,7 @@ class Azure(VaultApiBase):
         client_secret: Optional[str] = None,
         environment: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure the credentials required for the plugin to perform API calls to Azure.
 
@@ -89,7 +88,7 @@ class Azure(VaultApiBase):
             return response.get("data")
         raise VaultxError("Unexpected return of non-dict response")
 
-    def delete_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete the stored Azure configuration and credentials.
 
@@ -112,7 +111,7 @@ class Azure(VaultApiBase):
         ttl: Optional[str] = None,
         max_ttl: Optional[str] = None,
         mount_point=DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a Vault role.
 

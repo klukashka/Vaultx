@@ -17,8 +17,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.create_or_update_entity(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity",
             json={"name": "entity-name"},
@@ -29,8 +28,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.create_or_update_entity_by_name(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "entity-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity/name/entity-name",
             json={},
@@ -41,8 +39,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_entity(entity_id="entity-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/entity/id/entity-id",
         )
@@ -52,8 +49,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_entity_by_name(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "entity-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/entity/name/entity-name",
         )
@@ -63,8 +59,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.update_entity(entity_id="entity-id", name="updated-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "updated-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "updated-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity/id/entity-id",
             json={"name": "updated-name"},
@@ -75,8 +70,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.identity.delete_entity(entity_id="entity-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/entity/id/entity-id",
         )
@@ -86,8 +80,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.identity.delete_entity_by_name(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/entity/name/entity-name",
         )
@@ -97,8 +90,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.identity.list_entities(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["entity1", "entity2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["entity1", "entity2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/entity/id",
         )
@@ -108,8 +100,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.identity.list_entities_by_name(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["entity1", "entity2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["entity1", "entity2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/entity/name",
         )
@@ -119,8 +110,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.merge_entities(from_entity_ids=["entity1", "entity2"], to_entity_id="entity3")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity/merge",
             json={"from_entity_ids": ["entity1", "entity2"], "to_entity_id": "entity3"},
@@ -133,8 +123,7 @@ class TestIdentity(unittest.TestCase):
         result = self.identity.create_or_update_entity_alias(
             name="alias-name", canonical_id="entity-id", mount_accessor="accessor"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity-alias",
             json={"name": "alias-name", "canonical_id": "entity-id", "mount_accessor": "accessor"},
@@ -145,8 +134,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_entity_alias(alias_id="alias-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/entity-alias/id/alias-id",
         )
@@ -158,8 +146,7 @@ class TestIdentity(unittest.TestCase):
         result = self.identity.update_entity_alias(
             alias_id="alias-id", name="updated-alias-name", canonical_id="entity-id", mount_accessor="accessor"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "updated-alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "updated-alias-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity-alias/id/alias-id",
             json={"name": "updated-alias-name", "canonical_id": "entity-id", "mount_accessor": "accessor"},
@@ -170,8 +157,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.identity.list_entity_aliases(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["alias1", "alias2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["alias1", "alias2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/entity-alias/id",
         )
@@ -181,8 +167,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.identity.delete_entity_alias(alias_id="alias-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/entity-alias/id/alias-id",
         )
@@ -192,8 +177,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.create_or_update_group(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group",
             json={"name": "group-name", "type": "internal", "member_entity_ids": None, "member_group_ids": None},
@@ -204,8 +188,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_group(group_id="group-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/group/id/group-id",
         )
@@ -215,8 +198,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.update_group(group_id="group-id", name="updated-group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "updated-group-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "updated-group-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group/id/group-id",
             json={
@@ -232,8 +214,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.identity.delete_group(group_id="group-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/group/id/group-id",
         )
@@ -243,8 +224,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.identity.list_groups(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["group1", "group2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["group1", "group2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/group/id",
         )
@@ -254,8 +234,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.identity.list_groups_by_name(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["group1", "group2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["group1", "group2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/group/name",
         )
@@ -265,8 +244,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.create_or_update_group_by_name(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "group-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group/name/group-name",
             json={"type": "internal"},
@@ -277,8 +255,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_group_by_name(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "group-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/group/name/group-name",
         )
@@ -288,8 +265,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.identity.delete_group_by_name(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/group/name/group-name",
         )
@@ -301,8 +277,7 @@ class TestIdentity(unittest.TestCase):
         result = self.identity.create_or_update_group_alias(
             name="alias-name", mount_accessor="accessor", canonical_id="group-id"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group-alias",
             json={"name": "alias-name", "mount_accessor": "accessor", "canonical_id": "group-id"},
@@ -315,8 +290,7 @@ class TestIdentity(unittest.TestCase):
         result = self.identity.update_group_alias(
             entity_id="alias-id", name="updated-alias-name", mount_accessor="accessor", canonical_id="group-id"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "updated-alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "updated-alias-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group-alias/id/alias-id",
             json={"name": "updated-alias-name", "mount_accessor": "accessor", "canonical_id": "group-id"},
@@ -327,8 +301,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_group_alias(alias_id="alias-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/group-alias/id/alias-id",
         )
@@ -338,8 +311,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.identity.delete_group_alias(entity_id="alias-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/group-alias/id/alias-id",
         )
@@ -349,8 +321,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.identity.list_group_aliases(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["alias1", "alias2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["alias1", "alias2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/group-alias/id",
         )
@@ -360,8 +331,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.lookup_entity(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/lookup/entity",
             json={"name": "entity-name"},
@@ -372,8 +342,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.lookup_group(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/lookup/group",
             json={"name": "group-name"},
@@ -384,8 +353,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.configure_tokens_backend(issuer="https://vault.example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
+        self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/config",
             json={"issuer": "https://vault.example.com"},
@@ -396,8 +364,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_tokens_backend_configuration()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
+        self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/config",
         )
@@ -407,8 +374,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.create_named_key(name="key-name", algorithm="RS256")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "key-name", "algorithm": "RS256"}})
+        self.assertEqual(result.json(), {"data": {"name": "key-name", "algorithm": "RS256"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/key/key-name",
             json={
@@ -425,8 +391,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_named_key(name="key-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "key-name", "algorithm": "RS256"}})
+        self.assertEqual(result.json(), {"data": {"name": "key-name", "algorithm": "RS256"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/key/key-name",
         )
@@ -436,8 +401,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.identity.delete_named_key(name="key-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/oidc/key/key-name",
         )
@@ -447,8 +411,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.identity.list_named_keys()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/oidc/key",
         )
@@ -458,8 +421,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.rotate_named_key(name="key-name", verification_ttl="24h")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "key-name", "verification_ttl": "24h"}})
+        self.assertEqual(result.json(), {"data": {"name": "key-name", "verification_ttl": "24h"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/key/key-name",
             json={"verification_ttl": "24h"},
@@ -470,8 +432,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.create_or_update_role(name="role-name", key="key-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "role-name", "key": "key-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "role-name", "key": "key-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/role/role-name",
             json={"key": "key-name", "ttl": "24h"},
@@ -482,8 +443,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_role(name="role-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "role-name", "key": "key-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "role-name", "key": "key-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/role/role-name",
         )
@@ -493,8 +453,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.identity.delete_role(name="role-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/oidc/role/role-name",
         )
@@ -504,8 +463,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.identity.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/oidc/role",
         )
@@ -515,8 +473,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.generate_signed_id_token(name="role-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "signed-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "signed-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/token/role-name",
         )
@@ -526,8 +483,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.identity.introspect_signed_id_token(token="signed-token")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"active": True}})
+        self.assertEqual(result.json(), {"data": {"active": True}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/introspect",
             json={"token": "signed-token"},
@@ -538,8 +494,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_well_known_configurations()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
+        self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/.well-known/openid-configuration",
         )
@@ -549,8 +504,7 @@ class TestIdentity(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.identity.read_active_public_keys()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/.well-known/keys",
         )
@@ -566,8 +520,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.create_or_update_entity(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity",
             json={"name": "entity-name"},
@@ -578,8 +531,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.create_or_update_entity_by_name(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "entity-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity/name/entity-name",
             json={},
@@ -590,8 +542,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_entity(entity_id="entity-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/entity/id/entity-id",
         )
@@ -601,8 +552,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_entity_by_name(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "entity-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/entity/name/entity-name",
         )
@@ -612,8 +562,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.update_entity(entity_id="entity-id", name="updated-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "updated-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "updated-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity/id/entity-id",
             json={"name": "updated-name"},
@@ -624,8 +573,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.identity.delete_entity(entity_id="entity-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/entity/id/entity-id",
         )
@@ -635,8 +583,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.identity.delete_entity_by_name(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/entity/name/entity-name",
         )
@@ -646,8 +593,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.identity.list_entities(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["entity1", "entity2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["entity1", "entity2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/entity/id",
         )
@@ -657,8 +603,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.identity.list_entities_by_name(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["entity1", "entity2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["entity1", "entity2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/entity/name",
         )
@@ -668,8 +613,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.merge_entities(from_entity_ids=["entity1", "entity2"], to_entity_id="entity3")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity/merge",
             json={"from_entity_ids": ["entity1", "entity2"], "to_entity_id": "entity3"},
@@ -682,8 +626,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         result = await self.identity.create_or_update_entity_alias(
             name="alias-name", canonical_id="entity-id", mount_accessor="accessor"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity-alias",
             json={"name": "alias-name", "canonical_id": "entity-id", "mount_accessor": "accessor"},
@@ -694,8 +637,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_entity_alias(alias_id="alias-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/entity-alias/id/alias-id",
         )
@@ -707,8 +649,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         result = await self.identity.update_entity_alias(
             alias_id="alias-id", name="updated-alias-name", canonical_id="entity-id", mount_accessor="accessor"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "updated-alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "updated-alias-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/entity-alias/id/alias-id",
             json={"name": "updated-alias-name", "canonical_id": "entity-id", "mount_accessor": "accessor"},
@@ -719,8 +660,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.identity.list_entity_aliases(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["alias1", "alias2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["alias1", "alias2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/entity-alias/id",
         )
@@ -730,8 +670,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.identity.delete_entity_alias(alias_id="alias-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/entity-alias/id/alias-id",
         )
@@ -741,8 +680,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.create_or_update_group(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group",
             json={"name": "group-name", "type": "internal", "member_entity_ids": None, "member_group_ids": None},
@@ -753,8 +691,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_group(group_id="group-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/group/id/group-id",
         )
@@ -764,8 +701,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.update_group(group_id="group-id", name="updated-group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "updated-group-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "updated-group-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group/id/group-id",
             json={
@@ -781,8 +717,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.identity.delete_group(group_id="group-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/group/id/group-id",
         )
@@ -792,8 +727,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.identity.list_groups(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["group1", "group2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["group1", "group2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/group/id",
         )
@@ -803,8 +737,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.identity.list_groups_by_name(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["group1", "group2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["group1", "group2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/group/name",
         )
@@ -814,8 +747,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.create_or_update_group_by_name(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "group-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group/name/group-name",
             json={"type": "internal"},
@@ -826,8 +758,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_group_by_name(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "group-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/group/name/group-name",
         )
@@ -837,8 +768,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.identity.delete_group_by_name(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/group/name/group-name",
         )
@@ -850,8 +780,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         result = await self.identity.create_or_update_group_alias(
             name="alias-name", mount_accessor="accessor", canonical_id="group-id"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group-alias",
             json={"name": "alias-name", "mount_accessor": "accessor", "canonical_id": "group-id"},
@@ -864,8 +793,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         result = await self.identity.update_group_alias(
             entity_id="alias-id", name="updated-alias-name", mount_accessor="accessor", canonical_id="group-id"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "updated-alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "updated-alias-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/group-alias/id/alias-id",
             json={"name": "updated-alias-name", "mount_accessor": "accessor", "canonical_id": "group-id"},
@@ -876,8 +804,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_group_alias(alias_id="alias-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "alias-id", "name": "alias-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/group-alias/id/alias-id",
         )
@@ -887,8 +814,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.identity.delete_group_alias(entity_id="alias-id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/group-alias/id/alias-id",
         )
@@ -898,8 +824,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.identity.list_group_aliases(method="LIST")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["alias1", "alias2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["alias1", "alias2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/group-alias/id",
         )
@@ -909,8 +834,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.lookup_entity(name="entity-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "entity-id", "name": "entity-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/lookup/entity",
             json={"name": "entity-name"},
@@ -921,8 +845,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.lookup_group(name="group-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
+        self.assertEqual(result.json(), {"data": {"id": "group-id", "name": "group-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/lookup/group",
             json={"name": "group-name"},
@@ -933,8 +856,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.configure_tokens_backend(issuer="https://vault.example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
+        self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/config",
             json={"issuer": "https://vault.example.com"},
@@ -945,8 +867,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_tokens_backend_configuration()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
+        self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/config",
         )
@@ -956,8 +877,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.create_named_key(name="key-name", algorithm="RS256")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "key-name", "algorithm": "RS256"}})
+        self.assertEqual(result.json(), {"data": {"name": "key-name", "algorithm": "RS256"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/key/key-name",
             json={
@@ -974,8 +894,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_named_key(name="key-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "key-name", "algorithm": "RS256"}})
+        self.assertEqual(result.json(), {"data": {"name": "key-name", "algorithm": "RS256"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/key/key-name",
         )
@@ -985,8 +904,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.identity.delete_named_key(name="key-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/oidc/key/key-name",
         )
@@ -996,8 +914,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.identity.list_named_keys()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/oidc/key",
         )
@@ -1007,8 +924,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.rotate_named_key(name="key-name", verification_ttl="24h")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "key-name", "verification_ttl": "24h"}})
+        self.assertEqual(result.json(), {"data": {"name": "key-name", "verification_ttl": "24h"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/key/key-name",
             json={"verification_ttl": "24h"},
@@ -1019,8 +935,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.create_or_update_role(name="role-name", key="key-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "role-name", "key": "key-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "role-name", "key": "key-name"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/role/role-name",
             json={"key": "key-name", "ttl": "24h"},
@@ -1031,8 +946,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_role(name="role-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "role-name", "key": "key-name"}})
+        self.assertEqual(result.json(), {"data": {"name": "role-name", "key": "key-name"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/role/role-name",
         )
@@ -1042,8 +956,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.identity.delete_role(name="role-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/identity/oidc/role/role-name",
         )
@@ -1053,8 +966,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.identity.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/identity/oidc/role",
         )
@@ -1064,8 +976,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.generate_signed_id_token(name="role-name")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"token": "signed-token"}})
+        self.assertEqual(result.json(), {"data": {"token": "signed-token"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/token/role-name",
         )
@@ -1075,8 +986,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.identity.introspect_signed_id_token(token="signed-token")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"active": True}})
+        self.assertEqual(result.json(), {"data": {"active": True}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/identity/oidc/introspect",
             json={"token": "signed-token"},
@@ -1087,8 +997,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_well_known_configurations()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
+        self.assertEqual(result.json(), {"data": {"issuer": "https://vault.example.com"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/.well-known/openid-configuration",
         )
@@ -1098,8 +1007,7 @@ class TestAsyncIdentity(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.identity.read_active_public_keys()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["key1", "key2"]}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/identity/oidc/.well-known/keys",
         )

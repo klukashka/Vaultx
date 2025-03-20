@@ -1,13 +1,12 @@
 import json
-from typing import Any, Union
+from typing import Union
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
 class Policies(AsyncVaultApiBase):
-    async def list_acl_policies(self) -> Union[dict[str, Any], Response]:
+    async def list_acl_policies(self) -> VaultxResponse:
         """
         List all configured acl policies.
 
@@ -21,7 +20,7 @@ class Policies(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_acl_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_acl_policy(self, name: str) -> VaultxResponse:
         """
         Retrieve the policy body for the named acl policy.
 
@@ -38,7 +37,7 @@ class Policies(AsyncVaultApiBase):
 
     async def create_or_update_acl_policy(
         self, name: str, policy: Union[str, dict], pretty_print: bool = True
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Add a new or update an existing acl policy.
 
@@ -64,7 +63,7 @@ class Policies(AsyncVaultApiBase):
             json=params,
         )
 
-    async def delete_acl_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def delete_acl_policy(self, name: str) -> VaultxResponse:
         """
         Delete the acl policy with the given name.
 
@@ -81,7 +80,7 @@ class Policies(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_rgp_policies(self) -> Union[dict[str, Any], Response]:
+    async def list_rgp_policies(self) -> VaultxResponse:
         """
         List all configured rgp policies.
 
@@ -95,7 +94,7 @@ class Policies(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_rgp_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_rgp_policy(self, name: str) -> VaultxResponse:
         """
         Retrieve the policy body for the named rgp policy.
 
@@ -110,9 +109,7 @@ class Policies(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def create_or_update_rgp_policy(
-        self, name: str, policy: str, enforcement_level: str
-    ) -> Union[dict[str, Any], Response]:
+    async def create_or_update_rgp_policy(self, name: str, policy: str, enforcement_level: str) -> VaultxResponse:
         """
         Add a new or update an existing rgp policy.
         Once a policy is updated, it takes effect immediately to all associated users.
@@ -133,7 +130,7 @@ class Policies(AsyncVaultApiBase):
             json=params,
         )
 
-    async def delete_rgp_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def delete_rgp_policy(self, name: str) -> VaultxResponse:
         """
         Delete the rgp policy with the given name.
         This will immediately affect all users associated with this policy.
@@ -149,7 +146,7 @@ class Policies(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_egp_policies(self) -> Union[dict[str, Any], Response]:
+    async def list_egp_policies(self) -> VaultxResponse:
         """
         List all configured egp policies.
 
@@ -163,7 +160,7 @@ class Policies(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_egp_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_egp_policy(self, name: str) -> VaultxResponse:
         """
         Retrieve the policy body for the named egp policy.
 
@@ -180,7 +177,7 @@ class Policies(AsyncVaultApiBase):
 
     async def create_or_update_egp_policy(
         self, name: str, policy: str, enforcement_level: str, paths: list[str]
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Add a new or update an existing egp policy.
         Once a policy is updated, it takes effect immediately to all associated users.
@@ -206,7 +203,7 @@ class Policies(AsyncVaultApiBase):
             json=params,
         )
 
-    async def delete_egp_policy(self, name: str) -> Union[dict[str, Any], Response]:
+    async def delete_egp_policy(self, name: str) -> VaultxResponse:
         """
         Delete the egp policy with the given name.
         This will immediately affect all users associated with this policy.

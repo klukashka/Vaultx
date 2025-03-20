@@ -1,16 +1,13 @@
-"""Support for "Auth"-related System Backend Methods."""
-
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import exceptions, utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.utils import list_to_comma_delimited, validate_list_of_strings_param
 
 
 class Auth(VaultApiBase):
-    def list_auth_methods(self) -> Union[dict[str, Any], Response]:
+    def list_auth_methods(self) -> VaultxResponse:
         """
         List all enabled auth methods.
 
@@ -33,7 +30,7 @@ class Auth(VaultApiBase):
         local: bool = False,
         path: Optional[str] = None,
         **kwargs,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Enable a new auth method.
 
@@ -86,7 +83,7 @@ class Auth(VaultApiBase):
         api_path = f"/v1/sys/auth/{path}"
         return self._adapter.post(url=api_path, json=params)
 
-    def disable_auth_method(self, path: str) -> Union[dict[str, Any], Response]:
+    def disable_auth_method(self, path: str) -> VaultxResponse:
         """
         Disable the auth method at the given auth path.
 
@@ -102,7 +99,7 @@ class Auth(VaultApiBase):
             url=api_path,
         )
 
-    def read_auth_method_tuning(self, path: str) -> Union[dict[str, Any], Response]:
+    def read_auth_method_tuning(self, path: str) -> VaultxResponse:
         """
         Read the given auth path's configuration.
 
@@ -132,7 +129,7 @@ class Auth(VaultApiBase):
         listing_visibility: Optional[str] = None,
         passthrough_request_headers: Optional[list[str]] = None,
         **kwargs,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Tune configuration parameters for a given auth path.
 

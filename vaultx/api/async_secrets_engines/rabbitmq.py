@@ -1,7 +1,4 @@
-from typing import Any, Union
-
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -21,7 +18,7 @@ class RabbitMQ(AsyncVaultApiBase):
         password: str = "",
         verify_connection: bool = True,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure shared information for the rabbitmq secrets engine.
 
@@ -48,9 +45,7 @@ class RabbitMQ(AsyncVaultApiBase):
             json=params,
         )
 
-    async def configure_lease(
-        self, ttl: int, max_ttl: int, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def configure_lease(self, ttl: int, max_ttl: int, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint configures the lease settings for generated credentials.
 
@@ -76,7 +71,7 @@ class RabbitMQ(AsyncVaultApiBase):
         vhosts: str = "",
         vhost_topics: str = "",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint creates or updates the role definition.
 
@@ -87,14 +82,14 @@ class RabbitMQ(AsyncVaultApiBase):
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: rabbitmq).
         :return: The JSON response of the request.
         """
-        api_path = f"/v1/{mount_point}/roles/{mount_point}"
+        api_path = f"/v1/{mount_point}/roles/{name}"
         params = {"tags": tags, "vhosts": vhosts, "vhost_topics": vhost_topics}
         return await self._adapter.post(
             url=api_path,
             json=params,
         )
 
-    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint queries the role definition.
 
@@ -107,7 +102,7 @@ class RabbitMQ(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes the role definition.
         Even if the role does not exist, this endpoint will still return await a successful response.
@@ -121,9 +116,7 @@ class RabbitMQ(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def generate_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def generate_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint generates a new set of dynamic credentials based on the named role.
 

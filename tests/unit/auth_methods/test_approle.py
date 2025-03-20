@@ -20,8 +20,7 @@ class TestAppRole(unittest.TestCase):
             bind_secret_id=True,
             token_policies=["policy1", "policy2"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
         with self.assertRaises(exceptions.VaultxError):
@@ -45,8 +44,7 @@ class TestAppRole(unittest.TestCase):
     def test_delete_role(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.approle.delete_role(role_name="test_role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
     def test_read_role_id(self):
@@ -82,8 +80,7 @@ class TestAppRole(unittest.TestCase):
     def test_destroy_secret_id(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.approle.destroy_secret_id(role_name="test_role", secret_id="test_secret_id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     def test_list_secret_id_accessors(self):
@@ -101,8 +98,7 @@ class TestAppRole(unittest.TestCase):
     def test_destroy_secret_id_accessor(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.approle.destroy_secret_id_accessor(role_name="test_role", secret_id_accessor="test_accessor")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     def test_login(self):
@@ -124,8 +120,7 @@ class TestAsyncAppRole(unittest.IsolatedAsyncioTestCase):
             bind_secret_id=True,
             token_policies=["policy1", "policy2"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
         with self.assertRaises(exceptions.VaultxError):
@@ -149,8 +144,7 @@ class TestAsyncAppRole(unittest.IsolatedAsyncioTestCase):
     async def test_delete_role(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.approle.delete_role(role_name="test_role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
     async def test_read_role_id(self):
@@ -186,8 +180,7 @@ class TestAsyncAppRole(unittest.IsolatedAsyncioTestCase):
     async def test_destroy_secret_id(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.approle.destroy_secret_id(role_name="test_role", secret_id="test_secret_id")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     async def test_list_secret_id_accessors(self):
@@ -207,8 +200,7 @@ class TestAsyncAppRole(unittest.IsolatedAsyncioTestCase):
         result = await self.approle.destroy_secret_id_accessor(
             role_name="test_role", secret_id_accessor="test_accessor"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     async def test_login(self):

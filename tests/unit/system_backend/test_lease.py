@@ -18,9 +18,8 @@ class TestLease(unittest.TestCase):
 
         result = self.lease.read_lease(lease_id="my-lease")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "renewable": True}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "renewable": True}})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/lookup",
             json={"lease_id": "my-lease"},
@@ -32,9 +31,8 @@ class TestLease(unittest.TestCase):
 
         result = self.lease.list_leases(prefix="my-prefix")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"keys": ["lease1", "lease2"]}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"keys": ["lease1", "lease2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/sys/leases/lookup/my-prefix",
         )
@@ -44,9 +42,8 @@ class TestLease(unittest.TestCase):
         self.mock_adapter.put.return_value = mock_response
 
         result = self.lease.renew_lease(lease_id="my-lease", increment=3600)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "lease_duration": 3600}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "lease_duration": 3600}})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/renew",
             json={"lease_id": "my-lease", "increment": 3600},
@@ -58,9 +55,8 @@ class TestLease(unittest.TestCase):
 
         result = self.lease.renew_lease(lease_id="my-lease")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "lease_duration": 3600}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "lease_duration": 3600}})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/renew",
             json={"lease_id": "my-lease", "increment": None},
@@ -72,8 +68,7 @@ class TestLease(unittest.TestCase):
 
         result = self.lease.revoke_lease(lease_id="my-lease")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/revoke",
             json={"lease_id": "my-lease"},
@@ -85,8 +80,7 @@ class TestLease(unittest.TestCase):
 
         result = self.lease.revoke_prefix(prefix="my-prefix")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/revoke-prefix/my-prefix",
             json={"prefix": "my-prefix"},
@@ -98,8 +92,7 @@ class TestLease(unittest.TestCase):
 
         result = self.lease.revoke_force(prefix="my-prefix")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/revoke-force/my-prefix",
             json={"prefix": "my-prefix"},
@@ -117,9 +110,8 @@ class TestLeaseAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.lease.read_lease(lease_id="my-lease")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "renewable": True}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "renewable": True}})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/lookup",
             json={"lease_id": "my-lease"},
@@ -131,9 +123,8 @@ class TestLeaseAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.lease.list_leases(prefix="my-prefix")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"keys": ["lease1", "lease2"]}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"keys": ["lease1", "lease2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/sys/leases/lookup/my-prefix",
         )
@@ -144,9 +135,8 @@ class TestLeaseAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.lease.renew_lease(lease_id="my-lease", increment=3600)
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "lease_duration": 3600}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "lease_duration": 3600}})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/renew",
             json={"lease_id": "my-lease", "increment": 3600},
@@ -158,9 +148,8 @@ class TestLeaseAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.lease.renew_lease(lease_id="my-lease")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "lease_duration": 3600}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"lease_id": "my-lease", "lease_duration": 3600}})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/renew",
             json={"lease_id": "my-lease", "increment": None},
@@ -172,8 +161,7 @@ class TestLeaseAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.lease.revoke_lease(lease_id="my-lease")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/revoke",
             json={"lease_id": "my-lease"},
@@ -185,8 +173,7 @@ class TestLeaseAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.lease.revoke_prefix(prefix="my-prefix")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/revoke-prefix/my-prefix",
             json={"prefix": "my-prefix"},
@@ -198,8 +185,7 @@ class TestLeaseAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.lease.revoke_force(prefix="my-prefix")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/leases/revoke-force/my-prefix",
             json={"prefix": "my-prefix"},

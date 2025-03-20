@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
@@ -33,7 +32,7 @@ class Token(VaultApiBase):
         entity_alias: Optional[str] = None,
         wrap_ttl: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create a new token.
 
@@ -125,7 +124,7 @@ class Token(VaultApiBase):
         entity_alias: Optional[str] = None,
         wrap_ttl: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create a new orphaned token.
 
@@ -192,7 +191,7 @@ class Token(VaultApiBase):
             wrap_ttl=wrap_ttl,
         )
 
-    def list_accessors(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_accessors(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List token accessors.
 
@@ -210,7 +209,7 @@ class Token(VaultApiBase):
             url=api_path,
         )
 
-    def lookup(self, token: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def lookup(self, token: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Retrieve information about the client token.
 
@@ -230,7 +229,7 @@ class Token(VaultApiBase):
             json=params,
         )
 
-    def lookup_self(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def lookup_self(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Retrieve information about the current client token.
 
@@ -245,7 +244,7 @@ class Token(VaultApiBase):
             url=api_path,
         )
 
-    def lookup_accessor(self, accessor: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def lookup_accessor(self, accessor: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Retrieve information about the client token from its accessor.
 
@@ -271,7 +270,7 @@ class Token(VaultApiBase):
         increment: Optional[str] = None,
         wrap_ttl: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Renew a lease associated with a token.
 
@@ -303,7 +302,7 @@ class Token(VaultApiBase):
 
     def renew_self(
         self, increment: Optional[str] = None, wrap_ttl: Optional[str] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Renew a lease associated with the calling token.
 
@@ -337,7 +336,7 @@ class Token(VaultApiBase):
         increment: Optional[str] = None,
         wrap_ttl: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Renew a lease associated with a token using its accessor.
         This is used to prevent the expiration of a token, and the automatic revocation of it.
@@ -367,7 +366,7 @@ class Token(VaultApiBase):
             wrap_ttl=wrap_ttl,
         )
 
-    def revoke(self, token: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def revoke(self, token: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Revoke a token and all child tokens.
         When the token is revoked, all dynamic secrets generated with it are also revoked.
@@ -388,7 +387,7 @@ class Token(VaultApiBase):
             json=params,
         )
 
-    def revoke_self(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def revoke_self(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Revoke the token used to call it and all child tokens.
         When the token is revoked, all dynamic secrets generated with it are also revoked.
@@ -402,7 +401,7 @@ class Token(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/revoke-self"
         return self._adapter.post(url=api_path)
 
-    def revoke_accessor(self, accessor: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def revoke_accessor(self, accessor: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Revoke the token associated with the accessor and all the child tokens.
 
@@ -425,9 +424,7 @@ class Token(VaultApiBase):
             json=params,
         )
 
-    def revoke_and_orphan_children(
-        self, token: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def revoke_and_orphan_children(self, token: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Revoke a token but not its child tokens.
 
@@ -451,7 +448,7 @@ class Token(VaultApiBase):
             json=params,
         )
 
-    def read_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the named role configuration.
 
@@ -473,7 +470,7 @@ class Token(VaultApiBase):
     def list_roles(
         self,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         List available token roles.
 
@@ -500,7 +497,7 @@ class Token(VaultApiBase):
         mount_point: str = DEFAULT_MOUNT_POINT,
         token_period: Optional[str] = None,
         token_explicit_max_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create (or replace) the named role.
 
@@ -550,7 +547,7 @@ class Token(VaultApiBase):
             json=params,
         )
 
-    def delete_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete the named token role.
 
@@ -569,7 +566,7 @@ class Token(VaultApiBase):
             url=api_path,
         )
 
-    def tidy(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def tidy(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Perform some maintenance tasks to clean up invalid entries that may remain in the token store.
         On enterprise, `tidy` will only impact the tokens in the specified namespace,

@@ -3,6 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
+from vaultx.adapters import VaultxResponse
 from vaultx.api.async_secrets_engines.pki import Pki as AsyncPki
 from vaultx.api.secrets_engines.pki import Pki
 
@@ -14,7 +15,7 @@ class TestPki(unittest.TestCase):
 
     def test_read_ca_certificate(self):
         mock_response = Response(200, text="-----BEGIN CERTIFICATE-----")
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.pki.read_ca_certificate()
         self.assertEqual(result, "-----BEGIN CERTIFICATE-----")
@@ -24,7 +25,7 @@ class TestPki(unittest.TestCase):
 
     def test_read_ca_certificate_chain(self):
         mock_response = Response(200, text="-----BEGIN CERTIFICATE-----")
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.pki.read_ca_certificate_chain()
         self.assertEqual(result, "-----BEGIN CERTIFICATE-----")
@@ -37,8 +38,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.pki.read_certificate(serial="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"serial": "12345"}})
+        self.assertEqual(result.json(), {"data": {"serial": "12345"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/cert/12345",
         )
@@ -48,8 +48,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.pki.list_certificates()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["cert1", "cert2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["cert1", "cert2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/pki/certs",
         )
@@ -59,8 +58,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.submit_ca_information(pem_bundle="-----BEGIN CERTIFICATE-----")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "CA information submitted"}})
+        self.assertEqual(result.json(), {"data": {"message": "CA information submitted"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/config/ca",
             json={"pem_bundle": "-----BEGIN CERTIFICATE-----"},
@@ -68,11 +66,10 @@ class TestPki(unittest.TestCase):
 
     def test_read_crl_configuration(self):
         mock_response = Response(200, json={"data": {"expiry": "24h"}})
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.pki.read_crl_configuration()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"expiry": "24h"}})
+        self.assertEqual(result.value, {"data": {"expiry": "24h"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/config/crl",
         )
@@ -82,8 +79,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.set_crl_configuration(expiry="24h", disable=False)
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "CRL configuration updated"}})
+        self.assertEqual(result.json(), {"data": {"message": "CRL configuration updated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/config/crl",
             json={"expiry": "24h", "disable": False},
@@ -94,8 +90,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.pki.read_urls()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuing_certificates": ["http://example.com"]}})
+        self.assertEqual(result.json(), {"data": {"issuing_certificates": ["http://example.com"]}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/config/urls",
         )
@@ -105,8 +100,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.set_urls(params={"issuing_certificates": ["http://example.com"]})
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "URLs updated"}})
+        self.assertEqual(result.json(), {"data": {"message": "URLs updated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/config/urls",
             json={"issuing_certificates": ["http://example.com"]},
@@ -114,7 +108,7 @@ class TestPki(unittest.TestCase):
 
     def test_read_crl(self):
         mock_response = Response(200, text="-----BEGIN X509 CRL-----")
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.pki.read_crl()
         self.assertEqual(result, "-----BEGIN X509 CRL-----")
@@ -127,8 +121,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.pki.rotate_crl()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "CRL rotated"}})
+        self.assertEqual(result.json(), {"data": {"message": "CRL rotated"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/crl/rotate",
         )
@@ -138,8 +131,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.generate_intermediate(_type="exported", common_name="example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"csr": "-----BEGIN CERTIFICATE REQUEST-----"}})
+        self.assertEqual(result.json(), {"data": {"csr": "-----BEGIN CERTIFICATE REQUEST-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/intermediate/generate/exported",
             json={"common_name": "example.com"},
@@ -151,8 +143,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.set_signed_intermediate(certificate="-----BEGIN CERTIFICATE-----")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Intermediate certificate set"}})
+        self.assertEqual(result.json(), {"data": {"message": "Intermediate certificate set"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/intermediate/set-signed",
             json={"certificate": "-----BEGIN CERTIFICATE-----"},
@@ -163,8 +154,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.generate_certificate(name="test-role", common_name="example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/issue/test-role",
             json={"common_name": "example.com"},
@@ -176,8 +166,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.revoke_certificate(serial_number="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Certificate revoked"}})
+        self.assertEqual(result.json(), {"data": {"message": "Certificate revoked"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/revoke",
             json={"serial_number": "12345"},
@@ -188,8 +177,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.create_or_update_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Role created/updated"}})
+        self.assertEqual(result.json(), {"data": {"message": "Role created/updated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/roles/test-role",
             json={"name": "test-role"},
@@ -200,8 +188,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.pki.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/roles/test-role",
         )
@@ -211,8 +198,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.pki.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/pki/roles",
         )
@@ -222,8 +208,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.pki.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Role deleted"}})
+        self.assertEqual(result.json(), {"data": {"message": "Role deleted"}})
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/pki/roles/test-role",
         )
@@ -233,8 +218,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.generate_root(_type="exported", common_name="example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/root/generate/exported",
             json={"common_name": "example.com"},
@@ -246,8 +230,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.pki.delete_root()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Root deleted"}})
+        self.assertEqual(result.json(), {"data": {"message": "Root deleted"}})
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/pki/root",
         )
@@ -257,8 +240,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.sign_intermediate(csr="-----BEGIN CERTIFICATE REQUEST-----", common_name="example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/root/sign-intermediate",
             json={"csr": "-----BEGIN CERTIFICATE REQUEST-----", "common_name": "example.com"},
@@ -269,8 +251,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.sign_self_issued(certificate="-----BEGIN CERTIFICATE-----")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/root/sign-self-issued",
             json={"certificate": "-----BEGIN CERTIFICATE-----"},
@@ -283,8 +264,7 @@ class TestPki(unittest.TestCase):
         result = self.pki.sign_certificate(
             name="test-role", csr="-----BEGIN CERTIFICATE REQUEST-----", common_name="example.com"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/sign/test-role",
             json={"csr": "-----BEGIN CERTIFICATE REQUEST-----", "common_name": "example.com"},
@@ -295,8 +275,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.sign_verbatim(csr="-----BEGIN CERTIFICATE REQUEST-----")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/sign-verbatim",
             json={"csr": "-----BEGIN CERTIFICATE REQUEST-----"},
@@ -307,8 +286,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.tidy()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Tidy operation started"}})
+        self.assertEqual(result.json(), {"data": {"message": "Tidy operation started"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/tidy",
             json={},
@@ -319,8 +297,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.pki.read_issuer(issuer_ref="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuer_ref": "12345"}})
+        self.assertEqual(result.json(), {"data": {"issuer_ref": "12345"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/issuer/12345",
         )
@@ -330,8 +307,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.pki.list_issuers()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["issuer1", "issuer2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["issuer1", "issuer2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/pki/issuers",
         )
@@ -341,8 +317,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.update_issuer(issuer_ref="12345", extra_params={"key": "value"})
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Issuer updated"}})
+        self.assertEqual(result.json(), {"data": {"message": "Issuer updated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/issuer/12345",
             json={"key": "value"},
@@ -353,8 +328,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.pki.revoke_issuer(issuer_ref="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Issuer revoked"}})
+        self.assertEqual(result.json(), {"data": {"message": "Issuer revoked"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/issuer/12345/revoke",
         )
@@ -364,8 +338,7 @@ class TestPki(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.pki.delete_issuer(issuer_ref="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Issuer deleted"}})
+        self.assertEqual(result.json(), {"data": {"message": "Issuer deleted"}})
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/pki/issuer/12345",
         )
@@ -378,7 +351,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
 
     async def test_read_ca_certificate_async(self):
         mock_response = Response(200, text="-----BEGIN CERTIFICATE-----")
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = await self.pki.read_ca_certificate()
         self.assertEqual(result, "-----BEGIN CERTIFICATE-----")
@@ -388,7 +361,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
 
     async def test_read_ca_certificate_chain_async(self):
         mock_response = Response(200, text="-----BEGIN CERTIFICATE-----")
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = await self.pki.read_ca_certificate_chain()
         self.assertEqual(result, "-----BEGIN CERTIFICATE-----")
@@ -401,8 +374,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.pki.read_certificate(serial="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"serial": "12345"}})
+        self.assertEqual(result.json(), {"data": {"serial": "12345"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/cert/12345",
         )
@@ -412,8 +384,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.pki.list_certificates()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["cert1", "cert2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["cert1", "cert2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/pki/certs",
         )
@@ -423,8 +394,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.submit_ca_information(pem_bundle="-----BEGIN CERTIFICATE-----")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "CA information submitted"}})
+        self.assertEqual(result.json(), {"data": {"message": "CA information submitted"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/config/ca",
             json={"pem_bundle": "-----BEGIN CERTIFICATE-----"},
@@ -435,8 +405,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.pki.read_crl_configuration()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"expiry": "24h"}})
+        self.assertEqual(result.json(), {"data": {"expiry": "24h"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/config/crl",
         )
@@ -446,8 +415,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.set_crl_configuration(expiry="24h", disable=False)
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "CRL configuration updated"}})
+        self.assertEqual(result.json(), {"data": {"message": "CRL configuration updated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/config/crl",
             json={"expiry": "24h", "disable": False},
@@ -458,8 +426,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.pki.read_urls()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuing_certificates": ["http://example.com"]}})
+        self.assertEqual(result.json(), {"data": {"issuing_certificates": ["http://example.com"]}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/config/urls",
         )
@@ -469,8 +436,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.set_urls(params={"issuing_certificates": ["http://example.com"]})
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "URLs updated"}})
+        self.assertEqual(result.json(), {"data": {"message": "URLs updated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/config/urls",
             json={"issuing_certificates": ["http://example.com"]},
@@ -478,7 +444,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
 
     async def test_read_crl_async(self):
         mock_response = Response(200, text="-----BEGIN X509 CRL-----")
-        self.mock_adapter.get.return_value = mock_response
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = await self.pki.read_crl()
         self.assertEqual(result, "-----BEGIN X509 CRL-----")
@@ -491,8 +457,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.pki.rotate_crl()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "CRL rotated"}})
+        self.assertEqual(result.json(), {"data": {"message": "CRL rotated"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/crl/rotate",
         )
@@ -502,8 +467,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.generate_intermediate(_type="exported", common_name="example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"csr": "-----BEGIN CERTIFICATE REQUEST-----"}})
+        self.assertEqual(result.json(), {"data": {"csr": "-----BEGIN CERTIFICATE REQUEST-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/intermediate/generate/exported",
             json={"common_name": "example.com"},
@@ -515,8 +479,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.set_signed_intermediate(certificate="-----BEGIN CERTIFICATE-----")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Intermediate certificate set"}})
+        self.assertEqual(result.json(), {"data": {"message": "Intermediate certificate set"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/intermediate/set-signed",
             json={"certificate": "-----BEGIN CERTIFICATE-----"},
@@ -527,8 +490,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.generate_certificate(name="test-role", common_name="example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/issue/test-role",
             json={"common_name": "example.com"},
@@ -540,8 +502,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.revoke_certificate(serial_number="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Certificate revoked"}})
+        self.assertEqual(result.json(), {"data": {"message": "Certificate revoked"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/revoke",
             json={"serial_number": "12345"},
@@ -552,8 +513,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.create_or_update_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Role created/updated"}})
+        self.assertEqual(result.json(), {"data": {"message": "Role created/updated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/roles/test-role",
             json={"name": "test-role"},
@@ -564,8 +524,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.pki.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/roles/test-role",
         )
@@ -575,8 +534,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.pki.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/pki/roles",
         )
@@ -586,8 +544,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.pki.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Role deleted"}})
+        self.assertEqual(result.json(), {"data": {"message": "Role deleted"}})
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/pki/roles/test-role",
         )
@@ -597,8 +554,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.generate_root(_type="exported", common_name="example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/root/generate/exported",
             json={"common_name": "example.com"},
@@ -610,8 +566,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.pki.delete_root()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Root deleted"}})
+        self.assertEqual(result.json(), {"data": {"message": "Root deleted"}})
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/pki/root",
         )
@@ -621,8 +576,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.sign_intermediate(csr="-----BEGIN CERTIFICATE REQUEST-----", common_name="example.com")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/root/sign-intermediate",
             json={"csr": "-----BEGIN CERTIFICATE REQUEST-----", "common_name": "example.com"},
@@ -633,8 +587,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.sign_self_issued(certificate="-----BEGIN CERTIFICATE-----")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/root/sign-self-issued",
             json={"certificate": "-----BEGIN CERTIFICATE-----"},
@@ -647,8 +600,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         result = await self.pki.sign_certificate(
             name="test-role", csr="-----BEGIN CERTIFICATE REQUEST-----", common_name="example.com"
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/sign/test-role",
             json={"csr": "-----BEGIN CERTIFICATE REQUEST-----", "common_name": "example.com"},
@@ -659,8 +611,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.sign_verbatim(csr="-----BEGIN CERTIFICATE REQUEST-----")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/sign-verbatim",
             json={"csr": "-----BEGIN CERTIFICATE REQUEST-----"},
@@ -671,8 +622,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.tidy()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Tidy operation started"}})
+        self.assertEqual(result.json(), {"data": {"message": "Tidy operation started"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/tidy",
             json={},
@@ -683,8 +633,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.pki.read_issuer(issuer_ref="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"issuer_ref": "12345"}})
+        self.assertEqual(result.json(), {"data": {"issuer_ref": "12345"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/pki/issuer/12345",
         )
@@ -694,8 +643,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.pki.list_issuers()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["issuer1", "issuer2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["issuer1", "issuer2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/pki/issuers",
         )
@@ -705,8 +653,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.update_issuer(issuer_ref="12345", extra_params={"key": "value"})
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Issuer updated"}})
+        self.assertEqual(result.json(), {"data": {"message": "Issuer updated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/issuer/12345",
             json={"key": "value"},
@@ -717,8 +664,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.pki.revoke_issuer(issuer_ref="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Issuer revoked"}})
+        self.assertEqual(result.json(), {"data": {"message": "Issuer revoked"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/pki/issuer/12345/revoke",
         )
@@ -728,8 +674,7 @@ class TestAsyncPki(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.pki.delete_issuer(issuer_ref="12345")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Issuer deleted"}})
+        self.assertEqual(result.json(), {"data": {"message": "Issuer deleted"}})
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/pki/issuer/12345",
         )

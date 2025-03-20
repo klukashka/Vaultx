@@ -18,9 +18,8 @@ class TestNamespace(unittest.TestCase):
 
         result = self.namespace.create_namespace(path="my-namespace")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"path": "my-namespace"}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"path": "my-namespace"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/namespaces/my-namespace",
         )
@@ -31,9 +30,8 @@ class TestNamespace(unittest.TestCase):
 
         result = self.namespace.list_namespaces()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"keys": ["ns1/", "ns2/"]}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"keys": ["ns1/", "ns2/"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/sys/namespaces/",
         )
@@ -44,8 +42,7 @@ class TestNamespace(unittest.TestCase):
 
         result = self.namespace.delete_namespace(path="my-namespace")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/sys/namespaces/my-namespace",
         )
@@ -62,9 +59,8 @@ class TestAsyncNamespace(unittest.IsolatedAsyncioTestCase):
 
         result = await self.namespace.create_namespace(path="my-namespace")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"path": "my-namespace"}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"path": "my-namespace"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/namespaces/my-namespace",
         )
@@ -75,9 +71,8 @@ class TestAsyncNamespace(unittest.IsolatedAsyncioTestCase):
 
         result = await self.namespace.list_namespaces()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"data": {"keys": ["ns1/", "ns2/"]}})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"data": {"keys": ["ns1/", "ns2/"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/sys/namespaces/",
         )

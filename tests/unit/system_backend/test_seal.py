@@ -39,8 +39,7 @@ class TestSeal(unittest.TestCase):
     def test_seal(self):
         self.mock_adapter.put.return_value = Response(204)
         result = self.seal.seal()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(url="/v1/sys/seal")
 
     def test_submit_unseal_key(self):
@@ -108,8 +107,7 @@ class TestAsyncSeal(unittest.IsolatedAsyncioTestCase):
     async def test_seal(self):
         self.mock_adapter.put.return_value = Response(204)
         result = await self.seal.seal()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(url="/v1/sys/seal")
 
     async def test_submit_unseal_key(self):

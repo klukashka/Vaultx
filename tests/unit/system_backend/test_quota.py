@@ -18,8 +18,7 @@ class TestQuota(unittest.TestCase):
 
         result = self.quota.read_quota(name="my-quota")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "my-quota", "rate": 10}})
+        self.assertEqual(result.json(), {"data": {"name": "my-quota", "rate": 10}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit/my-quota",
         )
@@ -30,8 +29,7 @@ class TestQuota(unittest.TestCase):
 
         result = self.quota.list_quotas()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["quota1", "quota2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["quota1", "quota2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit",
         )
@@ -51,8 +49,7 @@ class TestQuota(unittest.TestCase):
             inheritable=True,
         )
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit/my-quota",
             json={
@@ -76,8 +73,7 @@ class TestQuota(unittest.TestCase):
             rate=10,
         )
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit/my-quota",
             json={
@@ -93,8 +89,7 @@ class TestQuota(unittest.TestCase):
 
         result = self.quota.delete_quota(name="my-quota")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit/my-quota",
         )
@@ -111,8 +106,7 @@ class TestAsyncQuota(unittest.IsolatedAsyncioTestCase):
 
         result = await self.quota.read_quota(name="my-quota")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "my-quota", "rate": 10}})
+        self.assertEqual(result.json(), {"data": {"name": "my-quota", "rate": 10}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit/my-quota",
         )
@@ -123,8 +117,7 @@ class TestAsyncQuota(unittest.IsolatedAsyncioTestCase):
 
         result = await self.quota.list_quotas()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["quota1", "quota2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["quota1", "quota2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit",
         )
@@ -144,8 +137,7 @@ class TestAsyncQuota(unittest.IsolatedAsyncioTestCase):
             inheritable=True,
         )
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit/my-quota",
             json={
@@ -169,8 +161,7 @@ class TestAsyncQuota(unittest.IsolatedAsyncioTestCase):
             rate=10,
         )
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit/my-quota",
             json={
@@ -186,8 +177,7 @@ class TestAsyncQuota(unittest.IsolatedAsyncioTestCase):
 
         result = await self.quota.delete_quota(name="my-quota")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/sys/quotas/rate-limit/my-quota",
         )

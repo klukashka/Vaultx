@@ -1,14 +1,13 @@
-from typing import Any, Optional, Union
+from typing import Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
 class Capabilities(AsyncVaultApiBase):
     async def get_capabilities(
         self, paths: list[str], token: Optional[str] = None, accessor: Optional[str] = None
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Get the capabilities associated with a token.
 

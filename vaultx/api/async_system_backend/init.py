@@ -1,13 +1,12 @@
-from typing import Any, Optional, Union
+from typing import Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.exceptions import VaultxError
 
 
 class Init(AsyncVaultApiBase):
-    async def read_init_status(self) -> Union[dict[str, Any], Response]:
+    async def read_init_status(self) -> VaultxResponse:
         """
         Read the initialization status of Vault.
 
@@ -42,7 +41,7 @@ class Init(AsyncVaultApiBase):
         recovery_shares: Optional[int] = None,
         recovery_threshold: Optional[int] = None,
         recovery_pgp_keys: Optional[list[int]] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Initialize a new Vault.
         The Vault must not have been previously initialized. The recovery options, as well as the stored shares option,

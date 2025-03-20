@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional, Union
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -33,7 +32,7 @@ class Ldap(AsyncVaultApiBase):
         client_tls_cert: Optional[str] = None,
         client_tls_key: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure shared information for the ldap secrets engine.
 
@@ -87,7 +86,7 @@ class Ldap(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the configured shared information for the ldap secrets engine.
         Credentials will be omitted from returned data.
@@ -103,7 +102,7 @@ class Ldap(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def rotate_root(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def rotate_root(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the root password for the binddn entry used to manage the ldap secrets engine.
 
@@ -123,7 +122,7 @@ class Ldap(AsyncVaultApiBase):
         dn: Optional[str] = None,
         rotation_period: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint creates or updates the ldap static role definition.
 
@@ -146,9 +145,7 @@ class Ldap(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_static_role(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def read_static_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint queries for information about a ldap static role with the given name.
         If no role exists with that name, a 404 is returned.
@@ -161,7 +158,7 @@ class Ldap(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_static_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_static_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint lists all existing static roles in the secrets engine.
         :return: The response of the request.
@@ -172,9 +169,7 @@ class Ldap(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_static_role(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_static_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes a ldap static role with the given name.
         Even if the role does not exist, this endpoint will still return await a successful response.
@@ -187,9 +182,7 @@ class Ldap(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def generate_static_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def generate_static_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint retrieves the previous and current LDAP password for
         the associated account (or rotate if required)
@@ -203,9 +196,7 @@ class Ldap(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def rotate_static_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def rotate_static_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint rotates the password of an existing static role.
 

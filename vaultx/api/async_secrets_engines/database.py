@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -25,7 +24,7 @@ class Database(AsyncVaultApiBase):
         root_rotation_statements: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         **kwargs,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint configures the connection string used to communicate with the desired database.
         In addition to the parameters listed here, each Database plugin has additional,
@@ -63,9 +62,7 @@ class Database(AsyncVaultApiBase):
             json=params,
         )
 
-    async def rotate_root_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def rotate_root_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint is used to rotate the root superuser credentials stored for the database connection.
         This user must have permissions to update its own password.
@@ -79,9 +76,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_connection(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def read_connection(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """This endpoint returns the configuration settings for a connection.
 
         :param name: Specifies the name of the connection to read.
@@ -94,7 +89,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_connections(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_connections(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint returns a list of available connections.
 
@@ -106,9 +101,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_connection(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_connection(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes a connection.
 
@@ -121,9 +114,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def reset_connection(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def reset_connection(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint closes a connection, its underlying plugin and
         restarts it with the configuration stored in the barrier.
@@ -148,7 +139,7 @@ class Database(AsyncVaultApiBase):
         rollback_statements: Optional[list[str]] = None,
         renew_statements: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint creates or updates a role definition.
 
@@ -192,7 +183,7 @@ class Database(AsyncVaultApiBase):
         rotation_statements: list[str],
         rotation_period: int = 86400,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """This endpoint creates or updates a static role definition.
 
         :param name: Specifies the name of the role to create.
@@ -217,7 +208,7 @@ class Database(AsyncVaultApiBase):
         api_path = f"/v1/{mount_point}/static-roles/{name}"
         return await self._adapter.post(url=api_path, json=params)
 
-    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint queries the role definition.
 
@@ -231,9 +222,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_static_role(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def read_static_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint queries the static role definition.
 
@@ -247,7 +236,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint returns a list of available roles.
 
@@ -260,7 +249,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_static_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_static_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint returns a list of available static roles.
 
@@ -273,7 +262,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes the role definition.
 
@@ -286,9 +275,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_static_role(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_static_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes the static role definition.
 
@@ -301,9 +288,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def generate_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def generate_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint generates a new set of dynamic credentials based on the named role.
 
@@ -317,9 +302,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def get_static_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def get_static_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint returns the current credentials based on the named static role.
 
@@ -333,9 +316,7 @@ class Database(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def rotate_static_role_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def rotate_static_role_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint is used to rotate the Static Role credentials stored for a given role name.
         While Static Roles are rotated automatically by Vault at configured rotation periods,

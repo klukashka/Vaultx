@@ -60,8 +60,7 @@ class TestMount(unittest.TestCase):
             path="secret",
             description="Test KV engine",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/mounts/secret",
             json={
@@ -78,8 +77,7 @@ class TestMount(unittest.TestCase):
     def test_disable_secrets_engine(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.mount.disable_secrets_engine(path="secret")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/sys/mounts/secret",
         )
@@ -99,8 +97,7 @@ class TestMount(unittest.TestCase):
             default_lease_ttl=3600,
             max_lease_ttl=7200,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/mounts/secret/tune",
             json={
@@ -115,8 +112,7 @@ class TestMount(unittest.TestCase):
             from_path="old_secret",
             to_path="new_secret",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/remount",
             json={
@@ -178,8 +174,7 @@ class TestAsyncMount(unittest.IsolatedAsyncioTestCase):
             path="secret",
             description="Test KV engine",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/mounts/secret",
             json={
@@ -196,8 +191,7 @@ class TestAsyncMount(unittest.IsolatedAsyncioTestCase):
     async def test_disable_secrets_engine(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.mount.disable_secrets_engine(path="secret")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/sys/mounts/secret",
         )
@@ -217,8 +211,7 @@ class TestAsyncMount(unittest.IsolatedAsyncioTestCase):
             default_lease_ttl=3600,
             max_lease_ttl=7200,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/mounts/secret/tune",
             json={
@@ -233,8 +226,7 @@ class TestAsyncMount(unittest.IsolatedAsyncioTestCase):
             from_path="old_secret",
             to_path="new_secret",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/remount",
             json={

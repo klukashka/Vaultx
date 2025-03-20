@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import exceptions, utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.constants import transit as transit_constants
 
@@ -27,7 +26,7 @@ class Transit(VaultApiBase):
         key_type: Optional[str] = None,
         mount_point: Optional[str] = DEFAULT_MOUNT_POINT,
         auto_rotate_period: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create a new named encryption key of the specified type.
         The values set here cannot be changed after key creation.
@@ -84,7 +83,7 @@ class Transit(VaultApiBase):
             json=params,
         )
 
-    def read_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read information about a named encryption key.
         The keys object shows the creation time of each key version; the values are not the keys themselves. Depending
@@ -103,7 +102,7 @@ class Transit(VaultApiBase):
             url=api_path,
         )
 
-    def list_keys(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_keys(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List keys (if there are any).
         Only the key names are returned (not the actual keys themselves).
@@ -118,7 +117,7 @@ class Transit(VaultApiBase):
         api_path = f"/v1/{mount_point}/keys"
         return self._adapter.list(url=api_path)
 
-    def delete_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete a named encryption key.
         It will no longer be possible to decrypt any data encrypted with the named key. Because this is a potentially
@@ -146,7 +145,7 @@ class Transit(VaultApiBase):
         allow_plaintext_backup: Optional[bool] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         auto_rotate_period: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Tune configuration values for a given key.
         These values are returned during a read operation on the named key.
@@ -195,7 +194,7 @@ class Transit(VaultApiBase):
             json=params,
         )
 
-    def rotate_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def rotate_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the version of the named key.
         After rotation, new plaintext requests will be encrypted with the new version of the key. To upgrade ciphertext
@@ -216,7 +215,7 @@ class Transit(VaultApiBase):
 
     def export_key(
         self, name: str, key_type: str, version: Optional[str] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Return the named key.
         The keys object shows the value of the key for each version. If version is specified, the specific version will
@@ -262,7 +261,7 @@ class Transit(VaultApiBase):
         convergent_encryption: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         associated_data: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Encrypt the provided plaintext using the named key.
 
@@ -334,7 +333,7 @@ class Transit(VaultApiBase):
         batch_input: Optional[list[dict]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         associated_data: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Decrypt the provided ciphertext using the named key.
 
@@ -386,7 +385,7 @@ class Transit(VaultApiBase):
         nonce: Optional[str] = None,
         batch_input: Optional[list[dict]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Rewrap the provided ciphertext using the latest version of the named key.
 
@@ -439,7 +438,7 @@ class Transit(VaultApiBase):
         nonce: Optional[str] = None,
         bits: Optional[int] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate a new high-entropy key and the value encrypted with the named key.
 
@@ -494,7 +493,7 @@ class Transit(VaultApiBase):
         n_bytes: Optional[int] = None,
         output_format: Optional[str] = None,
         mount_point: Optional[str] = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Return high-quality random bytes of the specified length.
 
@@ -525,7 +524,7 @@ class Transit(VaultApiBase):
         algorithm: Optional[str] = None,
         output_format: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Return the cryptographic hash of given data using the specified algorithm.
 
@@ -573,7 +572,7 @@ class Transit(VaultApiBase):
         key_version: Optional[int] = None,
         algorithm: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Return the digest of given data using the specified hash algorithm and the named key.
 
@@ -628,7 +627,7 @@ class Transit(VaultApiBase):
         salt_length: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         batch_input: Optional[list[dict[str, str]]] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """Return the cryptographic signature of the given data using the named key and the specified hash algorithm.
 
         The key must be of a type that supports signing.
@@ -749,7 +748,7 @@ class Transit(VaultApiBase):
         salt_length: Optional[str] = None,
         marshaling_algorithm: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """Return whether the provided signature is valid for the given data.
 
         Supported methods:
@@ -837,7 +836,7 @@ class Transit(VaultApiBase):
             json=params,
         )
 
-    def backup_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def backup_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Return a plaintext backup of a named key.
 
@@ -862,7 +861,7 @@ class Transit(VaultApiBase):
         name: Optional[str] = None,
         force: Optional[bool] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Restore the backup as a named key.
 
@@ -899,9 +898,7 @@ class Transit(VaultApiBase):
             json=params,
         )
 
-    def trim_key(
-        self, name: str, min_version: int, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def trim_key(self, name: str, min_version: int, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Trim older key versions setting a minimum version for the keyring.
         Once trimmed, previous versions of the key cannot be recovered.

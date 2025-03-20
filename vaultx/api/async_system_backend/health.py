@@ -1,10 +1,7 @@
-"""Support for "Health"-related System Backend Methods."""
-
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import exceptions, utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -23,7 +20,7 @@ class Health(AsyncVaultApiBase):
         sealed_code: Optional[int] = None,
         uninit_code: Optional[int] = None,
         method: str = "HEAD",
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Read the health status of Vault.
         This matches the semantics of a Consul HTTP health check and provides a simple way to monitor the health of a

@@ -33,8 +33,7 @@ class TestLdap(unittest.TestCase):
             client_tls_cert="-----BEGIN CERTIFICATE-----",
             client_tls_key="-----BEGIN PRIVATE KEY-----",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ldap/config",
             json={
@@ -61,8 +60,7 @@ class TestLdap(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ldap.read_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"binddn": "cn=admin,dc=example,dc=com"}})
+        self.assertEqual(result.json(), {"data": {"binddn": "cn=admin,dc=example,dc=com"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ldap/config",
         )
@@ -72,8 +70,7 @@ class TestLdap(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.ldap.rotate_root()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Root credentials rotated"}})
+        self.assertEqual(result.json(), {"data": {"message": "Root credentials rotated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ldap/rotate-root",
         )
@@ -88,8 +85,7 @@ class TestLdap(unittest.TestCase):
             dn="cn=test-user,ou=users,dc=example,dc=com",
             rotation_period="24h",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ldap/static-role/test-role",
             json={
@@ -104,8 +100,7 @@ class TestLdap(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ldap.read_static_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ldap/static-role/test-role",
         )
@@ -115,8 +110,7 @@ class TestLdap(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.ldap.list_static_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/ldap/static-role",
         )
@@ -126,8 +120,7 @@ class TestLdap(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.ldap.delete_static_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ldap/static-role/test-role",
         )
@@ -137,8 +130,7 @@ class TestLdap(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ldap.generate_static_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ldap/static-cred/test-role",
         )
@@ -148,8 +140,7 @@ class TestLdap(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.ldap.rotate_static_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Credentials rotated"}})
+        self.assertEqual(result.json(), {"data": {"message": "Credentials rotated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ldap/rotate-role/test-role",
         )
@@ -181,8 +172,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
             client_tls_cert="-----BEGIN CERTIFICATE-----",
             client_tls_key="-----BEGIN PRIVATE KEY-----",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ldap/config",
             json={
@@ -209,8 +199,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.ldap.read_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"binddn": "cn=admin,dc=example,dc=com"}})
+        self.assertEqual(result.json(), {"data": {"binddn": "cn=admin,dc=example,dc=com"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ldap/config",
         )
@@ -220,8 +209,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.ldap.rotate_root()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Root credentials rotated"}})
+        self.assertEqual(result.json(), {"data": {"message": "Root credentials rotated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ldap/rotate-root",
         )
@@ -236,8 +224,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
             dn="cn=test-user,ou=users,dc=example,dc=com",
             rotation_period="24h",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ldap/static-role/test-role",
             json={
@@ -252,8 +239,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.ldap.read_static_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ldap/static-role/test-role",
         )
@@ -263,8 +249,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.ldap.list_static_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/ldap/static-role",
         )
@@ -274,8 +259,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.ldap.delete_static_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ldap/static-role/test-role",
         )
@@ -285,8 +269,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.ldap.generate_static_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ldap/static-cred/test-role",
         )
@@ -296,8 +279,7 @@ class TestAsyncLdap(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.ldap.rotate_static_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Credentials rotated"}})
+        self.assertEqual(result.json(), {"data": {"message": "Credentials rotated"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ldap/rotate-role/test-role",
         )

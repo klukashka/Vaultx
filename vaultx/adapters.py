@@ -70,7 +70,7 @@ class HttpxAdapterResponse(AdapterResponse):
         return self._raw.status_code
 
     @property
-    def value(self) -> Optional[dict]:
+    def value(self) -> dict:
         return self._value
 
 
@@ -96,26 +96,26 @@ class VaultxResponse(HttpxAdapterResponse):
         return self.value.__contains__(__o)
 
 
-class MetaAdapter(metaclass=abc.ABCMeta):
-    """Abstract adapter class"""
+# class MetaAdapter(metaclass=abc.ABCMeta):
+#     """Abstract adapter class"""
+#
+#     @classmethod
+#     @abc.abstractmethod
+#     def from_adapter(
+#         cls: tp.Type["MetaAdapter"],
+#         adapter: object,
+#     ) -> "MetaAdapter":
+#         """
+#         Creates a new adapter based on an existing Adapter instance.
+#         This can be used to create a new type of adapter that inherits the properties of an existing one.
+#
+#         :param adapter: The existing Adapter instance.
+#         """
+#
+#         raise NotImplementedError()
 
-    @classmethod
-    @abc.abstractmethod
-    def from_adapter(
-        cls: tp.Type["MetaAdapter"],
-        adapter: object,
-    ) -> "MetaAdapter":
-        """
-        Creates a new adapter based on an existing Adapter instance.
-        This can be used to create a new type of adapter that inherits the properties of an existing one.
 
-        :param adapter: The existing Adapter instance.
-        """
-
-        raise NotImplementedError()
-
-
-class Adapter(MetaAdapter):
+class Adapter:
     """Abstract synchronous adapter class"""
 
     def __init__(
@@ -188,27 +188,27 @@ class Adapter(MetaAdapter):
     ) -> None:
         self.client.__exit__(exc_type, exc_value, traceback)
 
-    @classmethod
-    @exceptions.handle_unknown_exception
-    def from_adapter(
-        cls: tp.Type["Adapter"],
-        adapter: object,
-    ) -> "Adapter":
-        if isinstance(adapter, Adapter):
-            return cls(
-                base_uri=adapter.base_uri,
-                token=adapter.token,
-                follow_redirects=adapter.follow_redirects,
-                client=adapter.client,
-                namespace=adapter.namespace,
-                ignore_exceptions=adapter.ignore_exceptions,
-                strict_http=adapter.strict_http,
-                request_header=adapter.request_header,
-                **adapter._kwargs,
-            )
-        raise exceptions.VaultxError(
-            '"from_adapter" method of Adapter class should receive Adapter instance as a parameter'
-        )
+    # @classmethod
+    # @exceptions.handle_unknown_exception
+    # def from_adapter(
+    #     cls: tp.Type["Adapter"],
+    #     adapter: object,
+    # ) -> "Adapter":
+    #     if isinstance(adapter, Adapter):
+    #         return cls(
+    #             base_uri=adapter.base_uri,
+    #             token=adapter.token,
+    #             follow_redirects=adapter.follow_redirects,
+    #             client=adapter.client,
+    #             namespace=adapter.namespace,
+    #             ignore_exceptions=adapter.ignore_exceptions,
+    #             strict_http=adapter.strict_http,
+    #             request_header=adapter.request_header,
+    #             **adapter._kwargs,
+    #         )
+    #     raise exceptions.VaultxError(
+    #         '"from_adapter" method of Adapter class should receive Adapter instance as a parameter'
+    #     )
 
     @exceptions.handle_unknown_exception
     def close(self):
@@ -336,9 +336,9 @@ class Adapter(MetaAdapter):
 
 
 @exceptions.handle_unknown_exception
-class RawAdapter(Adapter):
+class VaultxAdapter(Adapter):
     """
-    The RawAdapter adapter class.
+    The VaultxAdapter adapter class.
     This adapter adds Vault-specific headers as required and optionally raises exceptions on errors,
     but always returns VaultxResponse objects for requests.
     """
@@ -411,42 +411,6 @@ class RawAdapter(Adapter):
 
 
 @exceptions.handle_unknown_exception
-class VaultxAdapter(RawAdapter):
-    """
-    The VaultxAdapter adapter class.
-    Currently, this adapter works just like the RawAdapter adapter.
-    """
-
-    def get_login_token(self, response: VaultxResponse) -> str:
-        """
-        Extracts the client token from a login response.
-
-        :param response: The response object returned by the login method.
-        """
-        return super().get_login_token(response)
-
-    def request(
-        self,
-        method: str,
-        url: str,
-        headers: Optional[dict[str, str]] = None,
-        raise_exception: Optional[bool] = True,
-        **kwargs: Optional[Any],
-    ) -> VaultxResponse:
-        """
-        Main method for routing HTTP requests to the configured Vault base_uri.
-
-        :param method: HTTP method to use with the request. E.g., GET, POST, etc.
-        :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
-            attribute.
-        :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception.
-        :param kwargs: Keyword arguments to pass to RawAdapter.request.
-        """
-        return super().request(method=method, url=url, headers=headers, raise_exception=raise_exception, **kwargs)
-
-
-@exceptions.handle_unknown_exception
 class AiohttpTransport(httpx.AsyncBaseTransport):
     """Class for providing httpx requests with aiohttp transport"""
 
@@ -484,7 +448,7 @@ class AiohttpTransport(httpx.AsyncBaseTransport):
             await self._session.close()
 
 
-class AsyncAdapter(MetaAdapter):
+class AsyncAdapter:
     """Abstract asynchronous adapter class"""
 
     def __init__(
@@ -561,27 +525,27 @@ class AsyncAdapter(MetaAdapter):
     ) -> None:
         await self.client.__aexit__(exc_type, exc_value, traceback)
 
-    @classmethod
-    @exceptions.handle_unknown_exception
-    def from_adapter(
-        cls: tp.Type["AsyncAdapter"],
-        adapter: object,
-    ) -> "AsyncAdapter":
-        if isinstance(adapter, AsyncAdapter):
-            return cls(
-                base_uri=adapter.base_uri,
-                token=adapter.token,
-                follow_redirects=adapter.follow_redirects,
-                client=adapter.client,
-                namespace=adapter.namespace,
-                ignore_exceptions=adapter.ignore_exceptions,
-                strict_http=adapter.strict_http,
-                request_header=adapter.request_header,
-                **adapter._kwargs,
-            )
-        raise exceptions.VaultxError(
-            '"from_adapter" method of AsyncAdapter class should receive AsyncAdapter instance as a parameter'
-        )
+    # @classmethod
+    # @exceptions.handle_unknown_exception
+    # def from_adapter(
+    #     cls: tp.Type["AsyncAdapter"],
+    #     adapter: object,
+    # ) -> "AsyncAdapter":
+    #     if isinstance(adapter, AsyncAdapter):
+    #         return cls(
+    #             base_uri=adapter.base_uri,
+    #             token=adapter.token,
+    #             follow_redirects=adapter.follow_redirects,
+    #             client=adapter.client,
+    #             namespace=adapter.namespace,
+    #             ignore_exceptions=adapter.ignore_exceptions,
+    #             strict_http=adapter.strict_http,
+    #             request_header=adapter.request_header,
+    #             **adapter._kwargs,
+    #         )
+    #     raise exceptions.VaultxError(
+    #         '"from_adapter" method of AsyncAdapter class should receive AsyncAdapter instance as a parameter'
+    #     )
 
     @exceptions.handle_unknown_exception
     async def close(self):
@@ -708,8 +672,8 @@ class AsyncAdapter(MetaAdapter):
 
 
 @exceptions.handle_unknown_exception
-class AsyncRawAdapter(AsyncAdapter):
-    """The AsyncRawAdapter adapter class. Mostly similar to the sync version."""
+class AsyncVaultxAdapter(AsyncAdapter):
+    """The AsyncVaultxAdapter adapter class. Mostly similar to the sync version."""
 
     async def get_login_token(self, response: VaultxResponse) -> str:
         """
@@ -737,7 +701,7 @@ class AsyncRawAdapter(AsyncAdapter):
         :param kwargs: Additional keyword arguments to include in the requests call.
         """
 
-        # url = replace_double_slashes_to_single(url)
+        url = replace_double_slashes_to_single(url)
         url = urljoin(self.base_uri, url)
 
         if not headers:
@@ -775,36 +739,3 @@ class AsyncRawAdapter(AsyncAdapter):
             raise exceptions.HTTPError(status_code=response.status_code, method=method, url=url)
 
         return VaultxResponse(response)
-
-
-@exceptions.handle_unknown_exception
-class AsyncVaultxAdapter(AsyncRawAdapter):
-    """The AsyncVaultxAdapter adapter class. Mostly similar to the sync version"""
-
-    async def get_login_token(self, response: VaultxResponse) -> str:
-        """
-        Extract the client token from a login response.
-
-        :param response: The response object returned by the login method.
-        """
-        return await super().get_login_token(response)
-
-    async def request(
-        self,
-        method: str,
-        url: str,
-        headers: Optional[dict[str, str]] = None,
-        raise_exception: Optional[bool] = True,
-        **kwargs: Optional[Any],
-    ) -> VaultxResponse:
-        """
-        Main method for routing HTTP requests to the configured Vault base_uri.
-
-        :param method: HTTP method to use with the request. E.g., GET, POST, etc.
-        :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
-            attribute.
-        :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception.
-        :param kwargs: Keyword arguments to pass to AsyncRawAdapter.request.
-        """
-        return await super().request(method=method, url=url, headers=headers, raise_exception=raise_exception, **kwargs)

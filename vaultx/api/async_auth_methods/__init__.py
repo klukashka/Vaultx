@@ -6,6 +6,7 @@ from vaultx import exceptions
 from vaultx.adapters import AsyncAdapter
 from vaultx.api.async_auth_methods.approle import AppRole
 from vaultx.api.async_auth_methods.aws import Aws
+from vaultx.api.async_auth_methods.azure import Azure
 from vaultx.api.async_auth_methods.token import Token
 from vaultx.api.async_auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import AsyncVaultApiBase
@@ -15,6 +16,7 @@ __all__ = (
     "AsyncAuthMethods",
     "AppRole",
     "Aws",
+    "Azure",
     "Userpass",
     "Token",
 )
@@ -27,6 +29,7 @@ class AsyncAuthMethods(AsyncVaultApiBase):
     _implemented_classes: tp.Final[dict] = {
         "_approle": AppRole,
         "_aws": Aws,
+        "_azure": Azure,
         "_userpass": Userpass,
         "_token": Token,
     }

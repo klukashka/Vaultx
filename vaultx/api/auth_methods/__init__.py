@@ -5,6 +5,7 @@ import typing as tp
 from vaultx import exceptions
 from vaultx.adapters import Adapter
 from vaultx.api.auth_methods.approle import AppRole
+from vaultx.api.auth_methods.aws import Aws
 from vaultx.api.auth_methods.token import Token
 from vaultx.api.auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import VaultApiBase
@@ -13,6 +14,7 @@ from vaultx.api.vault_api_base import VaultApiBase
 __all__ = (
     "AuthMethods",
     "AppRole",
+    "Aws",
     "Userpass",
     "Token",
 )
@@ -24,6 +26,7 @@ class AuthMethods(VaultApiBase):
 
     _implemented_classes: tp.Final[dict] = {
         "_approle": AppRole,
+        "_aws": Aws,
         "_userpass": Userpass,
         "_token": Token,
     }

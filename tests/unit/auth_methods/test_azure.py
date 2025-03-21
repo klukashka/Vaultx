@@ -1,10 +1,12 @@
 import unittest
 from unittest import mock
+
 from httpx import Response
+
 from vaultx import exceptions
-from vaultx.api.auth_methods.azure import Azure
-from vaultx.api.async_auth_methods.azure import Azure as AsyncAzure
 from vaultx.adapters import VaultxResponse
+from vaultx.api.async_auth_methods.azure import Azure as AsyncAzure
+from vaultx.api.auth_methods.azure import Azure
 
 
 class TestAzure(unittest.TestCase):

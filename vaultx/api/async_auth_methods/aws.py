@@ -9,7 +9,7 @@ import httpx
 
 from vaultx import exceptions, utils
 from vaultx.adapters import VaultxResponse
-from vaultx.api.vault_api_base import VaultApiBase
+from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.constants.aws import ALLOWED_EC2_ALIAS_TYPES, ALLOWED_IAM_ALIAS_TYPES
 from vaultx.constants.aws import DEFAULT_MOUNT_POINT as AWS_DEFAULT_MOUNT_POINT
 
@@ -83,7 +83,7 @@ def generate_sigv4_auth_request(header_value: Optional[str] = None) -> httpx.Req
     return request
 
 
-class Aws(VaultApiBase):
+class Aws(AsyncVaultApiBase):
     """
     AWS Auth Method (API).
 

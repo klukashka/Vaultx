@@ -63,18 +63,17 @@ def validate_list_of_strings_param(param_name: str, param_arg: Optional[list[str
         param_arg = []
     if isinstance(param_arg, str):
         param_arg = param_arg.split(",")
-    if not isinstance(param_arg, list) or not all(isinstance(p, str) for p in param_arg):
+    if not (isinstance(param_arg, list) and all(isinstance(p, str) for p in param_arg)):
         raise exceptions.VaultxError(
-            f'unsupported {param_name} argument provided "{param_arg}" ({type(param_arg)}), required type: List[str]'
+            f'unsupported {param_name} argument provided "{param_arg}" ({type(param_arg)}), required type: list[str]'
         )
 
 
-def list_to_comma_delimited(list_param) -> str:
+def list_to_comma_delimited(list_param: Optional[list[str]]) -> str:
     """
     Convert a list of strings into a comma-delimited list / string.
 
     :param list_param: A list of strings.
-    :type list_param: list
     :return: Comma-delimited string.
     """
     if list_param is None:

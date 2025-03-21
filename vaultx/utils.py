@@ -80,3 +80,25 @@ def list_to_comma_delimited(list_param) -> str:
     if list_param is None:
         list_param = []
     return ",".join(list_param)
+
+def validate_pem_format(param_name: str, param_argument: str) -> None:
+    """
+    Validate that an argument is a PEM-formatted public key or certificate
+
+    :param param_name: The name of the parameter validated. Used in any resulting exception messages.
+    :param param_argument: The argument to validate
+    """
+
+    def _check_pem(arg: str) -> bool:
+        arg = arg.strip()
+        if not arg.startswith("-----BEGIN CERTIFICATE-----") or not arg.endswith("-----END CERTIFICATE-----"):
+            return False
+        return True
+
+    if isinstance(param_argument, str):
+        param_argument = [param_argument]
+
+    if not isinstance(param_argument, list) or not all(_check_pem(p) for p in param_argument):
+        raise exceptions.VaultxError(
+            f"unsupported {param_name} public key / certificate format, required type: PEM"
+        )

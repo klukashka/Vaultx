@@ -7,6 +7,7 @@ from vaultx.adapters import AsyncAdapter
 from vaultx.api.async_auth_methods.approle import AppRole
 from vaultx.api.async_auth_methods.aws import Aws
 from vaultx.api.async_auth_methods.azure import Azure
+from vaultx.api.async_auth_methods.gcp import Gcp
 from vaultx.api.async_auth_methods.token import Token
 from vaultx.api.async_auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import AsyncVaultApiBase
@@ -17,6 +18,7 @@ __all__ = (
     "AppRole",
     "Aws",
     "Azure",
+    "Gcp",
     "Userpass",
     "Token",
 )
@@ -30,6 +32,7 @@ class AsyncAuthMethods(AsyncVaultApiBase):
         "_approle": AppRole,
         "_aws": Aws,
         "_azure": Azure,
+        "_gcp": Gcp,
         "_userpass": Userpass,
         "_token": Token,
     }

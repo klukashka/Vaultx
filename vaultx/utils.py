@@ -51,7 +51,7 @@ def remove_nones(params: dict[Any, Any]) -> dict[Any, Any]:
     return {key: value for key, value in params.items() if value is not None}
 
 
-def validate_list_of_strings_param(param_name: str, param_arg: Optional[list[str]]) -> None:
+def validate_list_of_strings_param(param_name: str, param_arg: Optional[Union[list[str], str]]) -> None:
     """
     Validate that an argument is a list of strings.
     Returns nothing if valid, raises ParamValidationException if invalid.

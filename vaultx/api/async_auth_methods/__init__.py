@@ -10,6 +10,7 @@ from vaultx.api.async_auth_methods.azure import Azure
 from vaultx.api.async_auth_methods.gcp import Gcp
 from vaultx.api.async_auth_methods.github import Github
 from vaultx.api.async_auth_methods.jwt import Jwt
+from vaultx.api.async_auth_methods.kubernetes import Kubernetes
 from vaultx.api.async_auth_methods.token import Token
 from vaultx.api.async_auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import AsyncVaultApiBase
@@ -22,6 +23,7 @@ __all__ = (
     "Azure",
     "Gcp",
     "Github",
+    "Kubernetes",
     "Jwt",
     "Userpass",
     "Token",
@@ -39,6 +41,7 @@ class AsyncAuthMethods(AsyncVaultApiBase):
         "_gcp": Gcp,
         "_github": Github,
         "_jwt": Jwt,
+        "_kubernetes": Kubernetes,
         "_userpass": Userpass,
         "_token": Token,
     }

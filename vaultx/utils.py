@@ -82,7 +82,21 @@ def list_to_comma_delimited(list_param) -> str:
     return ",".join(list_param)
 
 
-def validate_pem_format(param_name: str, param_argument: Union[str, list]) -> None:
+def comma_delimited_to_list(list_param: Optional[Union[list[str], str]]) -> list[str]:
+    """
+    Convert comma-delimited list / string into a list of strings
+
+    :param list_param: Comma-delimited string
+    :return: A list of strings
+    """
+    if isinstance(list_param, list):
+        return list_param
+    if isinstance(list_param, str):
+        return list_param.split(",")
+    return []
+
+
+def validate_pem_format(param_name: str, param_argument: Union[str, list]) -> bool:
     """
     Validate that an argument is a PEM-formatted public key or certificate
 
@@ -99,3 +113,5 @@ def validate_pem_format(param_name: str, param_argument: Union[str, list]) -> No
 
     if not (isinstance(param_argument, list) and all(_check_pem(p) for p in param_argument)):
         raise exceptions.VaultxError(f"unsupported {param_name} public key / certificate format, required type: PEM")
+
+    return True

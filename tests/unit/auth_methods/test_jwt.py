@@ -4,14 +4,14 @@ from unittest import mock
 from httpx import Response
 
 from vaultx.adapters import VaultxResponse
-from vaultx.api.async_auth_methods.jwt import JWT as AsyncJWT  # type: ignore
-from vaultx.api.auth_methods.jwt import JWT
+from vaultx.api.async_auth_methods.jwt import Jwt as AsyncJwt
+from vaultx.api.auth_methods.jwt import Jwt
 
 
-class TestJWT(unittest.TestCase):
+class TestJwt(unittest.TestCase):
     def setUp(self):
         self.mock_adapter = mock.Mock()
-        self.jwt = JWT(self.mock_adapter)
+        self.jwt = Jwt(self.mock_adapter)
 
     def test_configure(self):
         self.mock_adapter.post.return_value = Response(204)
@@ -76,10 +76,10 @@ class TestJWT(unittest.TestCase):
         self.mock_adapter.login.assert_called_once()
 
 
-class TestAsyncJWT(unittest.IsolatedAsyncioTestCase):
+class TestAsyncJwt(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.mock_adapter = mock.AsyncMock()
-        self.jwt = AsyncJWT(self.mock_adapter)
+        self.jwt = AsyncJwt(self.mock_adapter)
 
     async def test_configure(self):
         self.mock_adapter.post.return_value = Response(204)

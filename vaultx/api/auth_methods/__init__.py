@@ -9,7 +9,7 @@ from vaultx.api.auth_methods.aws import Aws
 from vaultx.api.auth_methods.azure import Azure
 from vaultx.api.auth_methods.gcp import Gcp
 from vaultx.api.auth_methods.github import Github
-from vaultx.api.auth_methods.jwt import JWT
+from vaultx.api.auth_methods.jwt import Jwt
 from vaultx.api.auth_methods.token import Token
 from vaultx.api.auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import VaultApiBase
@@ -22,7 +22,7 @@ __all__ = (
     "Azure",
     "Gcp",
     "Github",
-    "JWT",
+    "Jwt",
     "Userpass",
     "Token",
 )
@@ -38,7 +38,7 @@ class AuthMethods(VaultApiBase):
         "_azure": Azure,
         "_gcp": Gcp,
         "_github": Github,
-        "_jwt": JWT,
+        "_jwt": Jwt,
         "_userpass": Userpass,
         "_token": Token,
     }

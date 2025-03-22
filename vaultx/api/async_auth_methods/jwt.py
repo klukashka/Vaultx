@@ -6,7 +6,7 @@ from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
-class JWT(AsyncVaultApiBase):
+class Jwt(AsyncVaultApiBase):
     """
     JWT auth method which can be used to authenticate with Vault by providing a JWT.
 
@@ -327,9 +327,9 @@ class JWT(AsyncVaultApiBase):
             GET: /auth/{path}/callback.
 
         :param state: Opaque state ID that is part of the Authorization URL and will
-            be included in the the redirect following successful authentication on the provider.
+            be included in the redirect following successful authentication on the provider.
         :param nonce: Opaque nonce that is part of the Authorization URL and will
-            be included in the the redirect following successful authentication on the provider.
+            be included in the redirect following successful authentication on the provider.
         :param code: Provider-generated authorization code that Vault will exchange for
             an ID token.
         :param path: The "path" the method/backend was mounted on.

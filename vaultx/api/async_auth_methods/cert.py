@@ -193,7 +193,9 @@ class Cert(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def configure_tls_certificate(self, mount_point: str = "cert", disable_binding: bool = False) -> VaultxResponse:
+    async def configure_tls_certificate(
+        self, mount_point: str = "cert", disable_binding: bool = False
+    ) -> VaultxResponse:
         """
         Configure options for the method.
 

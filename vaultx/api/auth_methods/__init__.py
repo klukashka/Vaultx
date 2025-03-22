@@ -40,7 +40,7 @@ class AuthMethods(VaultApiBase):
         "_approle": AppRole,
         "_aws": Aws,
         "_azure": Azure,
-        "_cert": Cert, 
+        "_cert": Cert,
         "_gcp": Gcp,
         "_github": Github,
         "_jwt": Jwt,

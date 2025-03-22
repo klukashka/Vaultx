@@ -7,6 +7,7 @@ from vaultx.adapters import Adapter
 from vaultx.api.auth_methods.approle import AppRole
 from vaultx.api.auth_methods.aws import Aws
 from vaultx.api.auth_methods.azure import Azure
+from vaultx.api.auth_methods.cert import Cert
 from vaultx.api.auth_methods.gcp import Gcp
 from vaultx.api.auth_methods.github import Github
 from vaultx.api.auth_methods.jwt import Jwt
@@ -21,6 +22,7 @@ __all__ = (
     "AppRole",
     "Aws",
     "Azure",
+    "Cert",
     "Gcp",
     "Github",
     "Jwt",
@@ -38,6 +40,7 @@ class AuthMethods(VaultApiBase):
         "_approle": AppRole,
         "_aws": Aws,
         "_azure": Azure,
+        "_cert": Cert, 
         "_gcp": Gcp,
         "_github": Github,
         "_jwt": Jwt,

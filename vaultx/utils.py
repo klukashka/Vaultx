@@ -1,5 +1,5 @@
 import os
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from vaultx import exceptions
 
@@ -79,3 +79,38 @@ def list_to_comma_delimited(list_param: Optional[list[str]]) -> str:
     if list_param is None:
         list_param = []
     return ",".join(list_param)
+
+
+def comma_delimited_to_list(list_param: Optional[Union[list[str], str]]) -> list[str]:
+    """
+    Convert comma-delimited list / string into a list of strings
+
+    :param list_param: Comma-delimited string
+    :return: A list of strings
+    """
+    if isinstance(list_param, list):
+        return list_param
+    if isinstance(list_param, str):
+        return list_param.split(",")
+    return []
+
+
+def validate_pem_format(param_name: str, param_argument: Union[str, list]) -> bool:
+    """
+    Validate that an argument is a PEM-formatted public key or certificate
+
+    :param param_name: The name of the parameter validated. Used in any resulting exception messages.
+    :param param_argument: The argument to validate
+    """
+
+    def _check_pem(arg: str) -> bool:
+        arg = arg.strip()
+        return bool(arg.startswith("-----BEGIN CERTIFICATE-----") and arg.endswith("-----END CERTIFICATE-----"))
+
+    if isinstance(param_argument, str):
+        param_argument = [param_argument]
+
+    if not (isinstance(param_argument, list) and all(_check_pem(p) for p in param_argument)):
+        raise exceptions.VaultxError(f"unsupported {param_name} public key / certificate format, required type: PEM")
+
+    return True

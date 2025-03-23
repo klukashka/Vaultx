@@ -103,10 +103,8 @@ class Ldap(AsyncVaultApiBase):
         :param tls_max_version: Maximum TLS version to use. Accepted values are tls10, tls11 or tls12.
         :param insecure_tls: If true, skips LDAP server SSL certificate verification - insecure, use with caution!
         :param certificate: CA certificate to use when verifying LDAP server certificate, must be x509 PEM encoded.
-        :type certificate: str | unicode
         :param binddn: Distinguished name of object to bind when performing user search. Example:
             cn=vault,ou=Users,dc=example,dc=com
-        :type binddn: str | unicode
         :param bindpass:  Password to use along with binddn when performing user search.
         :param userattr: Attribute on user attribute object matching the username passed when authenticating. Examples:
             sAMAccountName, cn, uid
@@ -186,7 +184,7 @@ class Ldap(AsyncVaultApiBase):
             GET: /auth/{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_configuration request.
+        :return: The VaultxResponse of the read_configuration request.
         """
         api_path = f"/v1/auth/{mount_point}/config"
         return await self._adapter.get(
@@ -229,7 +227,7 @@ class Ldap(AsyncVaultApiBase):
             LIST: /auth/{mount_point}/groups. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the list_groups request.
+        :return: The VaultxResponse of the list_groups request.
         """
         api_path = f"/v1/auth/{mount_point}/groups"
         return await self._adapter.list(
@@ -340,7 +338,6 @@ class Ldap(AsyncVaultApiBase):
         :param username: The username of the LDAP user
         :param mount_point: The "path" the method/backend was mounted on.
         :return: The VaultxResponse of the read_user request.
-        :rtype: dict
         """
         api_path = f"/v1/auth/{mount_point}/users/{username}"
         return await self._adapter.get(

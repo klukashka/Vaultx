@@ -15,7 +15,6 @@ class TestRadius(unittest.TestCase):
         self.radius = Radius(self.mock_adapter)
 
     def test_configure(self):
-        # Test successful configuration with all parameters
         self.mock_adapter.post.return_value = Response(204)
         result = self.radius.configure(
             host="radius.example.com",
@@ -39,7 +38,6 @@ class TestRadius(unittest.TestCase):
             },
         )
 
-        # Test with minimal parameters
         self.mock_adapter.post.return_value = Response(204)
         result = self.radius.configure(
             host="radius.example.com",
@@ -55,7 +53,6 @@ class TestRadius(unittest.TestCase):
             },
         )
 
-        # Test with invalid unregistered_user_policies type
         with self.assertRaises(exceptions.VaultxError) as context:
             self.radius.configure(
                 host="radius.example.com",
@@ -68,7 +65,6 @@ class TestRadius(unittest.TestCase):
         )
 
     def test_read_configuration(self):
-        # Test successful read configuration
         mock_response = Response(200, json={"data": {"host": "radius.example.com"}})
         self.mock_adapter.get.return_value = VaultxResponse(mock_response)
         result = self.radius.read_configuration(mount_point="radius")
@@ -76,7 +72,6 @@ class TestRadius(unittest.TestCase):
         self.mock_adapter.get.assert_called_once_with(url="/v1/auth/radius/config")
 
     def test_register_user(self):
-        # Test successful user registration with policies
         self.mock_adapter.post.return_value = Response(204)
         result = self.radius.register_user(
             username="test_user",
@@ -89,7 +84,6 @@ class TestRadius(unittest.TestCase):
             json={"policies": "policy1,policy2"},
         )
 
-        # Test with no policies
         self.mock_adapter.post.return_value = Response(204)
         result = self.radius.register_user(
             username="test_user",
@@ -101,7 +95,6 @@ class TestRadius(unittest.TestCase):
             json={},
         )
 
-        # Test with invalid policies type
         with self.assertRaises(exceptions.VaultxError) as context:
             self.radius.register_user(
                 username="test_user",
@@ -111,7 +104,6 @@ class TestRadius(unittest.TestCase):
         self.assertIn('"policies" argument must be an instance of list or None', str(context.exception))
 
     def test_list_users(self):
-        # Test successful list users
         mock_response = Response(200, json={"data": {"keys": ["user1", "user2"]}})
         self.mock_adapter.list.return_value = VaultxResponse(mock_response)
         result = self.radius.list_users(mount_point="radius")
@@ -119,7 +111,6 @@ class TestRadius(unittest.TestCase):
         self.mock_adapter.list.assert_called_once_with(url="/v1/auth/radius/users")
 
     def test_read_user(self):
-        # Test successful read user
         mock_response = Response(200, json={"data": {"username": "test_user"}})
         self.mock_adapter.get.return_value = VaultxResponse(mock_response)
         result = self.radius.read_user(username="test_user", mount_point="radius")
@@ -127,14 +118,12 @@ class TestRadius(unittest.TestCase):
         self.mock_adapter.get.assert_called_once_with(url="/v1/auth/radius/users/test_user")
 
     def test_delete_user(self):
-        # Test successful delete user
         self.mock_adapter.delete.return_value = Response(204)
         result = self.radius.delete_user(username="test_user", mount_point="radius")
         self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/auth/radius/users/test_user")
 
     def test_login(self):
-        # Test successful login
         mock_response = Response(200, json={"auth": {"client_token": "test_token"}})
         self.mock_adapter.login.return_value = VaultxResponse(mock_response)
         result = self.radius.login(
@@ -156,7 +145,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
         self.radius = AsyncRadius(self.mock_adapter)
 
     async def test_configure(self):
-        # Test successful configuration with all parameters
         self.mock_adapter.post.return_value = Response(204)
         result = await self.radius.configure(
             host="radius.example.com",
@@ -180,7 +168,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
             },
         )
 
-        # Test with minimal parameters
         self.mock_adapter.post.return_value = Response(204)
         result = await self.radius.configure(
             host="radius.example.com",
@@ -196,7 +183,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
             },
         )
 
-        # Test with invalid unregistered_user_policies type
         with self.assertRaises(exceptions.VaultxError) as context:
             await self.radius.configure(
                 host="radius.example.com",
@@ -209,7 +195,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
         )
 
     async def test_read_configuration(self):
-        # Test successful read configuration
         mock_response = Response(200, json={"data": {"host": "radius.example.com"}})
         self.mock_adapter.get.return_value = VaultxResponse(mock_response)
         result = await self.radius.read_configuration(mount_point="radius")
@@ -217,7 +202,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.assert_called_once_with(url="/v1/auth/radius/config")
 
     async def test_register_user(self):
-        # Test successful user registration with policies
         self.mock_adapter.post.return_value = Response(204)
         result = await self.radius.register_user(
             username="test_user",
@@ -230,7 +214,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
             json={"policies": "policy1,policy2"},
         )
 
-        # Test with no policies
         self.mock_adapter.post.return_value = Response(204)
         result = await self.radius.register_user(
             username="test_user",
@@ -242,7 +225,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
             json={},
         )
 
-        # Test with invalid policies type
         with self.assertRaises(exceptions.VaultxError) as context:
             await self.radius.register_user(
                 username="test_user",
@@ -252,7 +234,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
         self.assertIn('"policies" argument must be an instance of list or None', str(context.exception))
 
     async def test_list_users(self):
-        # Test successful list users
         mock_response = Response(200, json={"data": {"keys": ["user1", "user2"]}})
         self.mock_adapter.list.return_value = VaultxResponse(mock_response)
         result = await self.radius.list_users(mount_point="radius")
@@ -260,7 +241,6 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.assert_called_once_with(url="/v1/auth/radius/users")
 
     async def test_read_user(self):
-        # Test successful read user
         mock_response = Response(200, json={"data": {"username": "test_user"}})
         self.mock_adapter.get.return_value = VaultxResponse(mock_response)
         result = await self.radius.read_user(username="test_user", mount_point="radius")
@@ -268,14 +248,12 @@ class TestAsyncRadius(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.assert_called_once_with(url="/v1/auth/radius/users/test_user")
 
     async def test_delete_user(self):
-        # Test successful delete user
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.radius.delete_user(username="test_user", mount_point="radius")
         self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(url="/v1/auth/radius/users/test_user")
 
     async def test_login(self):
-        # Test successful login
         mock_response = Response(200, json={"auth": {"client_token": "test_token"}})
         self.mock_adapter.login.return_value = VaultxResponse(mock_response)
         result = await self.radius.login(

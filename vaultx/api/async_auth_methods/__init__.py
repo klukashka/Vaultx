@@ -7,6 +7,7 @@ from vaultx.adapters import AsyncAdapter
 from vaultx.api.async_auth_methods.approle import AppRole
 from vaultx.api.async_auth_methods.aws import Aws
 from vaultx.api.async_auth_methods.azure import Azure
+from vaultx.api.async_auth_methods.cert import Cert
 from vaultx.api.async_auth_methods.gcp import Gcp
 from vaultx.api.async_auth_methods.github import Github
 from vaultx.api.async_auth_methods.jwt import Jwt
@@ -21,6 +22,7 @@ __all__ = (
     "AppRole",
     "Aws",
     "Azure",
+    "Cert",
     "Gcp",
     "Github",
     "Kubernetes",
@@ -38,6 +40,7 @@ class AsyncAuthMethods(AsyncVaultApiBase):
         "_approle": AppRole,
         "_aws": Aws,
         "_azure": Azure,
+        "_cert": Cert,
         "_gcp": Gcp,
         "_github": Github,
         "_jwt": Jwt,

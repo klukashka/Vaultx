@@ -1,4 +1,3 @@
-import typing as tp
 from typing import Optional, Union
 
 from vaultx import utils
@@ -18,7 +17,7 @@ class Jwt(AsyncVaultApiBase):
     Reference: https://www.vaultproject.io/api/auth/jwt
     """
 
-    DEFAULT_PATH: tp.Final[str] = "jwt"
+    DEFAULT_PATH: str = "jwt"
 
     def resolve_path(self, path: Optional[str]) -> str:
         """
@@ -99,7 +98,7 @@ class Jwt(AsyncVaultApiBase):
                 "namespace_in_state": namespace_in_state,
             }
         )
-        api_path = f"/v1/auth/{path}/config"
+        api_path = f"/v1/auth/{self.resolve_path(path)}/config"
         return await self._adapter.post(
             url=api_path,
             json=params,
@@ -114,7 +113,7 @@ class Jwt(AsyncVaultApiBase):
 
         :return: The response of the read_config request.
         """
-        api_path = f"/v1/auth/{path}/config"
+        api_path = f"/v1/auth/{self.resolve_path(path)}/config"
         return await self._adapter.get(
             url=api_path,
         )
@@ -240,7 +239,7 @@ class Jwt(AsyncVaultApiBase):
                 "user_claim_json_pointer": user_claim_json_pointer,
             }
         )
-        api_path = f"/v1/auth/{path}/role/{name}"
+        api_path = f"/v1/auth/{self.resolve_path(path)}/role/{name}"
         return await self._adapter.post(
             url=api_path,
             json=params,
@@ -257,7 +256,7 @@ class Jwt(AsyncVaultApiBase):
         :param path: The "path" the method/backend was mounted on.
         :return: The response of the read_role request.
         """
-        api_path = f"/v1/auth/{path}/role/{name}"
+        api_path = f"/v1/auth/{self.resolve_path(path)}/role/{name}"
         return await self._adapter.get(
             url=api_path,
         )
@@ -272,7 +271,7 @@ class Jwt(AsyncVaultApiBase):
         :param path: The "path" the method/backend was mounted on.
         :return: The response of the list_roles request.
         """
-        api_path = f"/v1/auth/{path}/role"
+        api_path = f"/v1/auth/{self.resolve_path(path)}/role"
         return await self._adapter.list(
             url=api_path,
         )
@@ -288,7 +287,7 @@ class Jwt(AsyncVaultApiBase):
         :param path: The "path" the method/backend was mounted on.
         :return: The response of the delete_role request.
         """
-        api_path = f"/v1/auth/{path}/role/{name}"
+        api_path = f"/v1/auth/{self.resolve_path(path)}/role/{name}"
         return await self._adapter.delete(
             url=api_path,
         )
@@ -311,7 +310,7 @@ class Jwt(AsyncVaultApiBase):
             "role": role,
             "redirect_uri": redirect_uri,
         }
-        api_path = f"/v1/auth/{path}/oidc/auth_url"
+        api_path = f"/v1/auth/{self.resolve_path(path)}/oidc/auth_url"
         return await self._adapter.post(
             url=api_path,
             json=params,
@@ -369,7 +368,7 @@ class Jwt(AsyncVaultApiBase):
             "role": role,
             "jwt": jwt,
         }
-        api_path = f"/v1/auth/{path}/login"
+        api_path = f"/v1/auth/{self.resolve_path(path)}/login"
         return await self._adapter.login(
             url=api_path,
             use_token=use_token,

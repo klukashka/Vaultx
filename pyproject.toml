@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "vaultx"
-version = "0.0.3"
+version = "0.0.4"
 description = "Python 3.x httpx client for HashiCorp's Vault"
 authors = ["klukashka <klukin0202@yandex.ru>"]
-license = "MIT"
+license = "Apache-2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]

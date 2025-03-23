@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
@@ -18,7 +17,7 @@ class Consul(VaultApiBase):
 
     def configure_access(
         self, address: str, token: str, scheme: Optional[str] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint configures the access information for Consul.
         This access information is used so that Vault can communicate with Consul and generate Consul tokens.
@@ -57,7 +56,7 @@ class Consul(VaultApiBase):
         ttl: Optional[str] = None,
         max_ttl: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint creates or updates the Consul role definition.
         If the role does not exist, it will be created.
@@ -101,7 +100,7 @@ class Consul(VaultApiBase):
             json=params,
         )
 
-    def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint queries for information about a Consul role with the given name.
         If no role exists with that name, a 404 is returned.
@@ -117,7 +116,7 @@ class Consul(VaultApiBase):
             url=api_path,
         )
 
-    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint lists all existing roles in the secrets engine.
 
@@ -129,7 +128,7 @@ class Consul(VaultApiBase):
             url=api_path,
         )
 
-    def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes a Consul role with the given name.
         Even if the role does not exist, this endpoint will still return a successful response.
@@ -143,9 +142,7 @@ class Consul(VaultApiBase):
             url=api_path,
         )
 
-    def generate_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def generate_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint generates a dynamic Consul token based on the given role definition.
 

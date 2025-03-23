@@ -1,12 +1,11 @@
-from typing import Any, Optional, Union
+from typing import Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
 class Lease(VaultApiBase):
-    def read_lease(self, lease_id: str) -> Union[dict[str, Any], Response]:
+    def read_lease(self, lease_id: str) -> VaultxResponse:
         """
         Retrieve lease metadata.
 
@@ -14,13 +13,13 @@ class Lease(VaultApiBase):
             PUT: /sys/leases/lookup. Produces: 200 application/json
 
         :param lease_id: the ID of the lease to lookup.
-        :return: Parsed JSON response from the leases PUT request
+        :return: Parsed VaultxResponse from the leases PUT request
         """
         params = {"lease_id": lease_id}
         api_path = "/v1/sys/leases/lookup"
         return self._adapter.put(url=api_path, json=params)
 
-    def list_leases(self, prefix: str) -> Union[dict[str, Any], Response]:
+    def list_leases(self, prefix: str) -> VaultxResponse:
         """
         Retrieve a list of lease ids.
 
@@ -28,14 +27,14 @@ class Lease(VaultApiBase):
             LIST: /sys/leases/lookup/{prefix}. Produces: 200 application/json
 
         :param prefix: Lease prefix to filter list by.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/sys/leases/lookup/{prefix}"
         return self._adapter.list(
             url=api_path,
         )
 
-    def renew_lease(self, lease_id: str, increment: Optional[int] = None) -> Union[dict[str, Any], Response]:
+    def renew_lease(self, lease_id: str, increment: Optional[int] = None) -> VaultxResponse:
         """Renew a lease, requesting to extend the lease.
 
         Supported methods:
@@ -43,7 +42,7 @@ class Lease(VaultApiBase):
 
         :param lease_id: The ID of the lease to extend.
         :param increment: The requested amount of time (in seconds) to extend the lease.
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "lease_id": lease_id,
@@ -55,7 +54,7 @@ class Lease(VaultApiBase):
             json=params,
         )
 
-    def revoke_lease(self, lease_id: str) -> Union[dict[str, Any], Response]:
+    def revoke_lease(self, lease_id: str) -> VaultxResponse:
         """
         Revoke a lease immediately.
 
@@ -74,7 +73,7 @@ class Lease(VaultApiBase):
             json=params,
         )
 
-    def revoke_prefix(self, prefix: str) -> Union[dict[str, Any], Response]:
+    def revoke_prefix(self, prefix: str) -> VaultxResponse:
         """
         Revoke all secrets (via a lease ID prefix) or tokens (via the tokens' path property) generated under a given
         prefix immediately.
@@ -97,7 +96,7 @@ class Lease(VaultApiBase):
             json=params,
         )
 
-    def revoke_force(self, prefix: str) -> Union[dict[str, Any], Response]:
+    def revoke_force(self, prefix: str) -> VaultxResponse:
         """
         Revoke all secrets or tokens generated under a given prefix immediately.
         Unlike revoke_prefix, this path ignores backend errors encountered during revocation. This is potentially very

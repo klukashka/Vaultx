@@ -5,7 +5,6 @@ import httpx
 import respx
 
 from vaultx import AsyncClient, Client
-from vaultx.exceptions import VaultxError
 
 
 class TestAuthMethods(TestCase):
@@ -28,19 +27,16 @@ class TestAuthMethods(TestCase):
             )
             actual_request_params = json.loads(route.calls.last.request.content)
 
-        if isinstance(actual_response, httpx.Response) and isinstance(actual_request_params, dict):
-            self.assertEqual(
-                first=expected_status_code,
-                second=actual_response.status_code,
-            )
+        self.assertEqual(
+            first=expected_status_code,
+            second=actual_response.status,
+        )
 
-            # Ensure we sent through an optional tune parameter as expected
-            self.assertEqual(
-                first=test_description,
-                second=actual_request_params["description"],
-            )
-        else:
-            raise VaultxError("Unexpected response types")
+        # Ensure we sent through an optional tune parameter as expected
+        self.assertEqual(
+            first=test_description,
+            second=actual_request_params["description"],
+        )
 
     def test_get_auth_backend_tuning(self):
         client = Client()
@@ -79,7 +75,7 @@ class TestAuthMethods(TestCase):
             )
         self.assertEqual(
             first=mock_response,
-            second=actual_response,
+            second=actual_response.value,
         )
 
 
@@ -103,19 +99,16 @@ class TestAsyncAuthMethods(IsolatedAsyncioTestCase):
             )
             actual_request_params = json.loads(route.calls.last.request.content)
 
-        if isinstance(actual_response, httpx.Response) and isinstance(actual_request_params, dict):
-            self.assertEqual(
-                first=expected_status_code,
-                second=actual_response.status_code,
-            )
+        self.assertEqual(
+            first=expected_status_code,
+            second=actual_response.status,
+        )
 
-            # Ensure we sent through an optional tune parameter as expected
-            self.assertEqual(
-                first=test_description,
-                second=actual_request_params["description"],
-            )
-        else:
-            raise VaultxError("Unexpected response types")
+        # Ensure we sent through an optional tune parameter as expected
+        self.assertEqual(
+            first=test_description,
+            second=actual_request_params["description"],
+        )
 
     async def test_get_auth_backend_tuning(self):
         client = AsyncClient(client=httpx.AsyncClient())
@@ -154,5 +147,5 @@ class TestAsyncAuthMethods(IsolatedAsyncioTestCase):
             )
         self.assertEqual(
             first=mock_response,
-            second=actual_response,
+            second=actual_response.value,
         )

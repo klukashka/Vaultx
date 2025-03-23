@@ -1,12 +1,9 @@
-from typing import Any, Union
-
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
 class Namespace(VaultApiBase):
-    def create_namespace(self, path: str) -> Union[dict[str, Any], Response]:
+    def create_namespace(self, path: str) -> VaultxResponse:
         """
         Create a namespace at the given path.
 
@@ -20,21 +17,21 @@ class Namespace(VaultApiBase):
             url=api_path,
         )
 
-    def list_namespaces(self) -> Union[dict[str, Any], Response]:
+    def list_namespaces(self) -> VaultxResponse:
         """
         Lists all the namespaces.
 
         Supported methods:
             LIST: /sys/namespaces. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/namespaces/"
         return self._adapter.list(
             url=api_path,
         )
 
-    def delete_namespace(self, path: str) -> Union[dict[str, Any], Response]:
+    def delete_namespace(self, path: str) -> VaultxResponse:
         """
         Delete a namespaces. You cannot delete a namespace with existing child namespaces.
 

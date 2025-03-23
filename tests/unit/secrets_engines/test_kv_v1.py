@@ -18,8 +18,7 @@ class TestKvV1(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.kv_v1.read_secret(path="my-secret")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "value"}})
+        self.assertEqual(result.json(), {"data": {"key": "value"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/secret/my-secret",
         )
@@ -29,8 +28,7 @@ class TestKvV1(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.kv_v1.read_secret(path="my-secret", mount_point="custom-mount")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "value"}})
+        self.assertEqual(result.json(), {"data": {"key": "value"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/custom-mount/my-secret",
         )
@@ -40,8 +38,7 @@ class TestKvV1(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.kv_v1.list_secrets(path="my-folder")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["secret1/", "secret2/"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["secret1/", "secret2/"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/secret/my-folder",
         )
@@ -52,8 +49,7 @@ class TestKvV1(unittest.TestCase):
 
         secret = {"key": "value"}
         result = self.kv_v1.create_or_update_secret(path="my-secret", secret=secret, method="POST")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/secret/my-secret",
             json=secret,
@@ -65,8 +61,7 @@ class TestKvV1(unittest.TestCase):
 
         secret = {"key": "value"}
         result = self.kv_v1.create_or_update_secret(path="my-secret", secret=secret, method="PUT")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/secret/my-secret",
             json=secret,
@@ -79,8 +74,7 @@ class TestKvV1(unittest.TestCase):
 
         secret = {"key": "value"}
         result = self.kv_v1.create_or_update_secret(path="my-secret", secret=secret)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/secret/my-secret",
             json=secret,
@@ -93,8 +87,7 @@ class TestKvV1(unittest.TestCase):
 
         secret = {"key": "value"}
         result = self.kv_v1.create_or_update_secret(path="my-secret", secret=secret)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/secret/my-secret",
             json=secret,
@@ -114,8 +107,7 @@ class TestKvV1(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.kv_v1.delete_secret(path="my-secret")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/secret/my-secret",
         )
@@ -131,8 +123,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.kv_v1.read_secret(path="my-secret")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "value"}})
+        self.assertEqual(result.json(), {"data": {"key": "value"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/secret/my-secret",
         )
@@ -142,8 +133,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.kv_v1.read_secret(path="my-secret", mount_point="custom-mount")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "value"}})
+        self.assertEqual(result.json(), {"data": {"key": "value"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/custom-mount/my-secret",
         )
@@ -153,8 +143,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.kv_v1.list_secrets(path="my-folder")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["secret1/", "secret2/"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["secret1/", "secret2/"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/secret/my-folder",
         )
@@ -165,8 +154,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
 
         secret = {"key": "value"}
         result = await self.kv_v1.create_or_update_secret(path="my-secret", secret=secret, method="POST")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/secret/my-secret",
             json=secret,
@@ -178,8 +166,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
 
         secret = {"key": "value"}
         result = await self.kv_v1.create_or_update_secret(path="my-secret", secret=secret, method="PUT")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/secret/my-secret",
             json=secret,
@@ -192,8 +179,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
 
         secret = {"key": "value"}
         result = await self.kv_v1.create_or_update_secret(path="my-secret", secret=secret)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/secret/my-secret",
             json=secret,
@@ -206,8 +192,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
 
         secret = {"key": "value"}
         result = await self.kv_v1.create_or_update_secret(path="my-secret", secret=secret)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/secret/my-secret",
             json=secret,
@@ -227,8 +212,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.kv_v1.delete_secret(path="my-secret")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/secret/my-secret",
         )

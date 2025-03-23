@@ -1,13 +1,12 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
 class Quota(AsyncVaultApiBase):
-    async def read_quota(self, name: str) -> Union[dict[str, Any], Response]:
+    async def read_quota(self, name: str) -> VaultxResponse:
         """
         Read quota. Only works when calling on the root namespace.
 
@@ -15,19 +14,19 @@ class Quota(AsyncVaultApiBase):
             GET: /sys/quotas/rate-limit/:name. Produces: 200 application/json
 
         :param name: the name of the quota to look up.
-        :return: JSON response from API request.
+        :return: VaultxResponse from API request.
         """
         api_path = f"/v1/sys/quotas/rate-limit/{name}"
         return await self._adapter.get(url=api_path)
 
-    async def list_quotas(self) -> Union[dict[str, Any], Response]:
+    async def list_quotas(self) -> VaultxResponse:
         """
         Retrieve a list of quotas by name. Only works when calling on the root namespace.
 
         Supported methods:
             LIST: /sys/quotas/rate-limit. Produces: 200 application/json
 
-        :return: JSON response from API request.
+        :return: VaultxResponse from API request.
         """
         api_path = "/v1/sys/quotas/rate-limit"
         return await self._adapter.list(
@@ -44,7 +43,7 @@ class Quota(AsyncVaultApiBase):
         role: Optional[str] = None,
         rate_limit_type: Optional[str] = None,
         inheritable: Optional[bool] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """Create quota if it doesn't exist or update if already created. Only works when calling on the root namespace.
 
         Supported methods:
@@ -78,7 +77,7 @@ class Quota(AsyncVaultApiBase):
             json=params,
         )
 
-    async def delete_quota(self, name: str) -> Union[dict[str, Any], Response]:
+    async def delete_quota(self, name: str) -> VaultxResponse:
         """
         Delete a given quota. Only works when calling on the root namespace.
 

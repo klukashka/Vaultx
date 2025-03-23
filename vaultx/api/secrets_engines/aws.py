@@ -1,9 +1,8 @@
 import json
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional, Union
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.constants.aws import (
     ALLOWED_CREDS_ENDPOINTS,
@@ -29,7 +28,7 @@ class Aws(VaultApiBase):
         sts_endpoint: Optional[str] = None,
         max_retries: Optional[int] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure the root IAM credentials to communicate with AWS.
         There are multiple ways to pass root IAM credentials to the Vault server, specified below with the highest
@@ -79,7 +78,7 @@ class Aws(VaultApiBase):
             json=params,
         )
 
-    def rotate_root_iam_credentials(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def rotate_root_iam_credentials(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate static root IAM credentials.
 
@@ -94,16 +93,14 @@ class Aws(VaultApiBase):
         Supported methods:
             POST: /{mount_point}/config/rotate-root. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/rotate-root"
         return self._adapter.post(
             url=api_path,
         )
 
-    def configure_lease(
-        self, lease: str, lease_max: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def configure_lease(self, lease: str, lease_max: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Configure lease settings for the AWS secrets engine.
 
@@ -129,14 +126,14 @@ class Aws(VaultApiBase):
             json=params,
         )
 
-    def read_lease_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_lease_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """Read the current lease settings for the AWS secrets engine.
 
         Supported methods:
             GET: /{mount_point}/config/lease. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/lease"
         return self._adapter.get(
@@ -154,7 +151,7 @@ class Aws(VaultApiBase):
         policy_arns: Optional[list] = None,
         iam_tags: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update the role with the given name.
 
@@ -216,7 +213,7 @@ class Aws(VaultApiBase):
             json=params,
         )
 
-    def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query an existing role by the given name.
 
@@ -227,14 +224,14 @@ class Aws(VaultApiBase):
 
         :param name: Specifies the name of the role to read. This is part of the request URL.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List all existing roles in the secrets engine.
 
@@ -242,14 +239,14 @@ class Aws(VaultApiBase):
             LIST: /{mount_point}/roles. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles"
         return self._adapter.list(
             url=api_path,
         )
 
-    def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing role by the given name.
 
@@ -277,7 +274,7 @@ class Aws(VaultApiBase):
         endpoint: str = "creds",
         mount_point: str = DEFAULT_MOUNT_POINT,
         role_session_name: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate credential based on the named role.
 
@@ -308,7 +305,7 @@ class Aws(VaultApiBase):
             in the assumed role ARN will be truncated to 64 characters. If ``role_session_name`` is not provided,
             then it will be generated dynamically by async default.
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if endpoint not in ALLOWED_CREDS_ENDPOINTS:
             raise VaultxError(

@@ -18,8 +18,7 @@ class TestWrapping(unittest.TestCase):
 
         result = self.wrapping.unwrap(token="test_token")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "value"}})
+        self.assertEqual(result.json(), {"data": {"key": "value"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/wrapping/unwrap",
             json={"token": "test_token"},
@@ -31,8 +30,7 @@ class TestWrapping(unittest.TestCase):
 
         result = self.wrapping.unwrap()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "value"}})
+        self.assertEqual(result.json(), {"data": {"key": "value"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/wrapping/unwrap",
             json={},
@@ -46,8 +44,7 @@ class TestWrapping(unittest.TestCase):
         ttl = 120
         result = self.wrapping.wrap(payload=payload, ttl=ttl)
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"wrap_info": {"token": "wrapped_token"}})
+        self.assertEqual(result.json(), {"wrap_info": {"token": "wrapped_token"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/wrapping/wrap",
             json=payload,
@@ -60,8 +57,7 @@ class TestWrapping(unittest.TestCase):
 
         result = self.wrapping.wrap()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"wrap_info": {"token": "wrapped_token"}})
+        self.assertEqual(result.json(), {"wrap_info": {"token": "wrapped_token"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/wrapping/wrap",
             json={},
@@ -80,8 +76,7 @@ class TestAsyncWrapping(unittest.IsolatedAsyncioTestCase):
 
         result = await self.wrapping.unwrap(token="test_token")
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "value"}})
+        self.assertEqual(result.json(), {"data": {"key": "value"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/wrapping/unwrap",
             json={"token": "test_token"},
@@ -93,8 +88,7 @@ class TestAsyncWrapping(unittest.IsolatedAsyncioTestCase):
 
         result = await self.wrapping.unwrap()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"key": "value"}})
+        self.assertEqual(result.json(), {"data": {"key": "value"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/wrapping/unwrap",
             json={},
@@ -108,8 +102,7 @@ class TestAsyncWrapping(unittest.IsolatedAsyncioTestCase):
         ttl = 120
         result = await self.wrapping.wrap(payload=payload, ttl=ttl)
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"wrap_info": {"token": "wrapped_token"}})
+        self.assertEqual(result.json(), {"wrap_info": {"token": "wrapped_token"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/wrapping/wrap",
             json=payload,
@@ -122,8 +115,7 @@ class TestAsyncWrapping(unittest.IsolatedAsyncioTestCase):
 
         result = await self.wrapping.wrap()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"wrap_info": {"token": "wrapped_token"}})
+        self.assertEqual(result.json(), {"wrap_info": {"token": "wrapped_token"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/sys/wrapping/wrap",
             json={},

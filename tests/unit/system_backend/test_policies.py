@@ -31,15 +31,13 @@ class TestPolicies(unittest.TestCase):
             name="test_policy",
             policy={"key": "value"},
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once()
 
     def test_delete_acl_policy(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.policies.delete_acl_policy(name="test_policy")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
     def test_list_rgp_policies(self):
@@ -61,15 +59,13 @@ class TestPolicies(unittest.TestCase):
             policy="test_policy",
             enforcement_level="advisory",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once()
 
     def test_delete_rgp_policy(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.policies.delete_rgp_policy(name="test_policy")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
     def test_list_egp_policies(self):
@@ -92,15 +88,13 @@ class TestPolicies(unittest.TestCase):
             enforcement_level="advisory",
             paths=["path1", "path2"],
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.put.assert_called_once()
 
     def test_delete_egp_policy(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.policies.delete_egp_policy(name="test_policy")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
 
@@ -125,14 +119,12 @@ class TestAsyncPolicies:
     async def test_create_or_update_acl_policy(self):
         self.mock_adapter.put.return_value = Response(204)
         result = await self.policies.create_or_update_acl_policy(name="test_policy", policy={"key": "value"})
-        assert isinstance(result, Response)
         assert result.status_code == 204
         self.mock_adapter.put.assert_called_once()
 
     async def test_delete_acl_policy(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.policies.delete_acl_policy(name="test_policy")
-        assert isinstance(result, Response)
         assert result.status_code == 204
         self.mock_adapter.delete.assert_called_once()
 
@@ -153,14 +145,12 @@ class TestAsyncPolicies:
         result = await self.policies.create_or_update_rgp_policy(
             name="test_policy", policy="test_policy", enforcement_level="advisory"
         )
-        assert isinstance(result, Response)
         assert result.status_code == 204
         self.mock_adapter.put.assert_called_once()
 
     async def test_delete_rgp_policy(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.policies.delete_rgp_policy(name="test_policy")
-        assert isinstance(result, Response)
         assert result.status_code == 204
         self.mock_adapter.delete.assert_called_once()
 
@@ -184,13 +174,11 @@ class TestAsyncPolicies:
             enforcement_level="advisory",
             paths=["path1", "path2"],
         )
-        assert isinstance(result, Response)
         assert result.status_code == 204
         self.mock_adapter.put.assert_called_once()
 
     async def test_delete_egp_policy(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.policies.delete_egp_policy(name="test_policy")
-        assert isinstance(result, Response)
         assert result.status_code == 204
         self.mock_adapter.delete.assert_called_once()

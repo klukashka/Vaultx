@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Any, Optional
 
 from vaultx import exceptions
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 
 
@@ -16,7 +15,7 @@ class KvV1(VaultApiBase):
     Reference: https://www.vaultproject.io/api/secrets/kv/kv-v1.html
     """
 
-    def read_secret(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_secret(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Retrieve the secret at the specified location.
 
@@ -25,14 +24,14 @@ class KvV1(VaultApiBase):
 
         :param path: Specifies the path of the secret to read. This is specified as part of the URL.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the read_secret request.
+        :return: The VaultxResponse of the read_secret request.
         """
         api_path = f"/v1/{mount_point}/{path}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def list_secrets(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_secrets(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Return a list of key names at the specified location.
 
@@ -46,7 +45,7 @@ class KvV1(VaultApiBase):
         :param path: Specifies the path of the secrets to list.
             This is specified as part of the URL.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the list_secrets request.
+        :return: The VaultxResponse of the list_secrets request.
         """
         api_path = f"/v1/{mount_point}/{path}"
         return self._adapter.list(
@@ -55,7 +54,7 @@ class KvV1(VaultApiBase):
 
     def create_or_update_secret(
         self, path: str, secret: dict[Any, Any], method: Optional[str] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Store a secret at the specified location.
 
@@ -71,7 +70,7 @@ class KvV1(VaultApiBase):
             key/value pairs can be specified, and all will be returned on a read operation. A key called ttl will
             trigger some special behavior. See the Vault KV secrets engine documentation for details.
         :param method: Optional parameter to explicitly request a POST (create) or PUT (update) request to the selected
-            kv secret engine. If no argument is provided for this parameter, hvac attempts to intelligently determine
+            kv secret engine. If no argument is provided for this parameter, vaultx attempts to intelligently determine
             which method is appropriate.
         :param mount_point: The "path" the secret engine was mounted on.
         :return: The response of the create_or_update_secret request.
@@ -105,7 +104,7 @@ class KvV1(VaultApiBase):
         error_message = f'"method" parameter provided invalid value; POST or PUT allowed, "{method}" provided'
         raise exceptions.VaultxError(error_message)
 
-    def delete_secret(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_secret(self, path: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete the secret at the specified location.
 

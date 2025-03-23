@@ -26,8 +26,7 @@ class TestActiveDirectory(unittest.TestCase):
             "max_ttl": "24h",
         }
         result = self.ad.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ad/config",
             json=params,
@@ -47,8 +46,7 @@ class TestActiveDirectory(unittest.TestCase):
             "max_ttl": 86400,  # Integer max_ttl
         }
         result = self.ad.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ad/config",
             json=params,
@@ -59,8 +57,7 @@ class TestActiveDirectory(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ad.read_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"url": "ldap://localhost"}})
+        self.assertEqual(result.json(), {"data": {"url": "ldap://localhost"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ad/config",
         )
@@ -75,8 +72,7 @@ class TestActiveDirectory(unittest.TestCase):
             "ttl": "1h",
         }
         result = self.ad.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ad/roles/test-role",
             json=params,
@@ -92,8 +88,7 @@ class TestActiveDirectory(unittest.TestCase):
             "ttl": 3600,  # Integer TTL
         }
         result = self.ad.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ad/roles/test-role",
             json=params,
@@ -104,8 +99,7 @@ class TestActiveDirectory(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ad.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ad/roles/test-role",
         )
@@ -115,8 +109,7 @@ class TestActiveDirectory(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.ad.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/ad/roles",
         )
@@ -126,8 +119,7 @@ class TestActiveDirectory(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.ad.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ad/roles/test-role",
         )
@@ -137,8 +129,7 @@ class TestActiveDirectory(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ad.generate_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-pass"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-pass"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ad/creds/test-role",
         )
@@ -163,8 +154,7 @@ class TestAsyncActiveDirectory(unittest.IsolatedAsyncioTestCase):
             "max_ttl": "24h",
         }
         result = await self.ad.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ad/config",
             json=params,
@@ -175,8 +165,7 @@ class TestAsyncActiveDirectory(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.ad.read_config()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"url": "ldap://localhost"}})
+        self.assertEqual(result.json(), {"data": {"url": "ldap://localhost"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ad/config",
         )
@@ -191,8 +180,7 @@ class TestAsyncActiveDirectory(unittest.IsolatedAsyncioTestCase):
             "ttl": "1h",
         }
         result = await self.ad.create_or_update_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ad/roles/test-role",
             json=params,
@@ -203,8 +191,7 @@ class TestAsyncActiveDirectory(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.ad.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ad/roles/test-role",
         )
@@ -214,8 +201,7 @@ class TestAsyncActiveDirectory(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.ad.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/ad/roles",
         )
@@ -225,8 +211,7 @@ class TestAsyncActiveDirectory(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.ad.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ad/roles/test-role",
         )
@@ -236,8 +221,7 @@ class TestAsyncActiveDirectory(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.ad.generate_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-pass"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-pass"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ad/creds/test-role",
         )

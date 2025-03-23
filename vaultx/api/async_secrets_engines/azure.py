@@ -1,9 +1,8 @@
 import json
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Any, Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.constants.azure import VALID_ENVIRONMENTS
 from vaultx.exceptions import VaultxError
@@ -27,7 +26,7 @@ class Azure(AsyncVaultApiBase):
         client_secret: Optional[str] = None,
         environment: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure the credentials required for the plugin to perform API calls to Azure.
 
@@ -79,7 +78,7 @@ class Azure(AsyncVaultApiBase):
             GET: /{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config"
         response = await self._adapter.get(
@@ -89,7 +88,7 @@ class Azure(AsyncVaultApiBase):
             return response.get("data")
         raise VaultxError("Unexpected return of non-dict response")
 
-    async def delete_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete the stored Azure configuration and credentials.
 
@@ -112,7 +111,7 @@ class Azure(AsyncVaultApiBase):
         ttl: Optional[str] = None,
         max_ttl: Optional[str] = None,
         mount_point=DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a Vault role.
 
@@ -157,7 +156,7 @@ class Azure(AsyncVaultApiBase):
             LIST: /{mount_point}/roles. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles"
         response = await self._adapter.list(
@@ -175,7 +174,7 @@ class Azure(AsyncVaultApiBase):
 
         :param name: Specifies the name of the role to create credentials against.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         :rtype: dict
         """
         api_path = f"/v1/{mount_point}/creds/{name}"

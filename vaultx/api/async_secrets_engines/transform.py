@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -18,7 +17,7 @@ class Transform(AsyncVaultApiBase):
 
     async def create_or_update_role(
         self, name: str, transformations: list, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update the role with the given name.
         If a role with the name does not exist, it will be created. If the role exists, it will be
@@ -42,7 +41,7 @@ class Transform(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query an existing role by the given name.
 
@@ -58,7 +57,7 @@ class Transform(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List all existing roles in the secrets engine.
 
@@ -73,7 +72,7 @@ class Transform(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing role by the given name.
 
@@ -98,7 +97,7 @@ class Transform(AsyncVaultApiBase):
         masking_character: str = "*",
         allowed_roles: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a transformation with the given name.
         If a transformation with the name does not exist, it will be created. If the
@@ -150,7 +149,7 @@ class Transform(AsyncVaultApiBase):
         tweak_source: str = "supplied",
         allowed_roles: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update an FPE transformation with the given name.
         If a transformation with the name does not exist, it will be created. If the transformation exists, it will be
@@ -191,7 +190,7 @@ class Transform(AsyncVaultApiBase):
         masking_character: str = "*",
         allowed_roles: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a masking transformation with the given name. If a
         transformation with the name does not exist, it will be created. If the
@@ -234,7 +233,7 @@ class Transform(AsyncVaultApiBase):
         allowed_roles: Optional[list] = None,
         stores: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint creates or updates a tokenization transformation with the given name. If a
         transformation with the name does not exist, it will be created. If the
@@ -276,9 +275,7 @@ class Transform(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_transformation(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def read_transformation(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query an existing transformation by the given name.
 
@@ -295,7 +292,7 @@ class Transform(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_transformations(self, mount_point=DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_transformations(self, mount_point=DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """List all existing transformations in the secrets engine.
 
         Supported methods:
@@ -311,7 +308,7 @@ class Transform(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_transformation(self, name, mount_point=DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_transformation(self, name, mount_point=DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """Delete an existing transformation by the given name.
 
         Supported methods:
@@ -335,7 +332,7 @@ class Transform(AsyncVaultApiBase):
 
     async def create_or_update_template(
         self, name: str, template_type: str, pattern: str, alphabet: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a template with the given name.
         If a template with the name does not exist, it will be created. If the
@@ -367,7 +364,7 @@ class Transform(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_template(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_template(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query an existing template by the given name.
 
@@ -383,7 +380,7 @@ class Transform(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_templates(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_templates(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List all existing templates in the secrets engine.
 
@@ -398,9 +395,7 @@ class Transform(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_template(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_template(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing template by the given name.
 
@@ -423,7 +418,7 @@ class Transform(AsyncVaultApiBase):
 
     async def create_or_update_alphabet(
         self, name: str, alphabet: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update an alphabet with the given name.
         If an alphabet with the name does not exist, it will be created. If the
@@ -447,7 +442,7 @@ class Transform(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_alphabet(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_alphabet(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query an existing alphabet by the given name.
 
@@ -463,7 +458,7 @@ class Transform(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_alphabets(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_alphabets(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List all existing alphabets in the secrets engine.
 
@@ -478,9 +473,7 @@ class Transform(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_alphabet(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def delete_alphabet(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing alphabet by the given name.
 
@@ -510,7 +503,7 @@ class Transform(AsyncVaultApiBase):
         max_idle_connections: int = 4,
         max_connection_lifetime: int = 0,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a storage configuration for use with tokenization.
         The database user configured here should only have permission to SELECT, INSERT, and UPDATE rows in the tables.
@@ -566,7 +559,7 @@ class Transform(AsyncVaultApiBase):
         tweak: Optional[str] = None,
         batch_input: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Encode the provided value using a named role.
 
@@ -610,7 +603,7 @@ class Transform(AsyncVaultApiBase):
         tweak: Optional[str] = None,
         batch_input: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Decode the provided value using a named role.
 
@@ -653,7 +646,7 @@ class Transform(AsyncVaultApiBase):
         transformation: str,
         batch_input: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Determine if a provided tokenized value is valid and unexpired.
         Only valid for tokenization transformations.
@@ -695,7 +688,7 @@ class Transform(AsyncVaultApiBase):
         transformation: str,
         batch_input: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Determine if a provided plaintext value has an valid, unexpired tokenized value.
         Note that this cannot return await the token, just confirm that a
@@ -739,7 +732,7 @@ class Transform(AsyncVaultApiBase):
         transformation: str,
         batch_input: Optional[list] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint retrieves metadata for a tokenized value using a named role.
         Only valid for tokenization transformations.
@@ -776,7 +769,7 @@ class Transform(AsyncVaultApiBase):
 
     async def snapshot_tokenization_state(
         self, name: str, limit: int = 1000, continuation: str = "", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint starts or continues retrieving a snapshot of the stored
         state of a tokenization transform.  This state is protected as it is
@@ -809,7 +802,7 @@ class Transform(AsyncVaultApiBase):
 
     async def restore_tokenization_state(
         self, name: str, values: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint restores previously snapshotted tokenization state values
         to the underlying store(s) of a tokenization transform.  Calls to this
@@ -835,7 +828,7 @@ class Transform(AsyncVaultApiBase):
 
     async def export_decoded_tokenization_state(
         self, name: str, limit: int = 1000, continuation: str = "", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Start or continue retrieving an export of tokenization state, including the tokens and their decoded values.
         This call is only supported on tokenization stores configured with the exportable mapping mode.
@@ -866,7 +859,7 @@ class Transform(AsyncVaultApiBase):
 
     async def rotate_tokenization_key(
         self, transform_name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Rotate the version of the named key.
         After rotation, new requests will be encoded with the new version of the key.
@@ -886,7 +879,7 @@ class Transform(AsyncVaultApiBase):
 
     async def update_tokenization_key_config(
         self, transform_name: str, min_decryption_version: int, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Allow the minimum key version to be set for decode operations.
         Only valid for tokenization transformations.
@@ -911,9 +904,7 @@ class Transform(AsyncVaultApiBase):
             json=params,
         )
 
-    async def list_tokenization_key_configuration(
-        self, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def list_tokenization_key_configuration(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List all tokenization keys.
         Only valid for tokenization transformations.
@@ -931,7 +922,7 @@ class Transform(AsyncVaultApiBase):
 
     async def read_tokenization_key_configuration(
         self, transform_name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Read tokenization key configuration for a particular transform.
         Only valid for tokenization transformations.
@@ -951,7 +942,7 @@ class Transform(AsyncVaultApiBase):
 
     async def trim_tokenization_key_version(
         self, transform_name: str, min_available_version: int, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Trim older key versions setting a minimum version for the keyring.
         Once trimmed, previous versions of the key cannot be recovered.

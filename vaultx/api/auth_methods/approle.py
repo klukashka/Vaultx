@@ -1,9 +1,8 @@
 import json
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import exceptions, utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.constants.approle import ALLOWED_TOKEN_TYPES, DEFAULT_MOUNT_POINT
 from vaultx.utils import list_to_comma_delimited, validate_list_of_strings_param
@@ -33,7 +32,7 @@ class AppRole(VaultApiBase):
         token_period: Optional[str] = None,
         token_type: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ):
+    ) -> VaultxResponse:
         """
         Create/update approle.
 
@@ -108,7 +107,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}"
         return self._adapter.post(url=api_path, json=params)
 
-    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List existing roles created in the auth method.
 
@@ -116,12 +115,12 @@ class AppRole(VaultApiBase):
             LIST: /auth/{mount_point}/role. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the list_roles request.
+        :return: The VaultxResponse of the list_roles request.
         """
         api_path = f"/v1/auth/{mount_point}/role"
         return self._adapter.list(url=api_path)
 
-    def read_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read role in the auth method.
 
@@ -130,12 +129,12 @@ class AppRole(VaultApiBase):
 
         :param role_name: The name for the role.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_role request.
+        :return: The VaultxResponse of the read_role request.
         """
         api_path = f"/v1/auth/{mount_point}/role/{role_name}"
         return self._adapter.get(url=api_path)
 
-    def delete_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_role(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete role in the auth method.
 
@@ -149,7 +148,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}"
         return self._adapter.delete(url=api_path)
 
-    def read_role_id(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role_id(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the Role ID of a role in the auth method.
 
@@ -158,14 +157,12 @@ class AppRole(VaultApiBase):
 
         :param role_name: The name for the role.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_role_id request.
+        :return: The VaultxResponse of the read_role_id request.
         """
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/role-id"
         return self._adapter.get(url=api_path)
 
-    def update_role_id(
-        self, role_name: str, role_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def update_role_id(self, role_name: str, role_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Update the Role ID of a role in the auth method.
 
@@ -175,7 +172,7 @@ class AppRole(VaultApiBase):
         :param role_name: The name for the role.
         :param role_id: New value for the Role ID.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_role_id request.
+        :return: The VaultxResponse of the read_role_id request.
         """
         params = {"role_id": role_id}
 
@@ -190,7 +187,7 @@ class AppRole(VaultApiBase):
         token_bound_cidrs: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate and issue a new Secret ID on a role in the auth method.
 
@@ -205,7 +202,7 @@ class AppRole(VaultApiBase):
         :param wrap_ttl: Returns the request as a response-wrapping token.
             Can be either an integer number of seconds or a string duration of
             seconds (`15s`), minutes (`20m`), or hours (`25h`).
-        :return: The JSON response of the read_role_id request.
+        :return: The VaultxResponse of the read_role_id request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise exceptions.VaultxError(
@@ -240,7 +237,7 @@ class AppRole(VaultApiBase):
         token_bound_cidrs: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate and issue a new Secret ID on a role in the auth method.
 
@@ -256,7 +253,7 @@ class AppRole(VaultApiBase):
         :param wrap_ttl: Returns the request as a response-wrapping token.
             Can be either an integer number of seconds or a string duration of
             seconds (`15s`), minutes (`20m`), or hours (`25h`).
-        :return: The JSON response of the read_role_id request.
+        :return: The VaultxResponse of the read_role_id request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise exceptions.VaultxError(
@@ -283,9 +280,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/custom-secret-id"
         return self._adapter.post(url=api_path, json=params, wrap_ttl=wrap_ttl)
 
-    def read_secret_id(
-        self, role_name: str, secret_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def read_secret_id(self, role_name: str, secret_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the properties of a Secret ID for a role in the auth method.
 
@@ -295,7 +290,7 @@ class AppRole(VaultApiBase):
         :param role_name: The name for the role
         :param secret_id: The Secret ID to read.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_role_id request.
+        :return: The VaultxResponse of the read_role_id request.
         """
         params = {"secret_id": secret_id}
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/secret-id/lookup"
@@ -303,7 +298,7 @@ class AppRole(VaultApiBase):
 
     def destroy_secret_id(
         self, role_name: str, secret_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Destroy a Secret ID for a role in the auth method.
 
@@ -318,9 +313,7 @@ class AppRole(VaultApiBase):
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/secret-id/destroy"
         return self._adapter.post(url=api_path, json=params)
 
-    def list_secret_id_accessors(
-        self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def list_secret_id_accessors(self, role_name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List accessors of all issued Secret IDs for a role in the auth method.
 
@@ -329,14 +322,14 @@ class AppRole(VaultApiBase):
 
         :param role_name: The name for the role
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_role_id request.
+        :return: The VaultxResponse of the read_role_id request.
         """
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/secret-id"
         return self._adapter.list(url=api_path)
 
     def read_secret_id_accessor(
         self, role_name: str, secret_id_accessor: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Read the properties of a Secret ID for a role in the auth method.
 
@@ -346,7 +339,7 @@ class AppRole(VaultApiBase):
         :param role_name: The name for the role
         :param secret_id_accessor: The accessor for the Secret ID to read.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_role_id request.
+        :return: The VaultxResponse of the read_role_id request.
         """
         params = {"secret_id_accessor": secret_id_accessor}
         api_path = f"/v1/auth/{mount_point}/role/{role_name}/secret-id-accessor/lookup"
@@ -354,7 +347,7 @@ class AppRole(VaultApiBase):
 
     def destroy_secret_id_accessor(
         self, role_name: str, secret_id_accessor: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Destroy a Secret ID for a role in the auth method.
 
@@ -371,7 +364,7 @@ class AppRole(VaultApiBase):
 
     def login(
         self, role_id: str, secret_id: Optional[str] = None, use_token: bool = True, mount_point=DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Login with APPROLE credentials.
 
@@ -383,7 +376,7 @@ class AppRole(VaultApiBase):
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
             attribute on the Adapter instance under the _adapter Client attribute.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the login request.
+        :return: The VaultxResponse of the login request.
         """
         params = {"role_id": role_id, "secret_id": secret_id}
         api_path = f"/v1/auth/{mount_point}/login"

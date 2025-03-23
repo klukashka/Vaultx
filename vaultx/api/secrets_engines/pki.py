@@ -1,10 +1,8 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
-from vaultx.exceptions import VaultxError
 
 
 DEFAULT_MOUNT_POINT = "pki"
@@ -32,9 +30,7 @@ class Pki(VaultApiBase):
         response = self._adapter.get(
             url=api_path,
         )
-        if isinstance(response, Response):
-            return str(response.text)
-        raise VaultxError("Unexpected non-Response return")
+        return str(response.raw.text)
 
     def read_ca_certificate_chain(self, mount_point: str = DEFAULT_MOUNT_POINT) -> str:
         """
@@ -51,11 +47,9 @@ class Pki(VaultApiBase):
         response = self._adapter.get(
             url=api_path,
         )
-        if isinstance(response, Response):
-            return str(response.text)
-        raise VaultxError("Unexpected non-Response return")
+        return str(response.raw.text)
 
-    def read_certificate(self, serial: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_certificate(self, serial: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read Certificate.
         Retrieve one of a selection of certificates.
@@ -65,14 +59,14 @@ class Pki(VaultApiBase):
 
         :param serial: the serial of the key to read.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/cert/{serial}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def list_certificates(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_certificates(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List Certificates.
         The list of the current certificates by serial number only.
@@ -81,16 +75,14 @@ class Pki(VaultApiBase):
             LIST: /{mount_point}/certs. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/certs"
         return self._adapter.list(
             url=api_path,
         )
 
-    def submit_ca_information(
-        self, pem_bundle: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def submit_ca_information(self, pem_bundle: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Submit CA Information.
         Submitting the CA information for the backend.
@@ -100,7 +92,7 @@ class Pki(VaultApiBase):
 
         :param pem_bundle: Specifies the unencrypted private key and certificate, concatenated in PEM format.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "pem_bundle": pem_bundle,
@@ -111,7 +103,7 @@ class Pki(VaultApiBase):
             json=params,
         )
 
-    def read_crl_configuration(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_crl_configuration(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read CRL Configuration.
         Getting the duration for which the generated CRL should be marked valid.
@@ -120,7 +112,7 @@ class Pki(VaultApiBase):
             GET: /{mount_point}/config/crl. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/crl"
         return self._adapter.get(
@@ -133,7 +125,7 @@ class Pki(VaultApiBase):
         disable: Optional[bool] = None,
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Set CRL Configuration.
 
@@ -148,7 +140,7 @@ class Pki(VaultApiBase):
         :param disable: Disables or enables CRL building.
         :param extra_params: Other extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -168,7 +160,7 @@ class Pki(VaultApiBase):
             json=params,
         )
 
-    def read_urls(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_urls(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read URLs.
         Fetch the URLs to be encoded in generated certificates.
@@ -177,14 +169,14 @@ class Pki(VaultApiBase):
             GET: /{mount_point}/config/urls. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/urls"
         return self._adapter.get(
             url=api_path,
         )
 
-    def set_urls(self, params: dict, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def set_urls(self, params: dict, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Set URLs.
 
@@ -197,7 +189,7 @@ class Pki(VaultApiBase):
 
         :param params: The parameters to insert as json.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/urls"
         return self._adapter.post(
@@ -222,11 +214,9 @@ class Pki(VaultApiBase):
         response = self._adapter.get(
             url=api_path,
         )
-        if isinstance(response, Response):
-            return str(response.text)
-        raise VaultxError("Unexpected non-Response return")
+        return str(response.raw.text)
 
-    def rotate_crl(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def rotate_crl(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate CRLs.
         Force a rotation of the CRL.
@@ -235,7 +225,7 @@ class Pki(VaultApiBase):
             GET: /{mount_point}/crl/rotate. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/crl/rotate"
         return self._adapter.get(
@@ -249,7 +239,7 @@ class Pki(VaultApiBase):
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate Intermediate.
         Generate a new private key and a CSR for signing.
@@ -262,7 +252,7 @@ class Pki(VaultApiBase):
         :param extra_params: Dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
         :param wrap_ttl: Specifies response wrapping token creation with duration. IE: '15s', '20m', '25h'.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -277,9 +267,7 @@ class Pki(VaultApiBase):
             wrap_ttl=wrap_ttl,
         )
 
-    def set_signed_intermediate(
-        self, certificate: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def set_signed_intermediate(self, certificate: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Set Signed Intermediate.
         Allow submitting the signed CA certificate corresponding to a private key generated via "Generate Intermediate"
@@ -305,7 +293,7 @@ class Pki(VaultApiBase):
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate Certificate.
         Generates a new set of credentials (private key and certificate) based on the role named in the endpoint.
@@ -318,7 +306,7 @@ class Pki(VaultApiBase):
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
         :param wrap_ttl: Specifies response wrapping token creation with duration. IE: '15s', '20m', '25h'.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -333,9 +321,7 @@ class Pki(VaultApiBase):
             wrap_ttl=wrap_ttl,
         )
 
-    def revoke_certificate(
-        self, serial_number: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def revoke_certificate(self, serial_number: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Revoke Certificate.
         Revoke a certificate using its serial number.
@@ -356,7 +342,7 @@ class Pki(VaultApiBase):
 
     def create_or_update_role(
         self, name: str, extra_params: Optional[dict] = None, mount_point=DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create/Update Role.
         Create or updates the role definition.
@@ -367,7 +353,7 @@ class Pki(VaultApiBase):
         :param name: The name of the role to create.
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -381,7 +367,7 @@ class Pki(VaultApiBase):
             json=params,
         )
 
-    def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read Role.
         Query the role definition.
@@ -391,14 +377,14 @@ class Pki(VaultApiBase):
 
         :param name: The name of the role to read.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List Roles.
         Get a list of available roles.
@@ -407,14 +393,14 @@ class Pki(VaultApiBase):
             LIST: /{mount_point}/roles. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles"
         return self._adapter.list(
             url=api_path,
         )
 
-    def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete Role.
         Delete the role definition.
@@ -424,7 +410,7 @@ class Pki(VaultApiBase):
 
         :param name: The name of the role to delete.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
 
@@ -439,7 +425,7 @@ class Pki(VaultApiBase):
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate Root.
         Generate a new self-signed CA certificate and private key.
@@ -452,7 +438,7 @@ class Pki(VaultApiBase):
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
         :param wrap_ttl: Specifies response wrapping token creation with duration. IE: '15s', '20m', '25h'.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -467,7 +453,7 @@ class Pki(VaultApiBase):
             wrap_ttl=wrap_ttl,
         )
 
-    def delete_root(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_root(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete Root.
         Delete the current CA key.
@@ -476,7 +462,7 @@ class Pki(VaultApiBase):
             DELETE: /{mount_point}/root. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/root"
 
@@ -486,7 +472,7 @@ class Pki(VaultApiBase):
 
     def sign_intermediate(
         self, csr: str, common_name: str, extra_params: Optional[dict] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Sign Intermediate.
         Issue a certificate with appropriate values for acting as an intermediate CA.
@@ -498,7 +484,7 @@ class Pki(VaultApiBase):
         :param common_name: The requested CN for the certificate.
         :param extra_params: Dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -513,9 +499,7 @@ class Pki(VaultApiBase):
             json=params,
         )
 
-    def sign_self_issued(
-        self, certificate: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def sign_self_issued(self, certificate: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Sign Self-Issued.
         Sign a self-issued certificate.
@@ -525,7 +509,7 @@ class Pki(VaultApiBase):
 
         :param certificate: The PEM-encoded self-issued certificate.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/root/sign-self-issued"
 
@@ -543,7 +527,7 @@ class Pki(VaultApiBase):
         common_name: str,
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Sign Certificate.
         Sign a new certificate based upon the provided CSR and the supplied parameters.
@@ -557,7 +541,7 @@ class Pki(VaultApiBase):
             If the CN is allowed by role policy, it will be issued.
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -578,7 +562,7 @@ class Pki(VaultApiBase):
         name: Optional[str] = None,
         extra_params: Optional[dict] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Sign Verbatim.
         Sign a new certificate based upon the provided CSR.
@@ -590,7 +574,7 @@ class Pki(VaultApiBase):
         :param name: Specifies a role.
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -606,9 +590,7 @@ class Pki(VaultApiBase):
             json=params,
         )
 
-    def tidy(
-        self, extra_params: Optional[dict] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def tidy(self, extra_params: Optional[dict] = None, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Tidy.
         Allow tidying up the storage backend and/or CRL by removing certificates that have
@@ -619,7 +601,7 @@ class Pki(VaultApiBase):
 
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -631,7 +613,7 @@ class Pki(VaultApiBase):
             json=params,
         )
 
-    def read_issuer(self, issuer_ref, mount_point=DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_issuer(self, issuer_ref, mount_point=DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read issuer.
         Get configuration of an issuer by its reference ID.
@@ -641,7 +623,7 @@ class Pki(VaultApiBase):
 
         :param mount_point: The "path" the method/backend was mounted on.
         :param issuer_ref: The reference ID of the issuer to get
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/issuer/{issuer_ref}"
 
@@ -649,7 +631,7 @@ class Pki(VaultApiBase):
             url=api_path,
         )
 
-    def list_issuers(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_issuers(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List issuers.
         Get list of all issuers for a given pki mount.
@@ -658,7 +640,7 @@ class Pki(VaultApiBase):
             LIST: /{mount_point}/issuers. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/issuers"
 
@@ -668,7 +650,7 @@ class Pki(VaultApiBase):
 
     def update_issuer(
         self, issuer_ref: str, extra_params: Optional[dict] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Update issuer.
         Update a given issuer.
@@ -679,7 +661,7 @@ class Pki(VaultApiBase):
         :param mount_point: The "path" the method/backend was mounted on.
         :param issuer_ref: The reference ID of the issuer to update
         :param extra_params: Dictionary with extra parameters.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = extra_params
 
@@ -687,7 +669,7 @@ class Pki(VaultApiBase):
 
         return self._adapter.post(url=api_path, json=params)
 
-    def revoke_issuer(self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def revoke_issuer(self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Revoke issuer.
         Revoke a given issuer.
@@ -697,7 +679,7 @@ class Pki(VaultApiBase):
 
         :param mount_point: The "path" the method/backend was mounted on.
         :param issuer_ref: The reference ID of the issuer to revoke
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/issuer/{issuer_ref}/revoke"
 
@@ -705,7 +687,7 @@ class Pki(VaultApiBase):
             url=api_path,
         )
 
-    def delete_issuer(self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_issuer(self, issuer_ref: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete issuer.
         Delete a given issuer. Deleting the default issuer will result in a warning
@@ -715,7 +697,7 @@ class Pki(VaultApiBase):
 
         :param mount_point: The "path" the method/backend was mounted on.
         :param issuer_ref: The reference ID of the issuer to delete
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/issuer/{issuer_ref}"
 

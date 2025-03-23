@@ -24,8 +24,7 @@ class TestDatabase(unittest.TestCase):
             "root_rotation_statements": ["ALTER USER WITH PASSWORD '{{password}}';"],
         }
         result = self.database.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "plugin_name": "postgresql-database-plugin",
@@ -43,8 +42,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.database.rotate_root_credentials(name="test-connection")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/database/rotate-root/test-connection",
         )
@@ -54,8 +52,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.database.read_connection(name="test-connection")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-connection"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-connection"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/database/config/test-connection",
         )
@@ -65,8 +62,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.database.list_connections()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["connection1", "connection2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["connection1", "connection2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/database/config",
         )
@@ -76,8 +72,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.database.delete_connection(name="test-connection")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/database/config/test-connection",
         )
@@ -87,8 +82,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.database.reset_connection(name="test-connection")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/database/reset/test-connection",
         )
@@ -108,8 +102,7 @@ class TestDatabase(unittest.TestCase):
             "renew_statements": ["ALTER USER '{{name}}' WITH PASSWORD '{{password}}';"],
         }
         result = self.database.create_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "db_name": "test-connection",
@@ -137,8 +130,7 @@ class TestDatabase(unittest.TestCase):
             "rotation_period": 86400,
         }
         result = self.database.create_static_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "db_name": "test-connection",
@@ -156,8 +148,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.database.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/database/roles/test-role",
         )
@@ -167,8 +158,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.database.read_static_role(name="test-static-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-static-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-static-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/database/static-roles/test-static-role",
         )
@@ -178,8 +168,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.database.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/database/roles",
         )
@@ -189,8 +178,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.database.list_static_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["static-role1", "static-role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["static-role1", "static-role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/database/static-roles",
         )
@@ -200,8 +188,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.database.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/database/roles/test-role",
         )
@@ -211,8 +198,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.database.delete_static_role(name="test-static-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/database/static-roles/test-static-role",
         )
@@ -222,8 +208,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.database.generate_credentials(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/database/creds/test-role",
         )
@@ -233,8 +218,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.database.get_static_credentials(name="test-static-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/database/static-creds/test-static-role",
         )
@@ -244,8 +228,7 @@ class TestDatabase(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.database.rotate_static_role_credentials(name="test-static-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/database/rotate-role/test-static-role",
         )
@@ -268,8 +251,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
             "root_rotation_statements": ["ALTER USER WITH PASSWORD '{{password}}';"],
         }
         result = await self.database.configure(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "plugin_name": "postgresql-database-plugin",
@@ -287,8 +269,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.database.rotate_root_credentials(name="test-connection")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/database/rotate-root/test-connection",
         )
@@ -298,8 +279,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.database.read_connection(name="test-connection")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-connection"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-connection"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/database/config/test-connection",
         )
@@ -309,8 +289,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.database.list_connections()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["connection1", "connection2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["connection1", "connection2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/database/config",
         )
@@ -320,8 +299,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.database.delete_connection(name="test-connection")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/database/config/test-connection",
         )
@@ -331,8 +309,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.database.reset_connection(name="test-connection")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/database/reset/test-connection",
         )
@@ -352,8 +329,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
             "renew_statements": ["ALTER USER '{{name}}' WITH PASSWORD '{{password}}';"],
         }
         result = await self.database.create_role(**params)
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
 
         expected_params = {
             "db_name": "test-connection",
@@ -477,8 +453,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.database.get_static_credentials(name="test-static-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "password": "test-password"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/database/static-creds/test-static-role",
         )
@@ -488,8 +463,7 @@ class TestAsyncDatabase(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.database.rotate_static_role_credentials(name="test-static-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/database/rotate-role/test-static-role",
         )

@@ -1,8 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional, Union
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
@@ -26,7 +25,7 @@ class ActiveDirectory(AsyncVaultApiBase):
         max_ttl: Optional[Union[str, int]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         **kwargs,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure shared information for the ad secrets engine.
 
@@ -66,7 +65,7 @@ class ActiveDirectory(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the configured shared information for the ad secrets engine.
 
@@ -76,7 +75,7 @@ class ActiveDirectory(AsyncVaultApiBase):
             GET: /{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config"
         return await self._adapter.get(
@@ -89,7 +88,7 @@ class ActiveDirectory(AsyncVaultApiBase):
         service_account_name: Optional[str] = None,
         ttl: Optional[Union[str, int]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         This endpoint creates or updates the ad role definition.
 
@@ -119,7 +118,7 @@ class ActiveDirectory(AsyncVaultApiBase):
             json=params,
         )
 
-    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint queries for information about an ad role with the given name.
         If no role exists with that name, a 404 is returned.
@@ -132,7 +131,7 @@ class ActiveDirectory(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint lists all existing roles in the secrets engine.
         :return: The response of the request.
@@ -142,7 +141,7 @@ class ActiveDirectory(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    async def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint deletes a ad role with the given name.
         Even if the role does not exist, this endpoint will still return a successful response.
@@ -155,9 +154,7 @@ class ActiveDirectory(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def generate_credentials(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    async def generate_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint retrieves the previous and current LDAP password for
            the associated account (or rotate if required)

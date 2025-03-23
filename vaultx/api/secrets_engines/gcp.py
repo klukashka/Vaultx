@@ -1,10 +1,9 @@
 import json
 import logging
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional, Union
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.constants.gcp import (
     ALLOWED_SECRETS_TYPES,
@@ -30,7 +29,7 @@ class Gcp(VaultApiBase):
         ttl: Optional[Union[str, int]] = None,
         max_ttl: Optional[Union[str, int]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Configure shared information for the Gcp secrets engine.
 
@@ -59,7 +58,7 @@ class Gcp(VaultApiBase):
             json=params,
         )
 
-    def rotate_root_credentials(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def rotate_root_credentials(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the GCP service account credentials used by Vault for this mount.
 
@@ -71,14 +70,14 @@ class Gcp(VaultApiBase):
             POST: /{mount_point}/config/rotate-root. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/rotate-root"
         return self._adapter.post(
             url=api_path,
         )
 
-    def read_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read the configured shared information for the Gcp secrets engine.
 
@@ -88,7 +87,7 @@ class Gcp(VaultApiBase):
             GET: /{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config"
         return self._adapter.get(
@@ -151,9 +150,7 @@ class Gcp(VaultApiBase):
             json=params,
         )
 
-    def rotate_roleset_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def rotate_roleset_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the service account this roleset uses to generate secrets.
 
@@ -173,9 +170,7 @@ class Gcp(VaultApiBase):
             url=api_path,
         )
 
-    def rotate_roleset_account_key(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def rotate_roleset_account_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the service account key this roleset uses to generate access tokens.
 
@@ -193,7 +188,7 @@ class Gcp(VaultApiBase):
             url=api_path,
         )
 
-    def read_roleset(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_roleset(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read a roleset.
 
@@ -202,14 +197,14 @@ class Gcp(VaultApiBase):
 
         :param name: Name of the role.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roleset/{name}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def list_rolesets(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_rolesets(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List configured rolesets.
 
@@ -217,14 +212,14 @@ class Gcp(VaultApiBase):
             LIST: /{mount_point}/rolesets. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/rolesets"
         return self._adapter.list(
             url=api_path,
         )
 
-    def delete_roleset(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_roleset(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing roleset by the given name.
 
@@ -240,9 +235,7 @@ class Gcp(VaultApiBase):
             url=api_path,
         )
 
-    def generate_oauth2_access_token(
-        self, roleset: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def generate_oauth2_access_token(self, roleset: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Generate an OAuth2 token with the scopes defined on the roleset.
 
@@ -253,7 +246,7 @@ class Gcp(VaultApiBase):
 
         :param roleset: Name of a roleset with secret type access_token to generate access_token under.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/token/{roleset}"
         return self._adapter.get(
@@ -267,7 +260,7 @@ class Gcp(VaultApiBase):
         key_type: str = "TYPE_GOOGLE_CREDENTIALS_FILE",
         method: str = "POST",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate Secret (IAM Service Account Creds): Service Account Key
 
@@ -282,7 +275,7 @@ class Gcp(VaultApiBase):
             POST: /{mount_point}/key/{roleset}. Produces: 200 application/json
             GET: /{mount_point}/key/{roleset}. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/key/{roleset}"
         return self._generate_service_account_key(api_path, key_algorithm, key_type, method)
@@ -295,7 +288,7 @@ class Gcp(VaultApiBase):
         secret_type: Optional[str] = None,
         token_scopes: Optional[list[str]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create a static account or update an existing static account.
 
@@ -343,9 +336,7 @@ class Gcp(VaultApiBase):
             json=params,
         )
 
-    def rotate_static_account_key(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def rotate_static_account_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Rotate the service account key this static account uses to generate access tokens.
 
@@ -363,7 +354,7 @@ class Gcp(VaultApiBase):
             url=api_path,
         )
 
-    def read_static_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_static_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read a static account.
 
@@ -372,14 +363,14 @@ class Gcp(VaultApiBase):
 
         :param name: Name of the static account.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/static-account/{name}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def list_static_accounts(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_static_accounts(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List configured static accounts.
 
@@ -387,16 +378,14 @@ class Gcp(VaultApiBase):
             LIST: /{mount_point}/static-accounts. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/static-accounts"
         return self._adapter.list(
             url=api_path,
         )
 
-    def delete_static_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def delete_static_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing static account by the given name.
 
@@ -414,7 +403,7 @@ class Gcp(VaultApiBase):
 
     def generate_static_account_oauth2_access_token(
         self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate an OAuth2 token with the scopes defined on the static account.
 
@@ -425,7 +414,7 @@ class Gcp(VaultApiBase):
 
         :param name: Name of a static account with secret type access_token to generate access_token under.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/static-account/{name}/token"
         return self._adapter.get(
@@ -454,7 +443,7 @@ class Gcp(VaultApiBase):
             POST: /v1/{mount_point}/static-account/{name}/key. Produces: 200 application/json
             GET: /v1/{mount_point}/static-account/{name}/key. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         api_path = f"/v1/{mount_point}/static-account/{name}/key"
@@ -467,7 +456,7 @@ class Gcp(VaultApiBase):
         token_scopes: Optional[list[str]] = None,
         ttl: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create an impersonated account or update an existing impersonated account.
 
@@ -502,9 +491,7 @@ class Gcp(VaultApiBase):
             json=params,
         )
 
-    def read_impersonated_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def read_impersonated_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read an impersonated account.
 
@@ -513,14 +500,14 @@ class Gcp(VaultApiBase):
 
         :param name: Name of the impersonated account.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/impersonated-account/{name}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def list_impersonated_accounts(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_impersonated_accounts(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List configured impersonated accounts.
 
@@ -528,16 +515,14 @@ class Gcp(VaultApiBase):
             LIST: /{mount_point}/impersonated-accounts. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/impersonated-accounts"
         return self._adapter.list(
             url=api_path,
         )
 
-    def delete_impersonated_account(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def delete_impersonated_account(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an existing impersonated account by the given name.
 
@@ -555,7 +540,7 @@ class Gcp(VaultApiBase):
 
     def generate_impersonated_account_oauth2_access_token(
         self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Generate an OAuth2 token with the scopes defined on the impersonated account.
 
@@ -566,7 +551,7 @@ class Gcp(VaultApiBase):
 
         :param name: Name of the impersonated account to generate an access token under.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/impersonated-account/{name}/token"
         return self._adapter.get(
@@ -579,7 +564,7 @@ class Gcp(VaultApiBase):
         key_algorithm: str = "KEY_ALG_RSA_2048",
         key_type: str = "TYPE_GOOGLE_CREDENTIALS_FILE",
         method: str = "POST",
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         if method == "POST":
             if key_algorithm not in SERVICE_ACCOUNT_KEY_ALGORITHMS:
                 raise VaultxError(

@@ -1,9 +1,8 @@
 import logging
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.constants.identity import ALLOWED_GROUP_TYPES, DEFAULT_MOUNT_POINT
 from vaultx.exceptions import VaultxError
@@ -27,7 +26,7 @@ class Identity(VaultApiBase):
         policies: Optional[str] = None,
         disabled: Optional[bool] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update an Entity.
 
@@ -41,7 +40,7 @@ class Identity(VaultApiBase):
         :param disabled: Whether the entity is disabled. Disabled entities' associated tokens cannot be used, but are
             not revoked.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response for creates, the generic response object for updates, of the request.
+        :return: The VaultxResponse for creates, the generic response object for updates, of the request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -70,7 +69,7 @@ class Identity(VaultApiBase):
         policies: Optional[str] = None,
         disabled: Optional[bool] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update an entity by a given name.
 
@@ -83,7 +82,7 @@ class Identity(VaultApiBase):
         :param disabled: Whether the entity is disabled. Disabled
             entities' associated tokens cannot be used, but are not revoked.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response for creates, the generic response of the request for updates.
+        :return: The VaultxResponse for creates, the generic response of the request for updates.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -103,7 +102,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_entity(self, entity_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_entity(self, entity_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query an entity by its identifier.
 
@@ -112,12 +111,12 @@ class Identity(VaultApiBase):
 
         :param entity_id: Identifier of the entity.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/entity/id/{entity_id}"
         return self._adapter.get(url=api_path)
 
-    def read_entity_by_name(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_entity_by_name(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query an entity by its name.
 
@@ -126,7 +125,7 @@ class Identity(VaultApiBase):
 
         :param name: Name of the entity.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/entity/name/{name}"
         return self._adapter.get(
@@ -141,7 +140,7 @@ class Identity(VaultApiBase):
         policies: Optional[str] = None,
         disabled: Optional[bool] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Update an existing entity.
 
@@ -155,7 +154,7 @@ class Identity(VaultApiBase):
         :param disabled: Whether the entity is disabled. Disabled entities' associated tokens cannot be used, but
             are not revoked.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response where available, otherwise the generic response object, of the request.
+        :return: The VaultxResponse where available, otherwise the generic response object, of the request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -176,7 +175,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def delete_entity(self, entity_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_entity(self, entity_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an entity and all its associated aliases.
 
@@ -192,9 +191,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def delete_entity_by_name(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def delete_entity_by_name(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an entity and all its associated aliases, given the entity name.
 
@@ -210,9 +207,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def list_entities(
-        self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def list_entities(self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List available entities by their identifiers.
 
@@ -220,7 +215,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/entity/id. Produces: 200 application/json
             GET: /{mount_point}/entity/id?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if method == "LIST":
             api_path = f"/v1/{mount_point}/entity/id"
@@ -237,9 +232,7 @@ class Identity(VaultApiBase):
             raise VaultxError(f'"method" parameter provided invalid value; LIST or GET allowed, "{method}" provided')
         return response
 
-    def list_entities_by_name(
-        self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def list_entities_by_name(self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List available entities by their names.
 
@@ -247,7 +240,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/entity/name. Produces: 200 application/json
             GET: /{mount_point}/entity/name?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if method == "LIST":
             api_path = f"/v1/{mount_point}/entity/name"
@@ -271,7 +264,7 @@ class Identity(VaultApiBase):
         force: Optional[bool] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         conflicting_alias_ids_to_keep: Optional[list[str]] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Merge many entities into one entity.
 
@@ -313,7 +306,7 @@ class Identity(VaultApiBase):
         mount_accessor: str,
         alias_id: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create a new alias for an entity.
 
@@ -327,7 +320,7 @@ class Identity(VaultApiBase):
         :param canonical_id: Entity ID to which this alias belongs to.
         :param mount_accessor: Accessor of the mount to which the alias should belong to.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = utils.remove_nones(
             {
@@ -343,9 +336,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_entity_alias(
-        self, alias_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def read_entity_alias(self, alias_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query the entity alias by its identifier.
 
@@ -354,7 +345,7 @@ class Identity(VaultApiBase):
 
         :param alias_id: Identifier of entity alias.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/entity-alias/id/{alias_id}"
         return self._adapter.get(
@@ -368,7 +359,7 @@ class Identity(VaultApiBase):
         canonical_id: str,
         mount_accessor: str,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Update an existing entity alias.
 
@@ -382,7 +373,7 @@ class Identity(VaultApiBase):
         :param canonical_id: Entity ID to which this alias belongs to.
         :param mount_accessor: Accessor of the mount to which the alias should belong to.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response where available, otherwise the generic response object, of the request.
+        :return: The VaultxResponse where available, otherwise the generic response object, of the request.
         """
         params = utils.remove_nones(
             {
@@ -397,9 +388,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def list_entity_aliases(
-        self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def list_entity_aliases(self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List available entity aliases by their identifiers.
 
@@ -407,7 +396,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/entity-alias/id. Produces: 200 application/json
             GET: /{mount_point}/entity-alias/id?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         if method == "LIST":
@@ -425,9 +414,7 @@ class Identity(VaultApiBase):
             raise VaultxError(f'"method" parameter provided invalid value; LIST or GET allowed, "{method}" provided')
         return response
 
-    def delete_entity_alias(
-        self, alias_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def delete_entity_alias(self, alias_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete an entity alias.
 
@@ -488,7 +475,7 @@ class Identity(VaultApiBase):
         member_group_ids: Optional[str] = None,
         member_entity_ids: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a Group.
 
@@ -503,7 +490,7 @@ class Identity(VaultApiBase):
         :param member_group_ids:  Group IDs to be assigned as group members.
         :param member_entity_ids: Entity IDs to be assigned as  group members.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response where available, otherwise the generic response object, of the request.
+        :return: The VaultxResponse where available, otherwise the generic response object, of the request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -536,7 +523,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_group(self, group_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_group(self, group_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query the group by its identifier.
 
@@ -545,7 +532,7 @@ class Identity(VaultApiBase):
 
         :param group_id: Identifier of the group.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/group/id/{group_id}"
         return self._adapter.get(
@@ -562,7 +549,7 @@ class Identity(VaultApiBase):
         member_group_ids: Optional[str] = None,
         member_entity_ids: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Update an existing group.
 
@@ -577,7 +564,7 @@ class Identity(VaultApiBase):
         :param member_group_ids:  Group IDs to be assigned as group members.
         :param member_entity_ids: Entity IDs to be assigned as group members.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response where available, otherwise the generic response object, of the request.
+        :return: The VaultxResponse where available, otherwise the generic response object, of the request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -609,7 +596,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def delete_group(self, group_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_group(self, group_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete a group.
 
@@ -625,9 +612,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def list_groups(
-        self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def list_groups(self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List available groups by their identifiers.
 
@@ -635,7 +620,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/group/id. Produces: 200 application/json
             GET: /{mount_point}/group/id?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         if method == "LIST":
@@ -654,9 +639,7 @@ class Identity(VaultApiBase):
 
         return response
 
-    def list_groups_by_name(
-        self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def list_groups_by_name(self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List available groups by their names.
 
@@ -664,7 +647,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/group/name. Produces: 200 application/json
             GET: /{mount_point}/group/name?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         if method == "LIST":
@@ -692,7 +675,7 @@ class Identity(VaultApiBase):
         member_group_ids: Optional[str] = None,
         member_entity_ids: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a group by its name.
 
@@ -738,7 +721,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_group_by_name(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_group_by_name(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query a group by its name.
 
@@ -747,16 +730,14 @@ class Identity(VaultApiBase):
 
         :param name: Name of the group.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/group/name/{name}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def delete_group_by_name(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def delete_group_by_name(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete a group, given its name.
 
@@ -779,7 +760,7 @@ class Identity(VaultApiBase):
         mount_accessor: Optional[str] = None,
         canonical_id: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a group alias.
 
@@ -791,7 +772,7 @@ class Identity(VaultApiBase):
         :param mount_accessor: Mount accessor to which this alias belongs to
         :param canonical_id: ID of the group to which this is an alias.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = utils.remove_nones(
             {
@@ -814,7 +795,7 @@ class Identity(VaultApiBase):
         mount_accessor: Optional[str] = None,
         canonical_id: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Update an existing group alias.
 
@@ -842,9 +823,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_group_alias(
-        self, alias_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def read_group_alias(self, alias_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query the group alias by its identifier.
 
@@ -853,16 +832,14 @@ class Identity(VaultApiBase):
 
         :param alias_id: ID of the group alias.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/group-alias/id/{alias_id}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def delete_group_alias(
-        self, entity_id: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def delete_group_alias(self, entity_id: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete a group alias.
 
@@ -878,9 +855,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def list_group_aliases(
-        self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def list_group_aliases(self, method: str = "LIST", mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List available group aliases by their identifiers.
 
@@ -888,7 +863,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/group-alias/id. Produces: 200 application/json
             GET: /{mount_point}/group-alias/id?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The "data" key from the JSON response of the request.
+        :return: The "data" key from the VaultxResponse of the request.
         """
 
         if method == "LIST":
@@ -913,7 +888,7 @@ class Identity(VaultApiBase):
         alias_name: Optional[str] = None,
         alias_mount_accessor: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Query an entity based on the given criteria.
 
@@ -929,7 +904,7 @@ class Identity(VaultApiBase):
         :param alias_mount_accessor: Accessor of the mount to which the alias belongs to.
             This should be supplied in conjunction with alias_name.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request if a entity / entity alias is found in the lookup, None otherwise.
+        :return: The VaultxResponse of the request if an entity / entity alias is found in the lookup, None otherwise.
         """
         params = {}
         if name is not None:
@@ -955,7 +930,7 @@ class Identity(VaultApiBase):
         alias_name: Optional[str] = None,
         alias_mount_accessor: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Query a group based on the given criteria.
         The criteria can be a name, id, alias_id, or a combination of alias_name and alias_mount_accessor.
@@ -970,7 +945,7 @@ class Identity(VaultApiBase):
         :param alias_mount_accessor: Accessor of the mount to which the alias belongs to.
             This should be supplied in conjunction with alias_name.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request if a group / group alias is found in the lookup, None otherwise.
+        :return: The VaultxResponse of the request if a group / group alias is found in the lookup, None otherwise.
         """
         params = {}
         if name is not None:
@@ -990,7 +965,7 @@ class Identity(VaultApiBase):
 
     def configure_tokens_backend(
         self, issuer: Optional[str] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Update configurations for OIDC-compliant identity tokens issued by Vault.
 
@@ -1016,9 +991,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_tokens_backend_configuration(
-        self, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def read_tokens_backend_configuration(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query vault identity tokens configurations.
 
@@ -1040,7 +1013,7 @@ class Identity(VaultApiBase):
         allowed_client_ids: Optional[list[str]] = None,
         algorithm: str = "RS256",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a named key which is used by a role to sign tokens.
 
@@ -1073,7 +1046,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_named_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_named_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query a named key and returns its configurations.
 
@@ -1089,7 +1062,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def delete_named_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_named_key(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete a named key.
 
@@ -1105,7 +1078,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def list_named_keys(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_named_keys(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List all named keys.
 
@@ -1122,7 +1095,7 @@ class Identity(VaultApiBase):
 
     def rotate_named_key(
         self, name: str, verification_ttl: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Rotate a named key.
 
@@ -1153,7 +1126,7 @@ class Identity(VaultApiBase):
         client_id: Optional[str] = None,
         ttl: str = "24h",
         mount_point: str = DEFAULT_MOUNT_POINT,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create or update a role.
         ID tokens are generated against a role and signed against a named key.
@@ -1185,7 +1158,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Query a role and returns its configuration.
 
@@ -1201,7 +1174,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_role(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete a role.
 
@@ -1218,7 +1191,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_roles(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         This endpoint will list all signing keys.
 
@@ -1234,9 +1207,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def generate_signed_id_token(
-        self, name: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    def generate_signed_id_token(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Generate a signed ID (OIDC) token.
 
@@ -1254,7 +1225,7 @@ class Identity(VaultApiBase):
 
     def introspect_signed_id_token(
         self, token: str, client_id: Optional[str] = None, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Verify the authenticity and active state of a signed ID token.
 
@@ -1279,7 +1250,7 @@ class Identity(VaultApiBase):
             json=params,
         )
 
-    def read_well_known_configurations(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_well_known_configurations(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Retrieve a set of claims about the identity tokens' configuration.
         The response is a compliant OpenID Provider Configuration Response.
@@ -1295,7 +1266,7 @@ class Identity(VaultApiBase):
             url=api_path,
         )
 
-    def read_active_public_keys(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_active_public_keys(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Retrieve the public portion of named keys.
         Clients can use this to validate the authenticity of an identity token.

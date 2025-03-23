@@ -46,8 +46,7 @@ class TestSsh(unittest.TestCase):
             allowed_user_key_lengths={"rsa": 2048},
             algorithm_signer="rsa-sha2-256",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ssh/roles/test-role",
             json={
@@ -86,8 +85,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ssh.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ssh/roles/test-role",
         )
@@ -97,8 +95,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = self.ssh.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/ssh/roles",
         )
@@ -108,8 +105,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.ssh.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ssh/roles/test-role",
         )
@@ -119,8 +115,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ssh.list_zeroaddress_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ssh/config/zeroaddress",
         )
@@ -130,8 +125,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.ssh.configure_zeroaddress_roles(roles="role1,role2")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Zero-address roles configured"}})
+        self.assertEqual(result.json(), {"data": {"message": "Zero-address roles configured"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ssh/config/zeroaddress",
             json={"roles": "role1,role2"},
@@ -142,8 +136,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.ssh.delete_zeroaddress_role()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ssh/config/zeroaddress",
         )
@@ -153,8 +146,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.ssh.generate_ssh_credentials(name="test-role", username="test-user", ip="192.168.1.1")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"username": "test-user", "ip": "192.168.1.1"}})
+        self.assertEqual(result.json(), {"data": {"username": "test-user", "ip": "192.168.1.1"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ssh/creds/test-role",
             json={"username": "test-user", "ip": "192.168.1.1"},
@@ -165,8 +157,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.ssh.list_roles_by_ip(ip="192.168.1.1")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ssh/lookup",
             json={"ip": "192.168.1.1"},
@@ -177,8 +168,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = self.ssh.verify_ssh_otp(otp="123456")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"valid": True}})
+        self.assertEqual(result.json(), {"data": {"valid": True}})
         self.mock_adapter.post.assert_called_once_with(
             url="v1/ssh/verify",
             json={"otp": "123456"},
@@ -195,8 +185,7 @@ class TestSsh(unittest.TestCase):
             key_type="ssh-rsa",
             key_bits=2048,
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "CA information submitted"}})
+        self.assertEqual(result.json(), {"data": {"message": "CA information submitted"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ssh/config/ca",
             json={
@@ -213,8 +202,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = self.ssh.delete_ca_information()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ssh/config/ca",
         )
@@ -224,8 +212,7 @@ class TestSsh(unittest.TestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = self.ssh.read_public_key()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"public_key": "-----BEGIN PUBLIC KEY-----"}})
+        self.assertEqual(result.json(), {"data": {"public_key": "-----BEGIN PUBLIC KEY-----"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ssh/config/ca",
         )
@@ -244,8 +231,7 @@ class TestSsh(unittest.TestCase):
             critical_options={"option1": "value1"},
             extensions={"ext1": "value1"},
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
+        self.assertEqual(result.json(), {"data": {"certificate": "-----BEGIN CERTIFICATE-----"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ssh/sign/test-role",
             json={
@@ -299,8 +285,7 @@ class TestAsyncSsh(unittest.IsolatedAsyncioTestCase):
             allowed_user_key_lengths={"rsa": 2048},
             algorithm_signer="rsa-sha2-256",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ssh/roles/test-role",
             json={
@@ -339,8 +324,7 @@ class TestAsyncSsh(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.ssh.read_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"name": "test-role"}})
+        self.assertEqual(result.json(), {"data": {"name": "test-role"}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ssh/roles/test-role",
         )
@@ -350,8 +334,7 @@ class TestAsyncSsh(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.list.return_value = mock_response
 
         result = await self.ssh.list_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"keys": ["role1", "role2"]}})
         self.mock_adapter.list.assert_called_once_with(
             url="/v1/ssh/roles",
         )
@@ -361,8 +344,7 @@ class TestAsyncSsh(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.ssh.delete_role(name="test-role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ssh/roles/test-role",
         )
@@ -372,8 +354,7 @@ class TestAsyncSsh(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.get.return_value = mock_response
 
         result = await self.ssh.list_zeroaddress_roles()
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
+        self.assertEqual(result.json(), {"data": {"roles": ["role1", "role2"]}})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/ssh/config/zeroaddress",
         )
@@ -383,8 +364,7 @@ class TestAsyncSsh(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.post.return_value = mock_response
 
         result = await self.ssh.configure_zeroaddress_roles(roles="role1,role2")
-        if isinstance(result, Response):
-            self.assertEqual(result.json(), {"data": {"message": "Zero-address roles configured"}})
+        self.assertEqual(result.json(), {"data": {"message": "Zero-address roles configured"}})
         self.mock_adapter.post.assert_called_once_with(
             url="/v1/ssh/config/zeroaddress",
             json={"roles": "role1,role2"},
@@ -395,8 +375,7 @@ class TestAsyncSsh(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.delete.return_value = mock_response
 
         result = await self.ssh.delete_zeroaddress_role()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once_with(
             url="/v1/ssh/config/zeroaddress",
         )

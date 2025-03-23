@@ -10,7 +10,7 @@ class Leader(VaultApiBase):
         Supported methods:
             GET: /sys/leader. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/leader"
         return self._adapter.get(
@@ -27,7 +27,7 @@ class Leader(VaultApiBase):
         the interim, the same node may become the active node again. Requires a
         token with root policy or sudo capability on the path.
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/step-down"
         return self._adapter.put(

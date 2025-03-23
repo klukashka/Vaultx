@@ -13,7 +13,7 @@ class Init(VaultApiBase):
         Supported methods:
             GET: /sys/init. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/init"
         return self._adapter.get(
@@ -67,7 +67,7 @@ class Init(VaultApiBase):
         :param recovery_pgp_keys: <enterprise only> Specifies an array of PGP public keys used to encrypt the output
             recovery keys. Ordering is preserved. The keys must be base64-encoded from their original binary
             representation. The size of this array must be the same as recovery_shares.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         params: dict = {

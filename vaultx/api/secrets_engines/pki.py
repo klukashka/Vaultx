@@ -59,7 +59,7 @@ class Pki(VaultApiBase):
 
         :param serial: the serial of the key to read.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/cert/{serial}"
         return self._adapter.get(
@@ -75,7 +75,7 @@ class Pki(VaultApiBase):
             LIST: /{mount_point}/certs. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/certs"
         return self._adapter.list(
@@ -92,7 +92,7 @@ class Pki(VaultApiBase):
 
         :param pem_bundle: Specifies the unencrypted private key and certificate, concatenated in PEM format.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "pem_bundle": pem_bundle,
@@ -112,7 +112,7 @@ class Pki(VaultApiBase):
             GET: /{mount_point}/config/crl. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/crl"
         return self._adapter.get(
@@ -140,7 +140,7 @@ class Pki(VaultApiBase):
         :param disable: Disables or enables CRL building.
         :param extra_params: Other extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -169,7 +169,7 @@ class Pki(VaultApiBase):
             GET: /{mount_point}/config/urls. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/urls"
         return self._adapter.get(
@@ -189,7 +189,7 @@ class Pki(VaultApiBase):
 
         :param params: The parameters to insert as json.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/urls"
         return self._adapter.post(
@@ -225,7 +225,7 @@ class Pki(VaultApiBase):
             GET: /{mount_point}/crl/rotate. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/crl/rotate"
         return self._adapter.get(
@@ -252,7 +252,7 @@ class Pki(VaultApiBase):
         :param extra_params: Dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
         :param wrap_ttl: Specifies response wrapping token creation with duration. IE: '15s', '20m', '25h'.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -306,7 +306,7 @@ class Pki(VaultApiBase):
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
         :param wrap_ttl: Specifies response wrapping token creation with duration. IE: '15s', '20m', '25h'.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -353,7 +353,7 @@ class Pki(VaultApiBase):
         :param name: The name of the role to create.
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -377,7 +377,7 @@ class Pki(VaultApiBase):
 
         :param name: The name of the role to read.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         return self._adapter.get(
@@ -393,7 +393,7 @@ class Pki(VaultApiBase):
             LIST: /{mount_point}/roles. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles"
         return self._adapter.list(
@@ -410,7 +410,7 @@ class Pki(VaultApiBase):
 
         :param name: The name of the role to delete.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
 
@@ -438,7 +438,7 @@ class Pki(VaultApiBase):
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
         :param wrap_ttl: Specifies response wrapping token creation with duration. IE: '15s', '20m', '25h'.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -462,7 +462,7 @@ class Pki(VaultApiBase):
             DELETE: /{mount_point}/root. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/root"
 
@@ -484,7 +484,7 @@ class Pki(VaultApiBase):
         :param common_name: The requested CN for the certificate.
         :param extra_params: Dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -509,7 +509,7 @@ class Pki(VaultApiBase):
 
         :param certificate: The PEM-encoded self-issued certificate.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/root/sign-self-issued"
 
@@ -541,7 +541,7 @@ class Pki(VaultApiBase):
             If the CN is allowed by role policy, it will be issued.
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -574,7 +574,7 @@ class Pki(VaultApiBase):
         :param name: Specifies a role.
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -601,7 +601,7 @@ class Pki(VaultApiBase):
 
         :param extra_params: A dictionary with extra parameters.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if extra_params is None:
             extra_params = {}
@@ -623,7 +623,7 @@ class Pki(VaultApiBase):
 
         :param mount_point: The "path" the method/backend was mounted on.
         :param issuer_ref: The reference ID of the issuer to get
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/issuer/{issuer_ref}"
 
@@ -640,7 +640,7 @@ class Pki(VaultApiBase):
             LIST: /{mount_point}/issuers. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/issuers"
 
@@ -661,7 +661,7 @@ class Pki(VaultApiBase):
         :param mount_point: The "path" the method/backend was mounted on.
         :param issuer_ref: The reference ID of the issuer to update
         :param extra_params: Dictionary with extra parameters.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = extra_params
 
@@ -679,7 +679,7 @@ class Pki(VaultApiBase):
 
         :param mount_point: The "path" the method/backend was mounted on.
         :param issuer_ref: The reference ID of the issuer to revoke
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/issuer/{issuer_ref}/revoke"
 
@@ -697,7 +697,7 @@ class Pki(VaultApiBase):
 
         :param mount_point: The "path" the method/backend was mounted on.
         :param issuer_ref: The reference ID of the issuer to delete
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/issuer/{issuer_ref}"
 

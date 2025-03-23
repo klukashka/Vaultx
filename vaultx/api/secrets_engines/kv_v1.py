@@ -24,7 +24,7 @@ class KvV1(VaultApiBase):
 
         :param path: Specifies the path of the secret to read. This is specified as part of the URL.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the read_secret request.
+        :return: The VaultxResponse of the read_secret request.
         """
         api_path = f"/v1/{mount_point}/{path}"
         return self._adapter.get(
@@ -45,7 +45,7 @@ class KvV1(VaultApiBase):
         :param path: Specifies the path of the secrets to list.
             This is specified as part of the URL.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the list_secrets request.
+        :return: The VaultxResponse of the list_secrets request.
         """
         api_path = f"/v1/{mount_point}/{path}"
         return self._adapter.list(

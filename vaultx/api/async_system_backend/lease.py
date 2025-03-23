@@ -13,7 +13,7 @@ class Lease(AsyncVaultApiBase):
             PUT: /sys/leases/lookup. Produces: 200 application/json
 
         :param lease_id: the ID of the lease to lookup.
-        :return: Parsed JSON response from the leases PUT request
+        :return: Parsed VaultxResponse from the leases PUT request
         """
         params = {"lease_id": lease_id}
         api_path = "/v1/sys/leases/lookup"
@@ -27,7 +27,7 @@ class Lease(AsyncVaultApiBase):
             LIST: /sys/leases/lookup/{prefix}. Produces: 200 application/json
 
         :param prefix: Lease prefix to filter list by.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/sys/leases/lookup/{prefix}"
         return await self._adapter.list(
@@ -42,7 +42,7 @@ class Lease(AsyncVaultApiBase):
 
         :param lease_id: The ID of the lease to extend.
         :param increment: The requested amount of time (in seconds) to extend the lease.
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "lease_id": lease_id,

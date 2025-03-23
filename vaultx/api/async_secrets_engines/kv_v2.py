@@ -60,7 +60,7 @@ class KvV2(AsyncVaultApiBase):
 
 
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config"
         return await self._adapter.get(url=api_path)
@@ -82,7 +82,7 @@ class KvV2(AsyncVaultApiBase):
         :param raise_on_deleted_version: Changes the behavior when the requested version is deleted.
             If True an exception will be raised.
             If False, nothing is returned.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         return await self.read_secret_version(
             path=path,
@@ -111,7 +111,7 @@ class KvV2(AsyncVaultApiBase):
         :param raise_on_deleted_version: Changes the behavior when the requested version is deleted.
             If True an exception will be raised.
             If False, nothing is returned.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         params = {}
@@ -148,7 +148,7 @@ class KvV2(AsyncVaultApiBase):
             specified in the cas parameter.
         :param secret: The contents of the "secret" dict will be stored and returned on read.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {"options": {}, "data": secret}
 
@@ -168,7 +168,7 @@ class KvV2(AsyncVaultApiBase):
         :param path: Path
         :param secret: The contents of the "secret" dict will be stored and returned on read.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the create_or_update_secret request.
+        :return: The VaultxResponse of the create_or_update_secret request.
         """
         # First, do a read.
         try:
@@ -316,7 +316,7 @@ class KvV2(AsyncVaultApiBase):
 
         :param path: Specifies the path of the secrets to list. This is specified as part of the URL.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/metadata/{path}"
         return await self._adapter.list(
@@ -332,7 +332,7 @@ class KvV2(AsyncVaultApiBase):
 
         :param path: Specifies the path of the secret to read. This is specified as part of the URL.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/metadata/{path}"
         return await self._adapter.get(

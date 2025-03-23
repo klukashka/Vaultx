@@ -13,7 +13,7 @@ class Key(VaultApiBase):
         Supported methods:
             GET: /sys/generate-root/attempt. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/generate-root/attempt"
         return self._adapter.get(
@@ -33,7 +33,7 @@ class Key(VaultApiBase):
             before being returned to the final unseal key provider.
         :param pgp_key: Specifies a base64-encoded PGP public key. The raw bytes of the token will be encrypted with
             this value before being returned to the final unseal key provider.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {}
         if otp is not None and pgp_key is not None:
@@ -58,7 +58,7 @@ class Key(VaultApiBase):
 
         :param key: Specifies a single master key share.
         :param nonce: The nonce of the attempt.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "key": key,
@@ -92,7 +92,7 @@ class Key(VaultApiBase):
         Supported methods:
             GET: /sys/key-status. Produces: 200 application/json
 
-        :return: JSON response with information regarding the current encryption key used by Vault.
+        :return: VaultxResponse with information regarding the current encryption key used by Vault.
         """
         api_path = "/v1/sys/key-status"
         return self._adapter.get(
@@ -127,7 +127,7 @@ class Key(VaultApiBase):
             GET: /sys/rekey/init. Produces: 200 application/json
 
         :param recovery_key: If true, send requests to "rekey-recovery-key" instead of "rekey" api path.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/rekey/init"
         if recovery_key:
@@ -231,7 +231,7 @@ class Key(VaultApiBase):
         :param key: Specifies a single recovery share key.
         :param nonce: Specifies the nonce of the rekey operation.
         :param recovery_key: If true, send requests to "rekey-recovery-key" instead of "rekey" api path.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "key": key,
@@ -284,7 +284,7 @@ class Key(VaultApiBase):
             PUT: /sys/rekey-recovery-key/backup. Produces: 200 application/json
 
         :param recovery_key: If true, send requests to "rekey-recovery-key" instead of "rekey" api path.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/rekey/backup"
         if recovery_key:
@@ -322,7 +322,7 @@ class Key(VaultApiBase):
 
         :param key: Specifies multiple recovery share keys.
         :param nonce: Specifies the nonce of the rekey verify operation.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "key": key,
@@ -347,7 +347,7 @@ class Key(VaultApiBase):
 
         :param keys: Specifies multiple recovery share keys.
         :param nonce: Specifies the nonce of the rekey verify operation.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         result = None
 
@@ -368,7 +368,7 @@ class Key(VaultApiBase):
         Supported methods:
             GET: /sys/rekey/verify. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/rekey/verify"
         return self._adapter.get(

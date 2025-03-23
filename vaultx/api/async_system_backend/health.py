@@ -39,7 +39,7 @@ class Health(AsyncVaultApiBase):
         :param method: Supported methods:
             HEAD: /sys/health. Produces: 000 (empty body)
             GET: /sys/health. Produces: 000 application/json
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         :rtype: requests.Response
         """
         params = utils.remove_nones(

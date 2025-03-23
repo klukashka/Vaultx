@@ -78,7 +78,7 @@ class Azure(AsyncVaultApiBase):
             GET: /{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config"
         response = await self._adapter.get(
@@ -156,7 +156,7 @@ class Azure(AsyncVaultApiBase):
             LIST: /{mount_point}/roles. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles"
         response = await self._adapter.list(
@@ -174,7 +174,7 @@ class Azure(AsyncVaultApiBase):
 
         :param name: Specifies the name of the role to create credentials against.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         :rtype: dict
         """
         api_path = f"/v1/{mount_point}/creds/{name}"

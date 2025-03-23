@@ -13,7 +13,7 @@ class Mount(AsyncVaultApiBase):
         Supported methods:
             POST: /sys/mounts. Produces: 200 application/json
 
-        :return: JSON response of the request.
+        :return: VaultxResponse of the request.
         """
         return await self._adapter.get("/v1/sys/mounts")
 
@@ -135,7 +135,7 @@ class Mount(AsyncVaultApiBase):
             GET: /sys/mounts/{path}/tune. Produces: 200 application/json
 
         :param path: Specifies the path where the secrets engine will be mounted. This is specified as part of the URL.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/sys/mounts/{path}/tune"
         return await self._adapter.get(

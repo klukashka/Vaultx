@@ -93,7 +93,7 @@ class Aws(VaultApiBase):
         Supported methods:
             POST: /{mount_point}/config/rotate-root. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/rotate-root"
         return self._adapter.post(
@@ -133,7 +133,7 @@ class Aws(VaultApiBase):
             GET: /{mount_point}/config/lease. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/lease"
         return self._adapter.get(
@@ -224,7 +224,7 @@ class Aws(VaultApiBase):
 
         :param name: Specifies the name of the role to read. This is part of the request URL.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         return self._adapter.get(
@@ -239,7 +239,7 @@ class Aws(VaultApiBase):
             LIST: /{mount_point}/roles. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles"
         return self._adapter.list(
@@ -305,7 +305,7 @@ class Aws(VaultApiBase):
             in the assumed role ARN will be truncated to 64 characters. If ``role_session_name`` is not provided,
             then it will be generated dynamically by async default.
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if endpoint not in ALLOWED_CREDS_ENDPOINTS:
             raise VaultxError(

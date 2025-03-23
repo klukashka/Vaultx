@@ -66,7 +66,7 @@ class Gcp(VaultApiBase):
             GET: /auth/{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/config"
         response = self._adapter.get(
@@ -151,7 +151,7 @@ class Gcp(VaultApiBase):
             authorized GCE instances. Because GCP labels are not currently ACL'd, we recommend that this be used in
             conjunction with other restrictions.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         type_specific_params = {
             "iam": {
@@ -309,7 +309,7 @@ class Gcp(VaultApiBase):
 
         :param name: The name of the role to read.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the read_role request.
+        :return: The data key from the VaultxResponse of the read_role request.
         """
         params = {
             "name": name,
@@ -329,7 +329,7 @@ class Gcp(VaultApiBase):
             LIST: /auth/{mount_point}/roles. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/roles"
         response = self._adapter.list(
@@ -374,7 +374,7 @@ class Gcp(VaultApiBase):
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
             attribute on the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse response of the request.
         """
         params = {
             "role": role,

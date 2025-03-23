@@ -52,7 +52,7 @@ class RabbitMQ(AsyncVaultApiBase):
         :param ttl: Specifies the lease ttl provided in seconds.
         :param max_ttl: Specifies the maximum ttl provided in seconds.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: rabbitmq).
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/lease"
         params = {
@@ -80,7 +80,7 @@ class RabbitMQ(AsyncVaultApiBase):
         :param vhosts: Specifies a map of virtual hosts to permissions.
         :param vhost_topics: Specifies a map of virtual hosts and exchanges to topic permissions.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: rabbitmq).
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         params = {"tags": tags, "vhosts": vhosts, "vhost_topics": vhost_topics}
@@ -95,7 +95,7 @@ class RabbitMQ(AsyncVaultApiBase):
 
         :param name:  Specifies the name of the role to read.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: rabbitmq).
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         return await self._adapter.get(

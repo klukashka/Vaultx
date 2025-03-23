@@ -19,7 +19,7 @@ class Capabilities(AsyncVaultApiBase):
         :param paths: Paths on which capabilities are being queried.
         :param token: Token for which capabilities are being queried.
         :param accessor: Accessor of the token for which capabilities are being queried.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params: dict = {
             "paths": paths,

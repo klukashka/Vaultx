@@ -190,7 +190,7 @@ class Kubernetes(AsyncVaultApiBase):
 
         :param name: Name of the role.
         :param mount_point: The "path" the kubernetes auth method was mounted on.
-        :return: The "data" key from the JSON response of the request.
+        :return: The "data" key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/role/{name}"
         response = await self._adapter.get(
@@ -206,7 +206,7 @@ class Kubernetes(AsyncVaultApiBase):
             LIST: /auth/{mount_point}/role. Produces: 200 application/json
 
         :param mount_point: The "path" the kubernetes auth method was mounted on.
-        :return: The "data" key from the JSON response of the request.
+        :return: The "data" key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/role"
         response = await self._adapter.list(
@@ -247,7 +247,7 @@ class Kubernetes(AsyncVaultApiBase):
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
             attribute on the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
         :param mount_point: The "path" the kubernetes auth method was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "role": role,

@@ -70,7 +70,7 @@ class Gcp(VaultApiBase):
             POST: /{mount_point}/config/rotate-root. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/rotate-root"
         return self._adapter.post(
@@ -87,7 +87,7 @@ class Gcp(VaultApiBase):
             GET: /{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config"
         return self._adapter.get(
@@ -197,7 +197,7 @@ class Gcp(VaultApiBase):
 
         :param name: Name of the role.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roleset/{name}"
         return self._adapter.get(
@@ -212,7 +212,7 @@ class Gcp(VaultApiBase):
             LIST: /{mount_point}/rolesets. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/rolesets"
         return self._adapter.list(
@@ -246,7 +246,7 @@ class Gcp(VaultApiBase):
 
         :param roleset: Name of a roleset with secret type access_token to generate access_token under.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/token/{roleset}"
         return self._adapter.get(
@@ -275,7 +275,7 @@ class Gcp(VaultApiBase):
             POST: /{mount_point}/key/{roleset}. Produces: 200 application/json
             GET: /{mount_point}/key/{roleset}. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/key/{roleset}"
         return self._generate_service_account_key(api_path, key_algorithm, key_type, method)
@@ -363,7 +363,7 @@ class Gcp(VaultApiBase):
 
         :param name: Name of the static account.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/static-account/{name}"
         return self._adapter.get(
@@ -378,7 +378,7 @@ class Gcp(VaultApiBase):
             LIST: /{mount_point}/static-accounts. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/static-accounts"
         return self._adapter.list(
@@ -414,7 +414,7 @@ class Gcp(VaultApiBase):
 
         :param name: Name of a static account with secret type access_token to generate access_token under.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/static-account/{name}/token"
         return self._adapter.get(
@@ -443,7 +443,7 @@ class Gcp(VaultApiBase):
             POST: /v1/{mount_point}/static-account/{name}/key. Produces: 200 application/json
             GET: /v1/{mount_point}/static-account/{name}/key. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         api_path = f"/v1/{mount_point}/static-account/{name}/key"
@@ -500,7 +500,7 @@ class Gcp(VaultApiBase):
 
         :param name: Name of the impersonated account.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/impersonated-account/{name}"
         return self._adapter.get(
@@ -515,7 +515,7 @@ class Gcp(VaultApiBase):
             LIST: /{mount_point}/impersonated-accounts. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/impersonated-accounts"
         return self._adapter.list(
@@ -551,7 +551,7 @@ class Gcp(VaultApiBase):
 
         :param name: Name of the impersonated account to generate an access token under.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/impersonated-account/{name}/token"
         return self._adapter.get(

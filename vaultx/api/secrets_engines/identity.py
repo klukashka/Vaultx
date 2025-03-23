@@ -40,7 +40,7 @@ class Identity(VaultApiBase):
         :param disabled: Whether the entity is disabled. Disabled entities' associated tokens cannot be used, but are
             not revoked.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response for creates, the generic response object for updates, of the request.
+        :return: The VaultxResponse for creates, the generic response object for updates, of the request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -82,7 +82,7 @@ class Identity(VaultApiBase):
         :param disabled: Whether the entity is disabled. Disabled
             entities' associated tokens cannot be used, but are not revoked.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response for creates, the generic response of the request for updates.
+        :return: The VaultxResponse for creates, the generic response of the request for updates.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -111,7 +111,7 @@ class Identity(VaultApiBase):
 
         :param entity_id: Identifier of the entity.
         :param mount_point: The "path" the secret engine was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/entity/id/{entity_id}"
         return self._adapter.get(url=api_path)
@@ -125,7 +125,7 @@ class Identity(VaultApiBase):
 
         :param name: Name of the entity.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/entity/name/{name}"
         return self._adapter.get(
@@ -154,7 +154,7 @@ class Identity(VaultApiBase):
         :param disabled: Whether the entity is disabled. Disabled entities' associated tokens cannot be used, but
             are not revoked.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response where available, otherwise the generic response object, of the request.
+        :return: The VaultxResponse where available, otherwise the generic response object, of the request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -215,7 +215,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/entity/id. Produces: 200 application/json
             GET: /{mount_point}/entity/id?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if method == "LIST":
             api_path = f"/v1/{mount_point}/entity/id"
@@ -240,7 +240,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/entity/name. Produces: 200 application/json
             GET: /{mount_point}/entity/name?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if method == "LIST":
             api_path = f"/v1/{mount_point}/entity/name"
@@ -320,7 +320,7 @@ class Identity(VaultApiBase):
         :param canonical_id: Entity ID to which this alias belongs to.
         :param mount_accessor: Accessor of the mount to which the alias should belong to.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = utils.remove_nones(
             {
@@ -345,7 +345,7 @@ class Identity(VaultApiBase):
 
         :param alias_id: Identifier of entity alias.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/entity-alias/id/{alias_id}"
         return self._adapter.get(
@@ -373,7 +373,7 @@ class Identity(VaultApiBase):
         :param canonical_id: Entity ID to which this alias belongs to.
         :param mount_accessor: Accessor of the mount to which the alias should belong to.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response where available, otherwise the generic response object, of the request.
+        :return: The VaultxResponse where available, otherwise the generic response object, of the request.
         """
         params = utils.remove_nones(
             {
@@ -396,7 +396,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/entity-alias/id. Produces: 200 application/json
             GET: /{mount_point}/entity-alias/id?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         if method == "LIST":
@@ -490,7 +490,7 @@ class Identity(VaultApiBase):
         :param member_group_ids:  Group IDs to be assigned as group members.
         :param member_entity_ids: Entity IDs to be assigned as  group members.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response where available, otherwise the generic response object, of the request.
+        :return: The VaultxResponse where available, otherwise the generic response object, of the request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -532,7 +532,7 @@ class Identity(VaultApiBase):
 
         :param group_id: Identifier of the group.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/group/id/{group_id}"
         return self._adapter.get(
@@ -564,7 +564,7 @@ class Identity(VaultApiBase):
         :param member_group_ids:  Group IDs to be assigned as group members.
         :param member_entity_ids: Entity IDs to be assigned as group members.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response where available, otherwise the generic response object, of the request.
+        :return: The VaultxResponse where available, otherwise the generic response object, of the request.
         """
         if metadata is not None and not isinstance(metadata, dict):
             raise VaultxError(
@@ -620,7 +620,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/group/id. Produces: 200 application/json
             GET: /{mount_point}/group/id?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         if method == "LIST":
@@ -647,7 +647,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/group/name. Produces: 200 application/json
             GET: /{mount_point}/group/name?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         if method == "LIST":
@@ -730,7 +730,7 @@ class Identity(VaultApiBase):
 
         :param name: Name of the group.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/group/name/{name}"
         return self._adapter.get(
@@ -772,7 +772,7 @@ class Identity(VaultApiBase):
         :param mount_accessor: Mount accessor to which this alias belongs to
         :param canonical_id: ID of the group to which this is an alias.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = utils.remove_nones(
             {
@@ -832,7 +832,7 @@ class Identity(VaultApiBase):
 
         :param alias_id: ID of the group alias.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/group-alias/id/{alias_id}"
         return self._adapter.get(
@@ -863,7 +863,7 @@ class Identity(VaultApiBase):
             LIST: /{mount_point}/group-alias/id. Produces: 200 application/json
             GET: /{mount_point}/group-alias/id?list=true. Produces: 200 application/json
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The "data" key from the JSON response of the request.
+        :return: The "data" key from the VaultxResponse of the request.
         """
 
         if method == "LIST":
@@ -904,7 +904,7 @@ class Identity(VaultApiBase):
         :param alias_mount_accessor: Accessor of the mount to which the alias belongs to.
             This should be supplied in conjunction with alias_name.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request if a entity / entity alias is found in the lookup, None otherwise.
+        :return: The VaultxResponse of the request if an entity / entity alias is found in the lookup, None otherwise.
         """
         params = {}
         if name is not None:
@@ -945,7 +945,7 @@ class Identity(VaultApiBase):
         :param alias_mount_accessor: Accessor of the mount to which the alias belongs to.
             This should be supplied in conjunction with alias_name.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request if a group / group alias is found in the lookup, None otherwise.
+        :return: The VaultxResponse of the request if a group / group alias is found in the lookup, None otherwise.
         """
         params = {}
         if name is not None:

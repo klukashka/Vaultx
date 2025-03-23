@@ -15,6 +15,7 @@ from vaultx.api.async_auth_methods.kubernetes import Kubernetes
 from vaultx.api.async_auth_methods.ldap import Ldap
 from vaultx.api.async_auth_methods.legacy_mfa import LegacyMfa
 from vaultx.api.async_auth_methods.oidc import Oidc
+from vaultx.api.async_auth_methods.okta import Okta
 from vaultx.api.async_auth_methods.token import Token
 from vaultx.api.async_auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import AsyncVaultApiBase
@@ -33,6 +34,7 @@ __all__ = (
     "Ldap",
     "LegacyMfa",
     "Oidc",
+    "Okta",
     "Userpass",
     "Token",
 )
@@ -54,6 +56,7 @@ class AsyncAuthMethods(AsyncVaultApiBase):
         "_ldap": Ldap,
         "_legacy_mfa": LegacyMfa,
         "_oidc": Oidc,
+        "_okta": Okta,
         "_userpass": Userpass,
         "_token": Token,
     }

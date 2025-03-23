@@ -133,7 +133,7 @@ class Jwt(AsyncVaultApiBase):
         groups_claim: Optional[str] = None,
         claim_mappings: Optional[dict] = None,
         oidc_scopes: Optional[list] = None,
-        bound_claims_type: Optional[str] = "string",
+        bound_claims_type: str = "string",
         verbose_oidc_logging: bool = False,
         token_ttl: Optional[Union[str, int]] = None,
         token_max_ttl: Optional[Union[str, int]] = None,

@@ -13,6 +13,7 @@ from vaultx.api.auth_methods.github import Github
 from vaultx.api.auth_methods.jwt import Jwt
 from vaultx.api.auth_methods.kubernetes import Kubernetes
 from vaultx.api.auth_methods.ldap import Ldap
+from vaultx.api.auth_methods.legacy_mfa import LegacyMfa
 from vaultx.api.auth_methods.token import Token
 from vaultx.api.auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import VaultApiBase
@@ -29,6 +30,7 @@ __all__ = (
     "Jwt",
     "Kubernetes",
     "Ldap",
+    "LegacyMfa",
     "Userpass",
     "Token",
 )
@@ -48,6 +50,7 @@ class AuthMethods(VaultApiBase):
         "_jwt": Jwt,
         "_kubernetes": Kubernetes,
         "_ldap": Ldap,
+        "_legacy_mfa": LegacyMfa,
         "_userpass": Userpass,
         "_token": Token,
     }

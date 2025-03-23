@@ -73,7 +73,7 @@ class Okta(VaultApiBase):
             GET: /auth/{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/config"
         return self._adapter.get(
@@ -140,7 +140,7 @@ class Okta(VaultApiBase):
 
         :param username: Username for this user.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "username": username,

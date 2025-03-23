@@ -14,7 +14,7 @@ class Quota(AsyncVaultApiBase):
             GET: /sys/quotas/rate-limit/:name. Produces: 200 application/json
 
         :param name: the name of the quota to look up.
-        :return: JSON response from API request.
+        :return: VaultxResponse from API request.
         """
         api_path = f"/v1/sys/quotas/rate-limit/{name}"
         return await self._adapter.get(url=api_path)
@@ -26,7 +26,7 @@ class Quota(AsyncVaultApiBase):
         Supported methods:
             LIST: /sys/quotas/rate-limit. Produces: 200 application/json
 
-        :return: JSON response from API request.
+        :return: VaultxResponse from API request.
         """
         api_path = "/v1/sys/quotas/rate-limit"
         return await self._adapter.list(

@@ -24,7 +24,7 @@ class Namespace(AsyncVaultApiBase):
         Supported methods:
             LIST: /sys/namespaces. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/namespaces/"
         return await self._adapter.list(

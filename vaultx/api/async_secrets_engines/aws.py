@@ -93,7 +93,7 @@ class Aws(AsyncVaultApiBase):
         Supported methods:
             POST: /{mount_point}/config/rotate-root. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/rotate-root"
         return await self._adapter.post(
@@ -135,7 +135,7 @@ class Aws(AsyncVaultApiBase):
             GET: /{mount_point}/config/lease. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/config/lease"
         return await self._adapter.get(
@@ -227,7 +227,7 @@ class Aws(AsyncVaultApiBase):
 
         :param name: Specifies the name of the role to read. This is part of the request URL.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         return await self._adapter.get(
@@ -242,7 +242,7 @@ class Aws(AsyncVaultApiBase):
             LIST: /{mount_point}/roles. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/roles"
         return await self._adapter.list(
@@ -308,7 +308,7 @@ class Aws(AsyncVaultApiBase):
             in the assumed role ARN will be truncated to 64 characters. If ``role_session_name`` is not provided,
             then it will be generated dynamically by async default.
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if endpoint not in ALLOWED_CREDS_ENDPOINTS:
             raise VaultxError(

@@ -166,7 +166,7 @@ class Aws(VaultApiBase):
             GET: /auth/{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The path the AWS auth method was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/config/client"
         response = self._adapter.get(
@@ -268,7 +268,7 @@ class Aws(VaultApiBase):
             GET: /auth/{mount_point}/config/identity. Produces: 200 application/json
 
         :param mount_point: The path the AWS auth method was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/config/identity"
         response = self._adapter.get(
@@ -329,7 +329,7 @@ class Aws(VaultApiBase):
 
         :param cert_name: Name of the certificate
         :param mount_point: The path the AWS auth method was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/config/certificate/{cert_name}"
         response = self._adapter.get(

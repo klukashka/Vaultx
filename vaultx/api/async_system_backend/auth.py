@@ -14,7 +14,7 @@ class Auth(AsyncVaultApiBase):
         Supported methods:
             GET: /sys/auth. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/auth"
         return await self._adapter.get(
@@ -111,7 +111,7 @@ class Auth(AsyncVaultApiBase):
 
         :param path: The path the method was mounted on. If not provided, defaults to the value of the "method_type"
             argument.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/sys/auth/{path}/tune"
         return await self._adapter.get(

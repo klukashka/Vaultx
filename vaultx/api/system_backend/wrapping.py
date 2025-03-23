@@ -18,7 +18,7 @@ class Wrapping(VaultApiBase):
 
         :param token: Specifies the wrapping token ID. This is required if the client token is not the wrapping token.
             Do not use the wrapping token in both locations.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {}
         if token is not None:
@@ -39,7 +39,7 @@ class Wrapping(VaultApiBase):
 
         :param payload: Specifies the data that should be wrapped inside the token.
         :param ttl: The TTL of the returned wrapping token.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         if payload is None:

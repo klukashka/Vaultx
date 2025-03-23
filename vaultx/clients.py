@@ -307,7 +307,7 @@ class Client(MetaClient):
         """
         Read the high availability status and current leader instance of Vault.
 
-        :return: The JSON response returned by read_leader_status()
+        :return: The VaultxResponse returned by read_leader_status()
         """
         return self.sys.read_leader_status()
 
@@ -320,7 +320,7 @@ class Client(MetaClient):
         Supported methods:
             GET: /sys/seal-status. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         return self.sys.read_seal_status()
 
@@ -328,7 +328,7 @@ class Client(MetaClient):
         """
         GET /<path>
 
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         try:
             return self._adapter.get(f"/v1/{path}", wrap_ttl=wrap_ttl)
@@ -705,7 +705,7 @@ class AsyncClient(MetaClient):
         """
         Read the high availability status and current leader instance of Vault.
 
-        :return: The JSON response returned by read_leader_status()
+        :return: The VaultxResponse returned by read_leader_status()
         """
         return await self.sys.read_leader_status()
 
@@ -718,7 +718,7 @@ class AsyncClient(MetaClient):
         Supported methods:
             GET: /sys/seal-status. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         return await self.sys.read_seal_status()
 
@@ -726,7 +726,7 @@ class AsyncClient(MetaClient):
         """
         GET /<path>
 
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         try:
             return await self._adapter.get(f"/v1/{path}", wrap_ttl=wrap_ttl)

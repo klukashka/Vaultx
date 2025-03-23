@@ -68,7 +68,7 @@ class Userpass:
 
         :param username: The username for the user.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_group request.
+        :return: The VaultxResponse of the read_group request.
         """
         api_path = f"/v1/auth/{mount_point}/users/{username}"
         return self._adapter.get(
@@ -84,7 +84,7 @@ class Userpass:
 
         :param username: The username for the user.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_group request.
+        :return: The VaultxResponse of the read_group request.
         """
         api_path = f"/v1/auth/{mount_point}/users/{username}"
         return self._adapter.delete(

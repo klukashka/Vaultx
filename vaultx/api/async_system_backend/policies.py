@@ -13,7 +13,7 @@ class Policies(AsyncVaultApiBase):
         Supported methods:
             GET: /sys/policies/acl. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/policies/acl"
         return await self._adapter.list(
@@ -87,7 +87,7 @@ class Policies(AsyncVaultApiBase):
         Supported methods:
             GET: /sys/policies/rgp. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/policies/rgp"
         return await self._adapter.list(
@@ -153,7 +153,7 @@ class Policies(AsyncVaultApiBase):
         Supported methods:
             GET: /sys/policies/egp. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/policies/egp"
         return await self._adapter.list(

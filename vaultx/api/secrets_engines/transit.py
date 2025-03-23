@@ -95,7 +95,7 @@ class Transit(VaultApiBase):
 
         :param name: Specifies the name of the encryption key to read. This is specified as part of the URL.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_key request.
+        :return: The VaultxResponse of the read_key request.
         """
         api_path = f"/v1/{mount_point}/keys/{name}"
         return self._adapter.get(
@@ -112,7 +112,7 @@ class Transit(VaultApiBase):
             LIST: /{mount_point}/keys. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/keys"
         return self._adapter.list(url=api_path)
@@ -235,7 +235,7 @@ class Transit(VaultApiBase):
         :param version: Specifies the version of the key to read. If omitted, all versions of the key will be returned.
             If the version is set to latest, the current key will be returned.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if key_type not in transit_constants.ALLOWED_EXPORT_KEY_TYPES:
             raise exceptions.VaultxError(
@@ -298,7 +298,7 @@ class Transit(VaultApiBase):
             ciphertext is generated. It is very important when using this mode that you ensure that all nonces are
             unique for a given context. Failing to do so will severely impact the ciphertext's security.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if plaintext is None and batch_input is None:
             raise ValueError("plaintext must be specified unless batch_input is set")
@@ -353,7 +353,7 @@ class Transit(VaultApiBase):
             the parameters 'ciphertext', 'context' and 'nonce' are also set, they will be ignored. Format for the input
             goes like this: [dict(context="b64_context", ciphertext="b64_plaintext"), ...]
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if ciphertext is None and batch_input is None:
             raise ValueError("ciphertext must be specified unless batch_input is set")
@@ -409,7 +409,7 @@ class Transit(VaultApiBase):
             the parameters 'ciphertext', 'context' and 'nonce' are also set, they will be ignored. Format for the input
             goes like this: [dict(context="b64_context", ciphertext="b64_plaintext"), ...]
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "ciphertext": ciphertext,
@@ -463,7 +463,7 @@ class Transit(VaultApiBase):
             thus, any given encryption key) this nonce value is never reused.
         :param bits: Specifies the number of bits in the desired key. Can be 128, 256, or 512.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if key_type not in transit_constants.ALLOWED_DATA_KEY_TYPES:
             raise exceptions.VaultxError(
@@ -504,7 +504,7 @@ class Transit(VaultApiBase):
             or as a part of the URL.
         :param output_format: Specifies the output encoding. Valid options are hex or base64.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = utils.remove_nones(
             {
@@ -536,7 +536,7 @@ class Transit(VaultApiBase):
             Currently-supported algorithms are: sha2-224, sha2-256, sha2-384, sha2-512
         :param output_format: Specifies the output encoding. This can be either hex or base64.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if algorithm is not None and algorithm not in transit_constants.ALLOWED_HASH_DATA_ALGORITHMS:
             allowed_types = ", ".join(transit_constants.ALLOWED_HASH_DATA_ALGORITHMS)
@@ -590,7 +590,7 @@ class Transit(VaultApiBase):
         :param algorithm: Specifies the hash algorithm to use. This can also be specified as part of the URL.
             Currently-supported algorithms are: sha2-224, sha2-256, sha2-384, sha2-512
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if algorithm is not None and algorithm not in transit_constants.ALLOWED_HASH_DATA_ALGORITHMS:
             allowed_types = ", ".join(transit_constants.ALLOWED_HASH_DATA_ALGORITHMS)
@@ -669,7 +669,7 @@ class Transit(VaultApiBase):
             This parameter is mutually exclusive with the ``hash_input`` parameter, but one of them must be supplied.
             If both are set, or neither are set, an exception will be raised.
             Responses are returned in the ``batch_results`` array component of the ``data`` element of the response.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if hash_algorithm is not None and hash_algorithm not in transit_constants.ALLOWED_HASH_DATA_ALGORITHMS:
             allowed_types = ", ".join(transit_constants.ALLOWED_HASH_DATA_ALGORITHMS)
@@ -776,7 +776,7 @@ class Transit(VaultApiBase):
             or an integer between the minimum and the maximum permissible salt lengths for the given RSA key size.
             Defaults to 'auto'.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         if (signature is None and hmac is None) or (signature is not None and hmac is not None):
             error_msg = 'either "signature" or "hmac" argument (but not both) must be provided to verify signature'
@@ -848,7 +848,7 @@ class Transit(VaultApiBase):
 
         :param name: Name of the key.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/{mount_point}/backup/{name}"
         return self._adapter.get(

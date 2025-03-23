@@ -25,7 +25,7 @@ class Seal(AsyncVaultApiBase):
         Supported methods:
             GET: /sys/seal-status. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/seal-status"
         return await self._adapter.get(
@@ -66,7 +66,7 @@ class Seal(AsyncVaultApiBase):
         :param reset: Specifies if previously-provided unseal keys are discarded and the unseal process is reset.
         :param migrate: Available in 1.0 Beta - Used to migrate the seal from shamir to autoseal or autoseal to shamir.
             Must be provided on all unseal key calls.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         params: dict = {
@@ -90,7 +90,7 @@ class Seal(AsyncVaultApiBase):
         :param keys: List of master key shares.
         :param migrate: Available in 1.0 Beta - Used to migrate the seal from shamir to autoseal or autoseal to shamir.
             Must be provided on all unseal key calls.
-        :return: The JSON response of the last unseal request.
+        :return: The VaultxResponse of the last unseal request.
         """
         result = None
 

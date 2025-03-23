@@ -13,7 +13,7 @@ class Policy(AsyncVaultApiBase):
         Supported methods:
             GET: /sys/policy. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/policy"
         return await self._adapter.get(

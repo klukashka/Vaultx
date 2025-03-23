@@ -90,7 +90,7 @@ class Ssh(AsyncVaultApiBase):
             be signed by the CA type.
         :param algorithm_signer: Algorithm to sign keys with. (default: "default")
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "key": key,
@@ -135,7 +135,7 @@ class Ssh(AsyncVaultApiBase):
 
         :param name: Specifies the name of the role to read.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         return await self._adapter.get(url=api_path)
@@ -148,7 +148,7 @@ class Ssh(AsyncVaultApiBase):
         This endpoint returns a list of available roles. Only the role names are returned, not any values.
 
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         api_path = f"/v1/{mount_point}/roles"
         return await self._adapter.list(url=api_path)
@@ -159,7 +159,7 @@ class Ssh(AsyncVaultApiBase):
 
         :param name:
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         api_path = f"/v1/{mount_point}/roles/{name}"
         return await self._adapter.delete(url=api_path)
@@ -172,7 +172,7 @@ class Ssh(AsyncVaultApiBase):
         This endpoint returns the list of configured zero-address roles.
 
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         api_path = f"/v1/{mount_point}/config/zeroaddress"
         return await self._adapter.get(url=api_path)
@@ -188,7 +188,7 @@ class Ssh(AsyncVaultApiBase):
         :param roles: Specifies a string containing comma separated list of role names which allows credentials
             to be requested for any IP address.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "roles": roles,
@@ -206,7 +206,7 @@ class Ssh(AsyncVaultApiBase):
         This endpoint deletes the zero-address roles configuration.
 
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         api_path = f"/v1/{mount_point}/config/zeroaddress"
 
@@ -228,7 +228,7 @@ class Ssh(AsyncVaultApiBase):
         :param username: Specifies the username on the remote host.
         :param ip: Specifies the IP of the remote host.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "username": username,
@@ -248,7 +248,7 @@ class Ssh(AsyncVaultApiBase):
 
         :param ip: Specifies the IP of the remote host.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "ip": ip,
@@ -270,7 +270,7 @@ class Ssh(AsyncVaultApiBase):
 
         :param otp: Specifies the One-Time-Key that needs to be validated.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "otp": otp,
@@ -303,7 +303,7 @@ class Ssh(AsyncVaultApiBase):
         :param key_bits: Specifies the desired key bits for the generated SSH CA key when generate_signing_key
             is set to true. (default: 0)
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "private_key": private_key,
@@ -328,7 +328,7 @@ class Ssh(AsyncVaultApiBase):
         This endpoint deletes the CA information for the backend via an SSH key pair.
 
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         api_path = f"/v1/{mount_point}/config/ca"
 
@@ -342,7 +342,7 @@ class Ssh(AsyncVaultApiBase):
         This endpoint reads the configured/generated public key.
 
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         api_path = f"/v1/{mount_point}/config/ca"
 
@@ -373,7 +373,7 @@ class Ssh(AsyncVaultApiBase):
         :param critical_options: Specifies a map of the critical options that the certificate should be signed for.
         :param extensions: Specifies a map of the extensions that the certificate should be signed for.
         :param mount_point: Specifies the place where the secrets engine will be accessible (default: ssh).
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         params = {
             "public_key": public_key,

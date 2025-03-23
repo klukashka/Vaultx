@@ -75,7 +75,7 @@ class Azure(VaultApiBase):
             GET: /auth/{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the azure auth method was mounted on.
-        :return: The data key from the JSON response of the request.
+        :return: The data key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/config"
         response = self._adapter.get(
@@ -179,7 +179,7 @@ class Azure(VaultApiBase):
 
         :param name: Name of the role.
         :param mount_point: The "path" the azure auth method was mounted on.
-        :return: The "data" key from the JSON response of the request.
+        :return: The "data" key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/role/{name}"
         response = self._adapter.get(
@@ -195,7 +195,7 @@ class Azure(VaultApiBase):
             LIST: /auth/{mount_point}/role. Produces: 200 application/json
 
         :param mount_point: The "path" the azure auth method was mounted on.
-        :return: The "data" key from the JSON response of the request.
+        :return: The "data" key from the VaultxResponse of the request.
         """
         api_path = f"/v1/auth/{mount_point}/role"
         response = self._adapter.list(url=api_path)
@@ -250,7 +250,7 @@ class Azure(VaultApiBase):
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
             attribute on the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
         :param mount_point: The "path" the azure auth method was mounted on.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "role": role,

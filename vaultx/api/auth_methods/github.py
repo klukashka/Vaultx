@@ -66,7 +66,7 @@ class Github(VaultApiBase):
             GET: /auth/{mount_point}/config. Produces: 200 application/json
 
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_configuration request.
+        :return: The VaultxResponse of the read_configuration request.
         """
         api_path = f"/v1/auth/{mount_point}/config"
         return self._adapter.get(url=api_path)
@@ -111,7 +111,7 @@ class Github(VaultApiBase):
 
         :param team_name: GitHub team name
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_team_mapping request.
+        :return: The VaultxResponse of the read_team_mapping request.
         """
         api_path = f"/v1/auth/{mount_point}/map/teams/{team_name}"
         return self._adapter.get(url=api_path)
@@ -157,7 +157,7 @@ class Github(VaultApiBase):
 
         :param user_name: GitHub username
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_user_mapping request.
+        :return: The VaultxResponse of the read_user_mapping request.
         """
         api_path = f"/v1/auth/{mount_point}/map/users/{user_name}"
         return self._adapter.get(url=api_path)
@@ -173,7 +173,7 @@ class Github(VaultApiBase):
         :param use_token: if True, uses the token in the response received from the auth request to set the "token"
             attribute on the :py:meth:`vaultx.adapters.Adapter` instance under the _adapter Client attribute.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the login request.
+        :return: The VaultxResponse of the login request.
         """
         params = {
             "token": token,

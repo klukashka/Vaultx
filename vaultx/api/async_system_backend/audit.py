@@ -16,7 +16,7 @@ class Audit(AsyncVaultApiBase):
         Supported methods:
             GET: /sys/audit. Produces: 200 application/json
 
-        :return: JSON response of the request.
+        :return: VaultxResponse of the request.
         """
         return await self._adapter.get("/v1/sys/audit")
 
@@ -90,7 +90,7 @@ class Audit(AsyncVaultApiBase):
 
         :param path: The path of the audit device to generate hashes for. This is part of the request URL.
         :param input_to_hash: The input string to hash.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "input": input_to_hash,

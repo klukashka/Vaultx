@@ -30,9 +30,18 @@ nav:
       - Why Vaultx: 'overview/why_vaultx.md'
   - Usage:
       - Auth Methods:
+          - AppRole: 'usage/auth_methods/approle.md'
+          - AWS: 'usage/auth_methods/aws.md'
+          - Azure: 'usage/auth_methods/azure.md'
+          - GCP: 'usage/auth_methods/gcp.md'
+          - GitHub: 'usage/auth_methods/github.md'
+          - JWT/OIDC: 'usage/auth_methods/jwt_oidc.md'
+          - Kubernetes: 'usage/auth_methods/kubernetes.md'
+          - LDAP: 'usage/auth_methods/ldap.md'
+          - Legacy_MFA: 'usage/auth_methods/legacy_mfa.md'
+          - Okta: 'usage/auth_methods/okta.md'
           - Token: 'usage/auth_methods/token.md'
           - Userpass: 'usage/auth_methods/userpass.md'
-          - AppRole: 'usage/auth_methods/approle.md'
       - Secrets Engines:
           - Active Directory: 'usage/secrets_engines/active_directory.md'
           - AWS: 'usage/secrets_engines/aws.md'

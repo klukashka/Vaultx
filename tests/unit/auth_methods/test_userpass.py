@@ -20,8 +20,7 @@ class TestUserpass(unittest.TestCase):
             password="test_password",
             policies="policy1,policy2",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     def test_list_user(self):
@@ -40,8 +39,7 @@ class TestUserpass(unittest.TestCase):
     def test_delete_user(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.userpass.delete_user(username="test_user")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
     def test_update_password_on_user(self):
@@ -50,8 +48,7 @@ class TestUserpass(unittest.TestCase):
             username="test_user",
             password="new_password",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     def test_login(self):
@@ -76,8 +73,7 @@ class TestAsyncUserpass(unittest.IsolatedAsyncioTestCase):
             password="test_password",
             policies="policy1,policy2",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     async def test_list_user(self):
@@ -95,8 +91,7 @@ class TestAsyncUserpass(unittest.IsolatedAsyncioTestCase):
     async def test_delete_user(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.userpass.delete_user(username="test_user")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
     async def test_update_password_on_user(self):
@@ -105,8 +100,7 @@ class TestAsyncUserpass(unittest.IsolatedAsyncioTestCase):
             username="test_user",
             password="new_password",
         )
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     async def test_login(self):

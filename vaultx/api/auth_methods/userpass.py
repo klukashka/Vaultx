@@ -1,9 +1,7 @@
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Any, Optional
 
 from vaultx import utils
-from vaultx.adapters import Adapter
+from vaultx.adapters import Adapter, VaultxResponse
 
 
 DEFAULT_MOUNT_POINT = "userpass"
@@ -25,7 +23,7 @@ class Userpass:
         policies: Optional[str] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
         **kwargs: dict[Any, Any],
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Create/update user in userpass.
 
@@ -47,7 +45,7 @@ class Userpass:
             json=params,
         )
 
-    def list_user(self, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def list_user(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         List existing users that have been created in the auth method
 
@@ -61,7 +59,7 @@ class Userpass:
             url=api_path,
         )
 
-    def read_user(self, username: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def read_user(self, username: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Read user in the auth method.
 
@@ -70,14 +68,14 @@ class Userpass:
 
         :param username: The username for the user.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_group request.
+        :return: The VaultxResponse of the read_group request.
         """
         api_path = f"/v1/auth/{mount_point}/users/{username}"
         return self._adapter.get(
             url=api_path,
         )
 
-    def delete_user(self, username: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Union[dict[str, Any], Response]:
+    def delete_user(self, username: str, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
         Delete user in the auth method.
 
@@ -86,7 +84,7 @@ class Userpass:
 
         :param username: The username for the user.
         :param mount_point: The "path" the method/backend was mounted on.
-        :return: The JSON response of the read_group request.
+        :return: The VaultxResponse of the read_group request.
         """
         api_path = f"/v1/auth/{mount_point}/users/{username}"
         return self._adapter.delete(
@@ -95,7 +93,7 @@ class Userpass:
 
     def update_password_on_user(
         self, username: str, password: str, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         update password for the user in userpass.
 
@@ -115,7 +113,7 @@ class Userpass:
 
     def login(
         self, username: str, password: str, use_token: bool = True, mount_point: str = DEFAULT_MOUNT_POINT
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Log in with USERPASS credentials.
 

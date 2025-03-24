@@ -1,20 +1,19 @@
-from typing import Any, Optional, Union
+from typing import Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.exceptions import VaultxError
 
 
 class Init(AsyncVaultApiBase):
-    async def read_init_status(self) -> Union[dict[str, Any], Response]:
+    async def read_init_status(self) -> VaultxResponse:
         """
         Read the initialization status of Vault.
 
         Supported methods:
             GET: /sys/init. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/init"
         return await self._adapter.get(
@@ -42,7 +41,7 @@ class Init(AsyncVaultApiBase):
         recovery_shares: Optional[int] = None,
         recovery_threshold: Optional[int] = None,
         recovery_pgp_keys: Optional[list[int]] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Initialize a new Vault.
         The Vault must not have been previously initialized. The recovery options, as well as the stored shares option,
@@ -68,7 +67,7 @@ class Init(AsyncVaultApiBase):
         :param recovery_pgp_keys: <enterprise only> Specifies an array of PGP public keys used to encrypt the output
             recovery keys. Ordering is preserved. The keys must be base64-encoded from their original binary
             representation. The size of this array must be the same as recovery_shares.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
 
         params: dict = {

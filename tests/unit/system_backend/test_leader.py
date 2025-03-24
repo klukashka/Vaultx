@@ -18,9 +18,8 @@ class TestLeader(unittest.TestCase):
 
         result = self.leader.read_leader_status()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"ha_enabled": True, "is_self": True})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"ha_enabled": True, "is_self": True})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/sys/leader",
         )
@@ -31,9 +30,8 @@ class TestLeader(unittest.TestCase):
 
         result = self.leader.step_down()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"message": "Successfully stepped down"})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"message": "Successfully stepped down"})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/step-down",
         )
@@ -50,9 +48,8 @@ class TestLeaderAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.leader.read_leader_status()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"ha_enabled": True, "is_self": True})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"ha_enabled": True, "is_self": True})
         self.mock_adapter.get.assert_called_once_with(
             url="/v1/sys/leader",
         )
@@ -63,9 +60,8 @@ class TestLeaderAsync(unittest.IsolatedAsyncioTestCase):
 
         result = await self.leader.step_down()
 
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 200)
-            self.assertEqual(result.json(), {"message": "Successfully stepped down"})
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {"message": "Successfully stepped down"})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/step-down",
         )

@@ -1,20 +1,19 @@
-from typing import Any, Optional, Union
+from typing import Any, Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.exceptions import VaultxError
 
 
 class Mount(AsyncVaultApiBase):
-    async def list_mounted_secrets_engines(self) -> Union[dict[str, Any], Response]:
+    async def list_mounted_secrets_engines(self) -> VaultxResponse:
         """
         List all the mounted secrets engines.
 
         Supported methods:
             POST: /sys/mounts. Produces: 200 application/json
 
-        :return: JSON response of the request.
+        :return: VaultxResponse of the request.
         """
         return await self._adapter.get("/v1/sys/mounts")
 
@@ -53,7 +52,7 @@ class Mount(AsyncVaultApiBase):
         local: bool = False,
         seal_wrap: bool = False,
         **kwargs,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Enable a new secrets engine at the given path.
 
@@ -111,7 +110,7 @@ class Mount(AsyncVaultApiBase):
             json=params,
         )
 
-    async def disable_secrets_engine(self, path: str) -> Union[dict[str, Any], Response]:
+    async def disable_secrets_engine(self, path: str) -> VaultxResponse:
         """
         Disable the mount point specified by the provided path.
 
@@ -126,7 +125,7 @@ class Mount(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_mount_configuration(self, path: str) -> Union[dict[str, Any], Response]:
+    async def read_mount_configuration(self, path: str) -> VaultxResponse:
         """
         Read the given mount's configuration.
         Unlike the mounts endpoint, this will return the current time in seconds for each TTL, which may be the system
@@ -136,7 +135,7 @@ class Mount(AsyncVaultApiBase):
             GET: /sys/mounts/{path}/tune. Produces: 200 application/json
 
         :param path: Specifies the path where the secrets engine will be mounted. This is specified as part of the URL.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/sys/mounts/{path}/tune"
         return await self._adapter.get(
@@ -215,7 +214,7 @@ class Mount(AsyncVaultApiBase):
             json=params,
         )
 
-    async def move_backend(self, from_path: str, to_path: str) -> Union[dict[str, Any], Response]:
+    async def move_backend(self, from_path: str, to_path: str) -> VaultxResponse:
         """
         Move an already-mounted backend to a new mount point.
 

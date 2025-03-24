@@ -7,34 +7,96 @@ from typing import Any, Optional, Union
 
 import aiohttp
 import httpx
-from httpx import Response
 
 from vaultx.constants.client import DEFAULT_URL
 from vaultx.utils import replace_double_slashes_to_single, urljoin
 from . import _types, exceptions
-from .exceptions import VaultxError
 
 
-class MetaAdapter(metaclass=abc.ABCMeta):
-    """Abstract adapter class"""
+class AdapterResponse(metaclass=abc.ABCMeta):
+    """Abstract base class for Adapter responses."""
 
-    @classmethod
+    @property
     @abc.abstractmethod
-    def from_adapter(
-        cls: tp.Type["MetaAdapter"],
-        adapter: object,
-    ) -> "MetaAdapter":
+    def raw(self) -> Any:
         """
-        Creates a new adapter based on an existing Adapter instance.
-        This can be used to create a new type of adapter that inherits the properties of an existing one.
-
-        :param adapter: The existing Adapter instance.
+        The raw response object.
+        The specific Adapter determines the type or whether to return anything.
+        :return: The raw response object from the request, if applicable.
         """
+        raise NotImplementedError()
 
+    @property
+    @abc.abstractmethod
+    def status(self) -> int:
+        """
+        The HTTP status code of the response.
+        :return: An HTTP response code.
+        """
+        raise NotImplementedError()
+
+    @property
+    @abc.abstractmethod
+    def value(self) -> Any:
+        """
+        The value of the response.
+        The specific Adapter determines the type of the response.
+        :return: The value returned by the request.
+        """
         raise NotImplementedError()
 
 
-class Adapter(MetaAdapter):
+@exceptions.handle_unknown_exception
+class HttpxAdapterResponse(AdapterResponse):
+    """An abstract AdapterResponse class for responses based on a httpx.Response."""
+
+    _raw: tp.Final[httpx.Response]
+    _value: tp.Final[dict]
+
+    def __init__(self, response: httpx.Response) -> None:
+        try:
+            value = response.json()
+        except ValueError:
+            value = {}
+        self._value = value
+        self._raw = response
+
+    @property
+    def raw(self) -> httpx.Response:
+        return self._raw
+
+    @property
+    def status(self) -> int:
+        return self._raw.status_code
+
+    @property
+    def value(self) -> dict:
+        return self._value
+
+
+@exceptions.handle_unknown_exception
+class VaultxResponse(HttpxAdapterResponse):
+    """The specialized AdapterResponse used for the HvacAdapter."""
+
+    def __getattr__(self, __name: str) -> Any:
+        if __name == "_value" or __name == "_raw":
+            raise AttributeError
+        return getattr(self.value, __name)
+
+    def __getitem__(self, __key: object) -> Any:
+        try:
+            return self.value.__getitem__(__key)
+        except KeyError as e:
+            raise KeyError(f'Failed to get "{__key}" item from VaultxResponse.') from e
+
+    def __len__(self) -> int:
+        return self.value.__len__()
+
+    def __contains__(self, __o: object) -> bool:
+        return self.value.__contains__(__o)
+
+
+class Adapter:
     """Abstract synchronous adapter class"""
 
     def __init__(
@@ -107,35 +169,13 @@ class Adapter(MetaAdapter):
     ) -> None:
         self.client.__exit__(exc_type, exc_value, traceback)
 
-    @classmethod
-    @exceptions.handle_unknown_exception
-    def from_adapter(
-        cls: tp.Type["Adapter"],
-        adapter: object,
-    ) -> "Adapter":
-        if isinstance(adapter, Adapter):
-            return cls(
-                base_uri=adapter.base_uri,
-                token=adapter.token,
-                follow_redirects=adapter.follow_redirects,
-                client=adapter.client,
-                namespace=adapter.namespace,
-                ignore_exceptions=adapter.ignore_exceptions,
-                strict_http=adapter.strict_http,
-                request_header=adapter.request_header,
-                **adapter._kwargs,
-            )
-        raise exceptions.VaultxError(
-            '"from_adapter" method of Adapter class should receive Adapter instance as a parameter'
-        )
-
     @exceptions.handle_unknown_exception
     def close(self):
         """Close the Client's underlying TCP connections."""
         self.client.close()
 
     @exceptions.handle_unknown_exception
-    def get(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    def get(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform a GET request.
 
@@ -146,7 +186,7 @@ class Adapter(MetaAdapter):
         return self.request("GET", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    def post(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    def post(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform a POST request.
 
@@ -157,7 +197,7 @@ class Adapter(MetaAdapter):
         return self.request("POST", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    def put(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    def put(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform a PUT request.
 
@@ -168,7 +208,7 @@ class Adapter(MetaAdapter):
         return self.request("PUT", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    def delete(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    def delete(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform a DELETE request.
 
@@ -179,7 +219,7 @@ class Adapter(MetaAdapter):
         return self.request("DELETE", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    def list(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    def list(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform a LIST request.
 
@@ -190,7 +230,7 @@ class Adapter(MetaAdapter):
         return self.request("LIST", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    def head(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    def head(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform a HEAD request.
 
@@ -201,7 +241,7 @@ class Adapter(MetaAdapter):
         return self.request("HEAD", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    def login(self, url: str, use_token: bool = True, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    def login(self, url: str, use_token: bool = True, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform a login request.
 
@@ -222,7 +262,7 @@ class Adapter(MetaAdapter):
         return response
 
     @abc.abstractmethod
-    def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
+    def get_login_token(self, response: VaultxResponse) -> str:
         """
         Extract the client token from a login response.
 
@@ -238,7 +278,7 @@ class Adapter(MetaAdapter):
         headers: Optional[dict[str, str]] = None,
         raise_exception: Optional[bool] = True,
         **kwargs: Optional[Any],
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Main method for routing HTTP requests to the configured Vault base_uri.
         Intended to be implemented by subclasses.
@@ -255,23 +295,20 @@ class Adapter(MetaAdapter):
 
 
 @exceptions.handle_unknown_exception
-class RawAdapter(Adapter):
+class VaultxAdapter(Adapter):
     """
-    The RawAdapter adapter class.
+    The VaultxAdapter adapter class.
     This adapter adds Vault-specific headers as required and optionally raises exceptions on errors,
-    but always returns Response objects for requests.
+    but always returns VaultxResponse objects for requests.
     """
 
-    def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
+    def get_login_token(self, response: VaultxResponse) -> str:
         """
         Extract the client token from a login response.
 
         :param response: The response object returned by the login method.
         """
-        if isinstance(response, Response):
-            response_json = response.json()
-            return response_json["auth"]["client_token"]
-        return response["auth"]["client_token"]
+        return response.value["auth"]["client_token"]
 
     def request(
         self,
@@ -280,7 +317,7 @@ class RawAdapter(Adapter):
         headers: Optional[dict[str, str]] = None,
         raise_exception: Optional[bool] = True,
         **kwargs: Optional[Any],
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Main method for routing HTTP requests to the configured Vault base_uri.
 
@@ -329,56 +366,7 @@ class RawAdapter(Adapter):
         if not response.is_success and (raise_exception and not self.ignore_exceptions):
             raise exceptions.HTTPError(status_code=response.status_code, method=method, url=url)
 
-        return response
-
-
-@exceptions.handle_unknown_exception
-class JsonAdapter(RawAdapter):
-    """
-    The JsonAdapter adapter class.
-    This adapter works just like the RawAdapter adapter except that HTTP 200 responses are returned as JSON dicts.
-    All non-200 responses are returned as Response objects.
-    """
-
-    def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
-        """
-        Extracts the client token from a login response.
-
-        :param response: The response object returned by the login method.
-        """
-        if isinstance(response, Response):
-            response_json = response.json()
-            return response_json["auth"]["client_token"]
-        return response["auth"]["client_token"]
-
-    def request(
-        self,
-        method: str,
-        url: str,
-        headers: Optional[dict[str, str]] = None,
-        raise_exception: Optional[bool] = True,
-        **kwargs: Optional[Any],
-    ) -> Union[dict[str, Any], Response]:
-        """
-        Main method for routing HTTP requests to the configured Vault base_uri.
-
-        :param method: HTTP method to use with the request. E.g., GET, POST, etc.
-        :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
-            attribute.
-        :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception.
-        :param kwargs: Keyword arguments to pass to RawAdapter.request.
-        """
-        response = super().request(method=method, url=url, headers=headers, raise_exception=raise_exception, **kwargs)
-        if isinstance(response, Response):
-            if response.status_code == 200:
-                try:
-                    return response.json()
-                except ValueError:
-                    pass
-
-            return response
-        raise VaultxError("Unexpected dict return from RawAdapter's request method inside JsonAdapter's request method")
+        return VaultxResponse(response)
 
 
 @exceptions.handle_unknown_exception
@@ -419,7 +407,7 @@ class AiohttpTransport(httpx.AsyncBaseTransport):
             await self._session.close()
 
 
-class AsyncAdapter(MetaAdapter):
+class AsyncAdapter:
     """Abstract asynchronous adapter class"""
 
     def __init__(
@@ -496,35 +484,13 @@ class AsyncAdapter(MetaAdapter):
     ) -> None:
         await self.client.__aexit__(exc_type, exc_value, traceback)
 
-    @classmethod
-    @exceptions.handle_unknown_exception
-    def from_adapter(
-        cls: tp.Type["AsyncAdapter"],
-        adapter: object,
-    ) -> "AsyncAdapter":
-        if isinstance(adapter, AsyncAdapter):
-            return cls(
-                base_uri=adapter.base_uri,
-                token=adapter.token,
-                follow_redirects=adapter.follow_redirects,
-                client=adapter.client,
-                namespace=adapter.namespace,
-                ignore_exceptions=adapter.ignore_exceptions,
-                strict_http=adapter.strict_http,
-                request_header=adapter.request_header,
-                **adapter._kwargs,
-            )
-        raise exceptions.VaultxError(
-            '"from_adapter" method of AsyncAdapter class should receive AsyncAdapter instance as a parameter'
-        )
-
     @exceptions.handle_unknown_exception
     async def close(self):
         """Close the AsyncClient's underlying TCP connections."""
         await self.client.aclose()
 
     @exceptions.handle_unknown_exception
-    async def get(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    async def get(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async GET request.
 
@@ -535,7 +501,7 @@ class AsyncAdapter(MetaAdapter):
         return await self.request("GET", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    async def post(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    async def post(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async POST request.
 
@@ -546,7 +512,7 @@ class AsyncAdapter(MetaAdapter):
         return await self.request("POST", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    async def put(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    async def put(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async PUT request.
 
@@ -557,7 +523,7 @@ class AsyncAdapter(MetaAdapter):
         return await self.request("PUT", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    async def delete(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    async def delete(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async DELETE request.
 
@@ -568,7 +534,7 @@ class AsyncAdapter(MetaAdapter):
         return await self.request("DELETE", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    async def list(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    async def list(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async LIST request.
 
@@ -579,7 +545,7 @@ class AsyncAdapter(MetaAdapter):
         return await self.request("LIST", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    async def head(self, url: str, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    async def head(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async HEAD request.
 
@@ -590,7 +556,7 @@ class AsyncAdapter(MetaAdapter):
         return await self.request("HEAD", url, **kwargs)
 
     @exceptions.handle_unknown_exception
-    async def login(self, url: str, use_token: bool = True, **kwargs: Optional[Any]) -> Union[dict[str, Any], Response]:
+    async def login(self, url: str, use_token: bool = True, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async login request.
 
@@ -611,7 +577,7 @@ class AsyncAdapter(MetaAdapter):
         return response
 
     @abc.abstractmethod
-    async def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
+    async def get_login_token(self, response: VaultxResponse) -> str:
         """
         Extract the async_client token from a login response.
 
@@ -627,7 +593,7 @@ class AsyncAdapter(MetaAdapter):
         headers: Optional[dict[str, str]] = None,
         raise_exception: Optional[bool] = True,
         **kwargs: Optional[Any],
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Main method for routing HTTP requests to the configured Vault base_uri.
         Intended to be implemented by subclasses.
@@ -643,19 +609,16 @@ class AsyncAdapter(MetaAdapter):
 
 
 @exceptions.handle_unknown_exception
-class AsyncRawAdapter(AsyncAdapter):
-    """The AsyncRawAdapter adapter class. Mostly similar to the sync version."""
+class AsyncVaultxAdapter(AsyncAdapter):
+    """The AsyncVaultxAdapter adapter class. Mostly similar to the sync version."""
 
-    async def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
+    async def get_login_token(self, response: VaultxResponse) -> str:
         """
         Extract the client token from a login response.
 
         :param response: The response object returned by the login method.
         """
-        if isinstance(response, Response):
-            response_json = response.json()
-            return response_json["auth"]["client_token"]
-        return response["auth"]["client_token"]
+        return response.value["auth"]["client_token"]
 
     async def request(
         self,
@@ -664,7 +627,7 @@ class AsyncRawAdapter(AsyncAdapter):
         headers: Optional[dict[str, str]] = None,
         raise_exception: Optional[bool] = True,
         **kwargs: Optional[Any],
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """Main method for routing HTTP requests to the configured Vault base_uri.
 
         :param method: HTTP method to use with the request. E.g., GET, POST, etc.
@@ -675,7 +638,7 @@ class AsyncRawAdapter(AsyncAdapter):
         :param kwargs: Additional keyword arguments to include in the requests call.
         """
 
-        # url = replace_double_slashes_to_single(url)
+        url = replace_double_slashes_to_single(url)
         url = urljoin(self.base_uri, url)
 
         if not headers:
@@ -712,53 +675,4 @@ class AsyncRawAdapter(AsyncAdapter):
         if not response.is_success and (raise_exception and not self.ignore_exceptions):
             raise exceptions.HTTPError(status_code=response.status_code, method=method, url=url)
 
-        return response
-
-
-@exceptions.handle_unknown_exception
-class AsyncJsonAdapter(AsyncRawAdapter):
-    """The AsyncJsonAdapter adapter class. Mostly similar to the sync version"""
-
-    async def get_login_token(self, response: Union[dict[str, Any], Response]) -> str:
-        """
-        Extract the client token from a login response.
-
-        :param response: The response object returned by the login method.
-        """
-        if isinstance(response, Response):
-            response_json = response.json()
-            return response_json["auth"]["client_token"]
-        return response["auth"]["client_token"]
-
-    async def request(
-        self,
-        method: str,
-        url: str,
-        headers: Optional[dict[str, str]] = None,
-        raise_exception: Optional[bool] = True,
-        **kwargs: Optional[Any],
-    ) -> Union[dict[str, Any], Response]:
-        """
-        Main method for routing HTTP requests to the configured Vault base_uri.
-
-        :param method: HTTP method to use with the request. E.g., GET, POST, etc.
-        :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
-            attribute.
-        :param headers: Additional headers to include with the request.
-        :param raise_exception: If True, raise an exception.
-        :param kwargs: Keyword arguments to pass to AsyncRawAdapter.request.
-        """
-        response = await super().request(
-            method=method, url=url, headers=headers, raise_exception=raise_exception, **kwargs
-        )
-        if isinstance(response, Response):
-            if response.status_code == 200:
-                try:
-                    return response.json()
-                except ValueError:
-                    pass
-
-            return response
-        raise VaultxError(
-            "Unexpected dict return from AsyncRawAdapter's request method inside AsyncJsonAdapter's request method"
-        )
+        return VaultxResponse(response)

@@ -1,7 +1,7 @@
 from unittest import IsolatedAsyncioTestCase, TestCase
 
 from vaultx import AsyncClient, Client
-from vaultx.adapters import AsyncJsonAdapter, JsonAdapter
+from vaultx.adapters import AsyncVaultxAdapter, VaultxAdapter
 
 
 class TestClient(TestCase):
@@ -11,7 +11,7 @@ class TestClient(TestCase):
         client = Client()
         old_adapter = client.adapter
 
-        client.adapter = JsonAdapter()
+        client.adapter = VaultxAdapter()
 
         self.assertIsNot(client.adapter, old_adapter)
         self.assertSetEqual(
@@ -27,7 +27,7 @@ class TestAsyncClient(IsolatedAsyncioTestCase):
         client = AsyncClient()
         old_adapter = client.adapter
 
-        client.adapter = AsyncJsonAdapter()
+        client.adapter = AsyncVaultxAdapter()
 
         self.assertIsNot(client.adapter, old_adapter)
         self.assertSetEqual(

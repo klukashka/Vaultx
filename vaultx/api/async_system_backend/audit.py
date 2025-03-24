@@ -1,15 +1,12 @@
-"""Support for "Audit"-related System Backend Methods."""
-
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 
 
 class Audit(AsyncVaultApiBase):
-    async def list_enabled_audit_devices(self) -> Union[dict[str, Any], Response]:
+    async def list_enabled_audit_devices(self) -> VaultxResponse:
         """
         List enabled audit devices.
 
@@ -19,7 +16,7 @@ class Audit(AsyncVaultApiBase):
         Supported methods:
             GET: /sys/audit. Produces: 200 application/json
 
-        :return: JSON response of the request.
+        :return: VaultxResponse of the request.
         """
         return await self._adapter.get("/v1/sys/audit")
 
@@ -30,7 +27,7 @@ class Audit(AsyncVaultApiBase):
         options: Optional[str] = None,
         path: Optional[str] = None,
         local: Optional[bool] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Enable a new audit device at the supplied path.
         The path can be a single word name or a more complex, nested path.
@@ -67,7 +64,7 @@ class Audit(AsyncVaultApiBase):
         api_path = f"/v1/sys/audit/{path}"
         return await self._adapter.post(url=api_path, json=params)
 
-    async def disable_audit_device(self, path: str) -> Union[dict[str, Any], Response]:
+    async def disable_audit_device(self, path: str) -> VaultxResponse:
         """
         Disable the audit device at the given path.
 
@@ -82,7 +79,7 @@ class Audit(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def calculate_hash(self, path: str, input_to_hash: str) -> Union[dict[str, Any], Response]:
+    async def calculate_hash(self, path: str, input_to_hash: str) -> VaultxResponse:
         """
         Hash the given input data with the specified audit device's hash function and salt.
         This endpoint can be used to discover whether a given plaintext string (the input parameter) appears in the
@@ -93,7 +90,7 @@ class Audit(AsyncVaultApiBase):
 
         :param path: The path of the audit device to generate hashes for. This is part of the request URL.
         :param input_to_hash: The input string to hash.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "input": input_to_hash,

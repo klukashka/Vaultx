@@ -1,29 +1,26 @@
-from typing import Any, Optional, Union
+from typing import Optional
 
-from httpx import Response
-
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
 from vaultx.exceptions import VaultxError
 
 
 class Key(VaultApiBase):
-    def read_root_generation_progress(self) -> Union[dict[str, Any], Response]:
+    def read_root_generation_progress(self) -> VaultxResponse:
         """
         Read the configuration and process of the current root generation attempt.
 
         Supported methods:
             GET: /sys/generate-root/attempt. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/generate-root/attempt"
         return self._adapter.get(
             url=api_path,
         )
 
-    def start_root_token_generation(
-        self, otp: Optional[str] = None, pgp_key: Optional[str] = None
-    ) -> Union[dict[str, Any], Response]:
+    def start_root_token_generation(self, otp: Optional[str] = None, pgp_key: Optional[str] = None) -> VaultxResponse:
         """
         Initialize a new root generation attempt.
         Only a single root generation attempt can take place at a time. One (and only one) of otp or pgp_key are
@@ -36,7 +33,7 @@ class Key(VaultApiBase):
             before being returned to the final unseal key provider.
         :param pgp_key: Specifies a base64-encoded PGP public key. The raw bytes of the token will be encrypted with
             this value before being returned to the final unseal key provider.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {}
         if otp is not None and pgp_key is not None:
@@ -49,7 +46,7 @@ class Key(VaultApiBase):
         api_path = "/v1/sys/generate-root/attempt"
         return self._adapter.put(url=api_path, json=params)
 
-    def generate_root(self, key: str, nonce: str) -> Union[dict[str, Any], Response]:
+    def generate_root(self, key: str, nonce: str) -> VaultxResponse:
         """
         Enter a single master key share to progress the root generation attempt.
         If the threshold number of master key shares is reached, Vault will complete the root generation and issue the
@@ -61,7 +58,7 @@ class Key(VaultApiBase):
 
         :param key: Specifies a single master key share.
         :param nonce: The nonce of the attempt.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "key": key,
@@ -73,7 +70,7 @@ class Key(VaultApiBase):
             json=params,
         )
 
-    def cancel_root_generation(self) -> Union[dict[str, Any], Response]:
+    def cancel_root_generation(self) -> VaultxResponse:
         """
         Cancel any in-progress root generation attempt.
         This clears any progress made. This must be called to change the OTP or PGP key being used.
@@ -88,21 +85,21 @@ class Key(VaultApiBase):
             url=api_path,
         )
 
-    def get_encryption_key_status(self) -> Union[dict[str, Any], Response]:
+    def get_encryption_key_status(self) -> VaultxResponse:
         """
         Read information about the current encryption key used by Vault.
 
         Supported methods:
             GET: /sys/key-status. Produces: 200 application/json
 
-        :return: JSON response with information regarding the current encryption key used by Vault.
+        :return: VaultxResponse with information regarding the current encryption key used by Vault.
         """
         api_path = "/v1/sys/key-status"
         return self._adapter.get(
             url=api_path,
         )
 
-    def rotate_encryption_key(self) -> Union[dict[str, Any], Response]:
+    def rotate_encryption_key(self) -> VaultxResponse:
         """
         Trigger a rotation of the backend encryption key.
         This is the key that is used to encrypt data written to the storage backend, and is not provided to operators.
@@ -121,7 +118,7 @@ class Key(VaultApiBase):
             url=api_path,
         )
 
-    def read_rekey_progress(self, recovery_key: bool = False) -> Union[dict[str, Any], Response]:
+    def read_rekey_progress(self, recovery_key: bool = False) -> VaultxResponse:
         """
         Read the configuration and progress of the current rekey attempt.
 
@@ -130,7 +127,7 @@ class Key(VaultApiBase):
             GET: /sys/rekey/init. Produces: 200 application/json
 
         :param recovery_key: If true, send requests to "rekey-recovery-key" instead of "rekey" api path.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/rekey/init"
         if recovery_key:
@@ -147,7 +144,7 @@ class Key(VaultApiBase):
         backup: bool = False,
         require_verification: bool = False,
         recovery_key: bool = False,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Initializes a new rekey attempt.
 
@@ -198,7 +195,7 @@ class Key(VaultApiBase):
             json=params,
         )
 
-    def cancel_rekey(self, recovery_key: bool = False) -> Union[dict[str, Any], Response]:
+    def cancel_rekey(self, recovery_key: bool = False) -> VaultxResponse:
         """
         Cancel any in-progress rekey.
         This clears the rekey settings as well as any progress made. This must be called to change the parameters of the
@@ -220,9 +217,7 @@ class Key(VaultApiBase):
             url=api_path,
         )
 
-    def rekey(
-        self, key: str, nonce: Optional[str] = None, recovery_key: bool = False
-    ) -> Union[dict[str, Any], Response]:
+    def rekey(self, key: str, nonce: Optional[str] = None, recovery_key: bool = False) -> VaultxResponse:
         """
         Enter a single recovery key share to progress the rekey of the Vault.
         If the threshold number of recovery key shares is reached, Vault will complete the rekey. Otherwise, this API
@@ -236,7 +231,7 @@ class Key(VaultApiBase):
         :param key: Specifies a single recovery share key.
         :param nonce: Specifies the nonce of the rekey operation.
         :param recovery_key: If true, send requests to "rekey-recovery-key" instead of "rekey" api path.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "key": key,
@@ -255,7 +250,7 @@ class Key(VaultApiBase):
 
     def rekey_multi(
         self, keys: list[str], nonce: Optional[str] = None, recovery_key: bool = False
-    ) -> Optional[Union[dict[str, Any], Response]]:
+    ) -> Optional[VaultxResponse]:
         """
         Enter multiple recovery key shares to progress the rekey of the Vault.
         If the threshold number of recovery key shares is reached, Vault will complete the rekey.
@@ -278,7 +273,7 @@ class Key(VaultApiBase):
 
         return result
 
-    def read_backup_keys(self, recovery_key: bool = False) -> Union[dict[str, Any], Response]:
+    def read_backup_keys(self, recovery_key: bool = False) -> VaultxResponse:
         """
         Retrieve the backup copy of PGP-encrypted unseal keys.
         The returned value is the nonce of the rekey operation and a map of PGP key fingerprint to hex-encoded
@@ -289,7 +284,7 @@ class Key(VaultApiBase):
             PUT: /sys/rekey-recovery-key/backup. Produces: 200 application/json
 
         :param recovery_key: If true, send requests to "rekey-recovery-key" instead of "rekey" api path.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/rekey/backup"
         if recovery_key:
@@ -298,7 +293,7 @@ class Key(VaultApiBase):
             url=api_path,
         )
 
-    def cancel_rekey_verify(self) -> Union[dict[str, Any], Response]:
+    def cancel_rekey_verify(self) -> VaultxResponse:
         """
         Cancel any in-progress rekey verification.
         This clears any progress made and resets the nonce. Unlike cancel_rekey, this only resets
@@ -315,7 +310,7 @@ class Key(VaultApiBase):
             url=api_path,
         )
 
-    def rekey_verify(self, key: str, nonce: str) -> Union[dict[str, Any], Response]:
+    def rekey_verify(self, key: str, nonce: str) -> VaultxResponse:
         """
         Enter a single new recovery key share to progress the rekey verification of the Vault.
         If the threshold number of new recovery key shares is reached, Vault will complete the
@@ -327,7 +322,7 @@ class Key(VaultApiBase):
 
         :param key: Specifies multiple recovery share keys.
         :param nonce: Specifies the nonce of the rekey verify operation.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         params = {
             "key": key,
@@ -340,7 +335,7 @@ class Key(VaultApiBase):
             json=params,
         )
 
-    def rekey_verify_multi(self, keys: list[str], nonce: str) -> Optional[Union[dict[str, Any], Response]]:
+    def rekey_verify_multi(self, keys: list[str], nonce: str) -> Optional[VaultxResponse]:
         """
         Enter multiple new recovery key shares to progress the rekey verification of the Vault.
         If the threshold number of new recovery key shares is reached, Vault will complete the
@@ -352,7 +347,7 @@ class Key(VaultApiBase):
 
         :param keys: Specifies multiple recovery share keys.
         :param nonce: Specifies the nonce of the rekey verify operation.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         result = None
 
@@ -366,14 +361,14 @@ class Key(VaultApiBase):
 
         return result
 
-    def read_rekey_verify_progress(self) -> Union[dict[str, Any], Response]:
+    def read_rekey_verify_progress(self) -> VaultxResponse:
         """
         Read the configuration and progress of the current rekey verify attempt.
 
         Supported methods:
             GET: /sys/rekey/verify. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/rekey/verify"
         return self._adapter.get(

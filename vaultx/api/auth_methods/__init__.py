@@ -5,6 +5,18 @@ import typing as tp
 from vaultx import exceptions
 from vaultx.adapters import Adapter
 from vaultx.api.auth_methods.approle import AppRole
+from vaultx.api.auth_methods.aws import Aws
+from vaultx.api.auth_methods.azure import Azure
+from vaultx.api.auth_methods.cert import Cert
+from vaultx.api.auth_methods.gcp import Gcp
+from vaultx.api.auth_methods.github import Github
+from vaultx.api.auth_methods.jwt import Jwt
+from vaultx.api.auth_methods.kubernetes import Kubernetes
+from vaultx.api.auth_methods.ldap import Ldap
+from vaultx.api.auth_methods.legacy_mfa import LegacyMfa
+from vaultx.api.auth_methods.oidc import Oidc
+from vaultx.api.auth_methods.okta import Okta
+from vaultx.api.auth_methods.radius import Radius
 from vaultx.api.auth_methods.token import Token
 from vaultx.api.auth_methods.userpass import Userpass
 from vaultx.api.vault_api_base import VaultApiBase
@@ -13,6 +25,18 @@ from vaultx.api.vault_api_base import VaultApiBase
 __all__ = (
     "AuthMethods",
     "AppRole",
+    "Aws",
+    "Azure",
+    "Cert",
+    "Gcp",
+    "Github",
+    "Jwt",
+    "Kubernetes",
+    "Ldap",
+    "LegacyMfa",
+    "Oidc",
+    "Okta",
+    "Radius",
     "Userpass",
     "Token",
 )
@@ -24,6 +48,18 @@ class AuthMethods(VaultApiBase):
 
     _implemented_classes: tp.Final[dict] = {
         "_approle": AppRole,
+        "_aws": Aws,
+        "_azure": Azure,
+        "_cert": Cert,
+        "_gcp": Gcp,
+        "_github": Github,
+        "_jwt": Jwt,
+        "_kubernetes": Kubernetes,
+        "_ldap": Ldap,
+        "_legacy_mfa": LegacyMfa,
+        "_oidc": Oidc,
+        "_okta": Okta,
+        "_radius": Radius,
         "_userpass": Userpass,
         "_token": Token,
     }

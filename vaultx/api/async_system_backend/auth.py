@@ -1,23 +1,20 @@
-"""Support for "Auth"-related System Backend Methods."""
-
-from typing import Any, Optional, Union
-
-from httpx import Response
+from typing import Optional
 
 from vaultx import exceptions, utils
+from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 from vaultx.utils import list_to_comma_delimited, validate_list_of_strings_param
 
 
 class Auth(AsyncVaultApiBase):
-    async def list_auth_methods(self) -> Union[dict[str, Any], Response]:
+    async def list_auth_methods(self) -> VaultxResponse:
         """
         List all enabled auth methods.
 
         Supported methods:
             GET: /sys/auth. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = "/v1/sys/auth"
         return await self._adapter.get(
@@ -33,7 +30,7 @@ class Auth(AsyncVaultApiBase):
         local: bool = False,
         path: Optional[str] = None,
         **kwargs,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Enable a new auth method.
 
@@ -86,7 +83,7 @@ class Auth(AsyncVaultApiBase):
         api_path = f"/v1/sys/auth/{path}"
         return await self._adapter.post(url=api_path, json=params)
 
-    async def disable_auth_method(self, path: str) -> Union[dict[str, Any], Response]:
+    async def disable_auth_method(self, path: str) -> VaultxResponse:
         """
         Disable the auth method at the given auth path.
 
@@ -102,7 +99,7 @@ class Auth(AsyncVaultApiBase):
             url=api_path,
         )
 
-    async def read_auth_method_tuning(self, path: str) -> Union[dict[str, Any], Response]:
+    async def read_auth_method_tuning(self, path: str) -> VaultxResponse:
         """
         Read the given auth path's configuration.
 
@@ -114,7 +111,7 @@ class Auth(AsyncVaultApiBase):
 
         :param path: The path the method was mounted on. If not provided, defaults to the value of the "method_type"
             argument.
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         api_path = f"/v1/sys/auth/{path}/tune"
         return await self._adapter.get(
@@ -132,7 +129,7 @@ class Auth(AsyncVaultApiBase):
         listing_visibility: Optional[str] = None,
         passthrough_request_headers: Optional[list[str]] = None,
         **kwargs,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Tune configuration parameters for a given auth path.
 

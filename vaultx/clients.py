@@ -7,9 +7,9 @@ import typing as tp
 from typing import Any, Optional, Union
 
 import httpx
-from httpx import Response
 
 from vaultx import _types, adapters, api, exceptions
+from vaultx.adapters import VaultxResponse
 from vaultx.constants.client import (
     DEFAULT_URL,
     VAULT_CACERT,
@@ -42,7 +42,7 @@ class MetaClient(metaclass=abc.ABCMeta):
         proxy: Optional[str] = None,
         follow_redirects: bool = True,
         client: Optional[Union[httpx.Client, httpx.AsyncClient]] = None,
-        adapter: Optional[adapters.MetaAdapter] = None,
+        adapter: Optional[Union[adapters.Adapter, adapters.AsyncAdapter]] = None,
         namespace: Optional[str] = None,
         **kwargs,
     ) -> None:
@@ -134,7 +134,7 @@ class Client(MetaClient):
         proxy: Optional[str] = None,
         follow_redirects: bool = True,
         client: Optional[httpx.Client] = None,
-        adapter: tp.Type[adapters.Adapter] = adapters.JsonAdapter,
+        adapter: tp.Type[adapters.Adapter] = adapters.VaultxAdapter,
         namespace: Optional[str] = None,
         **kwargs,
     ) -> None:
@@ -286,7 +286,7 @@ class Client(MetaClient):
         return self._sys
 
     @property
-    def generate_root_status(self) -> Union[dict[str, Any], Response]:
+    def generate_root_status(self) -> VaultxResponse:
         return self.sys.read_root_generation_progress()
 
     @property
@@ -296,25 +296,23 @@ class Client(MetaClient):
         :return: Information about the current encryption key used by Vault.
         """
         response = self.sys.get_encryption_key_status()
-        if isinstance(response, dict):
-            return response["data"]
-        raise exceptions.VaultxError('Non-dict response in "key_status" method')
+        return response.value["data"]
 
     @property
-    def rekey_status(self) -> Union[dict[str, Any], Response]:
+    def rekey_status(self) -> VaultxResponse:
         return self.sys.read_rekey_progress()
 
     @property
-    def ha_status(self) -> Union[dict[str, Any], Response]:
+    def ha_status(self) -> VaultxResponse:
         """
         Read the high availability status and current leader instance of Vault.
 
-        :return: The JSON response returned by read_leader_status()
+        :return: The VaultxResponse returned by read_leader_status()
         """
         return self.sys.read_leader_status()
 
     @property
-    def seal_status(self) -> Union[dict[str, Any], Response]:
+    def seal_status(self) -> VaultxResponse:
         """
         Read the seal status of the Vault.
         This is an unauthenticated endpoint.
@@ -322,15 +320,15 @@ class Client(MetaClient):
         Supported methods:
             GET: /sys/seal-status. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         return self.sys.read_seal_status()
 
-    def read(self, path: str, wrap_ttl: Optional[Union[str, int]] = None) -> Union[dict[str, Any], Response, None]:
+    def read(self, path: str, wrap_ttl: Optional[Union[str, int]] = None) -> Optional[VaultxResponse]:
         """
         GET /<path>
 
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         try:
             return self._adapter.get(f"/v1/{path}", wrap_ttl=wrap_ttl)
@@ -354,7 +352,7 @@ class Client(MetaClient):
         *,
         data: Optional[dict[str, Any]] = None,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Write data to a path.
 
@@ -403,7 +401,7 @@ class Client(MetaClient):
 
     def lookup_token(
         self, token: Optional[str] = None, accessor: bool = False, wrap_ttl: Optional[int] = None
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         GET /auth/token/lookup/<token>
         GET /auth/token/lookup-accessor/<token-accessor>
@@ -491,7 +489,7 @@ class Client(MetaClient):
         except exceptions.VaultxError:
             return False
 
-    def auth_cubbyhole(self, token: str) -> Union[dict[str, Any], Response]:
+    def auth_cubbyhole(self, token: str) -> VaultxResponse:
         """
         Perform a login request with a wrapped token.
         Stores the unwrapped token in the resulting Vault response for use by the :py:meth:`vaultx.adapters.Adapter`
@@ -503,9 +501,7 @@ class Client(MetaClient):
         self.token = token
         return self.login("/v1/sys/wrapping/unwrap")
 
-    def login(
-        self, url: str, use_token: bool = True, **kwargs: Optional[dict[Any, Any]]
-    ) -> Union[dict[str, Any], Response]:
+    def login(self, url: str, use_token: bool = True, **kwargs: Optional[dict[Any, Any]]) -> VaultxResponse:
         """
         Perform a login request.
         Associated request is typically to a path prefixed with "/v1/auth" and optionally stores the client token sent
@@ -534,7 +530,7 @@ class AsyncClient(MetaClient):
         proxy: Optional[str] = None,
         follow_redirects: bool = True,
         client: Optional[httpx.AsyncClient] = None,
-        adapter: tp.Type[adapters.AsyncAdapter] = adapters.AsyncJsonAdapter,
+        adapter: tp.Type[adapters.AsyncAdapter] = adapters.AsyncVaultxAdapter,
         namespace: Optional[str] = None,
         **kwargs,
     ) -> None:
@@ -686,7 +682,7 @@ class AsyncClient(MetaClient):
         return self._sys
 
     @property
-    async def generate_root_status(self) -> Union[dict[str, Any], Response]:
+    async def generate_root_status(self) -> VaultxResponse:
         return await self.sys.read_root_generation_progress()
 
     @property
@@ -701,20 +697,20 @@ class AsyncClient(MetaClient):
         raise exceptions.VaultxError('Non-dict response in "key_status" method')
 
     @property
-    async def rekey_status(self) -> Union[dict[str, Any], Response]:
+    async def rekey_status(self) -> VaultxResponse:
         return await self.sys.read_rekey_progress()
 
     @property
-    async def ha_status(self) -> Union[dict[str, Any], Response]:
+    async def ha_status(self) -> VaultxResponse:
         """
         Read the high availability status and current leader instance of Vault.
 
-        :return: The JSON response returned by read_leader_status()
+        :return: The VaultxResponse returned by read_leader_status()
         """
         return await self.sys.read_leader_status()
 
     @property
-    async def seal_status(self) -> Union[dict[str, Any], Response]:
+    async def seal_status(self) -> VaultxResponse:
         """
         Read the seal status of the Vault.
         This is an unauthenticated endpoint.
@@ -722,17 +718,15 @@ class AsyncClient(MetaClient):
         Supported methods:
             GET: /sys/seal-status. Produces: 200 application/json
 
-        :return: The JSON response of the request.
+        :return: The VaultxResponse of the request.
         """
         return await self.sys.read_seal_status()
 
-    async def read(
-        self, path: str, wrap_ttl: Optional[Union[str, int]] = None
-    ) -> Union[dict[str, Any], Response, None]:
+    async def read(self, path: str, wrap_ttl: Optional[Union[str, int]] = None) -> Optional[VaultxResponse]:
         """
         GET /<path>
 
-        :return: The JSON response of the request
+        :return: The VaultxResponse of the request
         """
         try:
             return await self._adapter.get(f"/v1/{path}", wrap_ttl=wrap_ttl)
@@ -756,7 +750,7 @@ class AsyncClient(MetaClient):
         *,
         data: Optional[dict[str, Any]] = None,
         wrap_ttl: Optional[str] = None,
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         Write data to a path.
 
@@ -805,7 +799,7 @@ class AsyncClient(MetaClient):
 
     async def lookup_token(
         self, token: Optional[str] = None, accessor: bool = False, wrap_ttl: Optional[int] = None
-    ) -> Union[dict[str, Any], Response]:
+    ) -> VaultxResponse:
         """
         GET /auth/token/lookup/<token>
         GET /auth/token/lookup-accessor/<token-accessor>
@@ -893,7 +887,7 @@ class AsyncClient(MetaClient):
         except exceptions.VaultxError:
             return False
 
-    async def auth_cubbyhole(self, token: str) -> Union[dict[str, Any], Response]:
+    async def auth_cubbyhole(self, token: str) -> VaultxResponse:
         """
         Perform a login request with a wrapped token.
         Stores the unwrapped token in the resulting Vault response for use by the
@@ -905,9 +899,7 @@ class AsyncClient(MetaClient):
         self.token = token
         return await self.login("/v1/sys/wrapping/unwrap")
 
-    async def login(
-        self, url: str, use_token: bool = True, **kwargs: Optional[dict[Any, Any]]
-    ) -> Union[dict[str, Any], Response]:
+    async def login(self, url: str, use_token: bool = True, **kwargs: Optional[dict[Any, Any]]) -> VaultxResponse:
         """
         Perform a login request.
         Associated request is typically to a path prefixed with "/v1/auth" and optionally stores the client token sent

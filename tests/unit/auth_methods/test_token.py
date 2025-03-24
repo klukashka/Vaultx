@@ -79,29 +79,25 @@ class TestToken(unittest.TestCase):
     def test_revoke(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.token.revoke(token="test_token")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     def test_revoke_self(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.token.revoke_self()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     def test_revoke_accessor(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.token.revoke_accessor(accessor="test_accessor")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     def test_revoke_and_orphan_children(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.token.revoke_and_orphan_children(token="test_token")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     def test_read_role(self):
@@ -119,15 +115,13 @@ class TestToken(unittest.TestCase):
     def test_delete_role(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = self.token.delete_role(role_name="test_role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
     def test_tidy(self):
         self.mock_adapter.post.return_value = Response(204)
         result = self.token.tidy()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
 
@@ -285,29 +279,25 @@ class TestAsyncToken(unittest.IsolatedAsyncioTestCase):
     async def test_revoke(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.token.revoke(token="test_token")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     async def test_revoke_self(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.token.revoke_self()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     async def test_revoke_accessor(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.token.revoke_accessor(accessor="test_accessor")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     async def test_revoke_and_orphan_children(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.token.revoke_and_orphan_children(token="test_token")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()
 
     async def test_read_role(self):
@@ -341,13 +331,11 @@ class TestAsyncToken(unittest.IsolatedAsyncioTestCase):
     async def test_delete_role(self):
         self.mock_adapter.delete.return_value = Response(204)
         result = await self.token.delete_role(role_name="test_role")
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.delete.assert_called_once()
 
     async def test_tidy(self):
         self.mock_adapter.post.return_value = Response(204)
         result = await self.token.tidy()
-        if isinstance(result, Response):
-            self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code, 204)
         self.mock_adapter.post.assert_called_once()

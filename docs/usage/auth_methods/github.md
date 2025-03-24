@@ -116,7 +116,7 @@ github_config = client.auth.github.read_user_mapping(
 print('The Github user "{user}" is mapped to the following policies: {policies}'.format(
     user=user_name,
     policies=github_config['data']['value'],
-)
+))
 ```
 
 ## Authentication / Login

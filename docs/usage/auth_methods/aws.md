@@ -126,8 +126,8 @@ def load_aws_ec2_pkcs7_string(metadata_url_base: str = EC2_METADATA_URL_BASE) ->
     :param metadata_url_base: IP address for the EC2 metadata service.
     :return: string, pkcs7-encoded identity document from the EC2 metadata service
     """
-    metadata_pkcs7_url = '{base}/latest/dynamic/instance-identity/pkcs7'.format(base=metadata_url_base)
-    logger.debug("load_aws_ec2_pkcs7_string connecting to %s" % metadata_pkcs7_url)
+    metadata_pkcs7_url = f'{metadata_url_base}/latest/dynamic/instance-identity/pkcs7'
+    logger.debug(f"load_aws_ec2_pkcs7_string connecting to {metadata_pkcs7_url}")
 
     response = httpx.get(url=metadata_pkcs7_url)
     response.raise_for_status()
@@ -145,12 +145,12 @@ def load_aws_ec2_nonce_from_disk(token_nonce_path: str = TOKEN_NONCE_PATH) -> by
         token meta nonce.
     :return: string, a previously stored "token_meta_nonce"
     """
-    logger.debug("Attempting to load vault token meta nonce from path: %s" % token_nonce_path)
+    logger.debug(f"Attempting to load vault token meta nonce from path: {token_nonce_path}")
     try:
         with open(token_nonce_path, 'rb') as nonce_file:
             nonce = nonce_file.readline()
     except IOError:
-        logger.warning("Unable to load vault token meta nonce at path: %s" % token_nonce_path)
+        logger.warning(f"Unable to load vault token meta nonce at path: {token_nonce_path}")
         nonce = None
 
     logger.debug(f"Nonce loaded: {nonce}")
@@ -227,7 +227,7 @@ def get_vault_client(vault_url=VAULT_URL, certs=VAULT_CERTS, verify_certs=True, 
     logger.debug('Retrieving a vault (vaultx) client...')
     if verify_certs:
         # We use a self-signed certificate for the vault service itself, so we need to include our
-        # local ca bundle here for the underlying requests module.
+        # local ca bundle here for the underlying httpx module.
         os.environ['REQUESTS_CA_BUNDLE'] = '/etc/ssl/certs/ca-certificates.crt'
         vault_client = vaultx.Client(
             url=vault_url,

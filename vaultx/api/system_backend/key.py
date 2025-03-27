@@ -268,7 +268,7 @@ class Key(VaultApiBase):
                 nonce=nonce,
                 recovery_key=recovery_key,
             )
-            if result.value.get("complete"):
+            if result.get("complete"):
                 break
 
         return result
@@ -356,7 +356,7 @@ class Key(VaultApiBase):
                 key=key,
                 nonce=nonce,
             )
-            if result.value.get("complete"):
+            if result.get("complete"):
                 break
 
         return result

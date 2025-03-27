@@ -97,7 +97,7 @@ class Seal(VaultApiBase):
                 key=key,
                 migrate=migrate,
             )
-            if result.value.get("sealed"):
+            if not result["sealed"]:
                 break
 
         return result

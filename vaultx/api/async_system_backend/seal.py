@@ -97,7 +97,7 @@ class Seal(AsyncVaultApiBase):
                 key=key,
                 migrate=migrate,
             )
-            if result["sealed"]:
+            if not result["sealed"]:
                 break
 
         return result

@@ -5,7 +5,6 @@ from httpx import Response
 
 from vaultx.api.async_system_backend.mount import Mount as AsyncMount
 from vaultx.api.system_backend.mount import Mount
-from vaultx.exceptions import VaultxError
 
 
 class TestMount(unittest.TestCase):

@@ -1,6 +1,5 @@
 from typing import Optional
 
-from vaultx import exceptions
 from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
 

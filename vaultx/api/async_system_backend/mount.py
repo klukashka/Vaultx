@@ -2,7 +2,6 @@ from typing import Any, Optional
 
 from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
-from vaultx.exceptions import VaultxError
 
 
 class Mount(AsyncVaultApiBase):

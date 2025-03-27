@@ -3,7 +3,6 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx import exceptions
 from vaultx.adapters import VaultxResponse
 from vaultx.api.async_system_backend.seal import Seal as AsyncSeal
 from vaultx.api.system_backend.seal import Seal

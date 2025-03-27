@@ -270,7 +270,7 @@ class Key(AsyncVaultApiBase):
                 nonce=nonce,
                 recovery_key=recovery_key,
             )
-            if isinstance(result, dict) and result.get("complete"):
+            if result.value.get("complete"):
                 break
 
         return result
@@ -358,7 +358,7 @@ class Key(AsyncVaultApiBase):
                 key=key,
                 nonce=nonce,
             )
-            if isinstance(result, dict) and result.get("complete"):
+            if result.value.get("complete"):
                 break
 
         return result

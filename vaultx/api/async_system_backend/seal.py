@@ -13,9 +13,7 @@ class Seal(AsyncVaultApiBase):
         :return: True if Vault is seal, False otherwise.
         """
         seal_status = await self.read_seal_status()
-        if isinstance(seal_status, dict):
-            return seal_status["sealed"]
-        raise exceptions.VaultxError("Unexpected return of non-json response")
+        return seal_status["sealed"]
 
     async def read_seal_status(self) -> VaultxResponse:
         """
@@ -99,7 +97,7 @@ class Seal(AsyncVaultApiBase):
                 key=key,
                 migrate=migrate,
             )
-            if isinstance(result, dict) and not result["sealed"]:
+            if result["sealed"]:
                 break
 
         return result

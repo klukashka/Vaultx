@@ -4,6 +4,7 @@ from unittest import mock
 
 from httpx import Response
 
+from vaultx.adapters import VaultxResponse
 from vaultx.api.async_secrets_engines.azure import Azure as AsyncAzure
 from vaultx.api.secrets_engines.azure import Azure
 from vaultx.exceptions import VaultxError
@@ -100,8 +101,8 @@ class TestAzure(unittest.TestCase):
         )
 
     def test_generate_credentials_returns_response(self):
-        mock_response = {"data": {"client_id": "test-client-id", "client_secret": "test-secret"}}
-        self.mock_adapter.get.return_value = mock_response
+        mock_response = Response(200, json={"data": {"client_id": "test-client-id", "client_secret": "test-secret"}})
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.azure.generate_credentials(name="test-role")
         self.assertEqual(result, {"client_id": "test-client-id", "client_secret": "test-secret"})

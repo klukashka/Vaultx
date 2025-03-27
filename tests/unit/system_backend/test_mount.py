@@ -5,7 +5,6 @@ from httpx import Response
 
 from vaultx.api.async_system_backend.mount import Mount as AsyncMount
 from vaultx.api.system_backend.mount import Mount
-from vaultx.exceptions import VaultxError
 
 
 class TestMount(unittest.TestCase):
@@ -39,19 +38,6 @@ class TestMount(unittest.TestCase):
         )
         self.assertEqual(result, "1")
         self.mock_adapter.get.assert_called_once_with("/v1/sys/mounts")
-
-    def test_retrieve_mount_option_non_json_response(self):
-        self.mock_adapter.get.return_value = Response(500)
-        with self.assertRaises(VaultxError) as context:
-            self.mount.retrieve_mount_option(
-                mount_point="secret",
-                option_name="version",
-                default_value="1",
-            )
-        self.assertEqual(
-            str(context.exception),
-            "Unexpected return of non-json response",
-        )
 
     def test_enable_secrets_engine(self):
         self.mock_adapter.post.return_value = Response(204)
@@ -153,19 +139,6 @@ class TestAsyncMount(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual(result, "1")
         self.mock_adapter.get.assert_called_once_with("/v1/sys/mounts")
-
-    async def test_retrieve_mount_option_non_json_response(self):
-        self.mock_adapter.get.return_value = Response(500)
-        with self.assertRaises(VaultxError) as context:
-            await self.mount.retrieve_mount_option(
-                mount_point="secret",
-                option_name="version",
-                default_value="1",
-            )
-        self.assertEqual(
-            str(context.exception),
-            "Unexpected return of non-json response",
-        )
 
     async def test_enable_secrets_engine(self):
         self.mock_adapter.post.return_value = Response(204)

@@ -3,6 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
+from vaultx.adapters import VaultxResponse
 from vaultx.api.async_system_backend.key import Key as AsyncKey
 from vaultx.api.system_backend.key import Key
 from vaultx.exceptions import VaultxError
@@ -160,10 +161,15 @@ class TestKey(unittest.TestCase):
         )
 
     def test_rekey_multi(self):
-        self.mock_adapter.put.side_effect = [
-            {"complete": False},
-            {"complete": True},
-        ]
+        self.mock_adapter.put.side_effect = VaultxResponse(
+            Response(
+                200,
+                json=[
+                    {"complete": False},
+                    {"complete": True},
+                ],
+            )
+        )
         result = self.key.rekey_multi(keys=["key1", "key2"], nonce="test_nonce")
         self.assertEqual(result, {"complete": True})
         self.assertEqual(self.mock_adapter.put.call_count, 2)

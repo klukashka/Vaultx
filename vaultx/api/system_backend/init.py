@@ -27,9 +27,7 @@ class Init(VaultApiBase):
         :return: True if Vault is initialized, False otherwise.
         """
         status = self.read_init_status()
-        if isinstance(status, dict):
-            return status["initialized"]
-        raise VaultxError("Unexpected return of non-json response")
+        return status["initialized"]
 
     def initialize(
         self,

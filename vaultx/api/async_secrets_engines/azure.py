@@ -84,9 +84,7 @@ class Azure(AsyncVaultApiBase):
         response = await self._adapter.get(
             url=api_path,
         )
-        if isinstance(response, dict):
-            return response.get("data")
-        raise VaultxError("Unexpected return of non-dict response")
+        return response.value.get("data")
 
     async def delete_config(self, mount_point: str = DEFAULT_MOUNT_POINT) -> VaultxResponse:
         """
@@ -162,9 +160,7 @@ class Azure(AsyncVaultApiBase):
         response = await self._adapter.list(
             url=api_path,
         )
-        if isinstance(response, dict):
-            return response.get("data")
-        raise VaultxError("Unexpected return of non-dict response")
+        return response.value.get("data")
 
     async def generate_credentials(self, name: str, mount_point: str = DEFAULT_MOUNT_POINT) -> Any:
         """Generate a new service principal based on the named role.
@@ -181,6 +177,4 @@ class Azure(AsyncVaultApiBase):
         response = await self._adapter.get(
             url=api_path,
         )
-        if isinstance(response, dict):
-            return response.get("data")
-        raise VaultxError("Unexpected return of non-dict response")
+        return response.value.get("data")

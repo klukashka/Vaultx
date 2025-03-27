@@ -4,6 +4,7 @@ from unittest import mock
 
 from httpx import Response
 
+from vaultx.adapters import VaultxResponse
 from vaultx.api.async_secrets_engines.azure import Azure as AsyncAzure
 from vaultx.api.secrets_engines.azure import Azure
 from vaultx.exceptions import VaultxError
@@ -47,8 +48,8 @@ class TestAzure(unittest.TestCase):
         )
 
     def test_read_config_returns_response(self):
-        mock_response = {"data": {"subscription_id": "test-subscription-id"}}
-        self.mock_adapter.get.return_value = mock_response
+        mock_response = Response(200, json={"data": {"subscription_id": "test-subscription-id"}})
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.azure.read_config()
         self.assertEqual(result, {"subscription_id": "test-subscription-id"})
@@ -90,8 +91,8 @@ class TestAzure(unittest.TestCase):
         )
 
     def test_list_roles_returns_response(self):
-        mock_response = {"data": {"keys": ["role1", "role2"]}}
-        self.mock_adapter.list.return_value = mock_response
+        mock_response = Response(200, json={"data": {"keys": ["role1", "role2"]}})
+        self.mock_adapter.list.return_value = VaultxResponse(mock_response)
 
         result = self.azure.list_roles()
         self.assertEqual(result, {"keys": ["role1", "role2"]})
@@ -100,8 +101,8 @@ class TestAzure(unittest.TestCase):
         )
 
     def test_generate_credentials_returns_response(self):
-        mock_response = {"data": {"client_id": "test-client-id", "client_secret": "test-secret"}}
-        self.mock_adapter.get.return_value = mock_response
+        mock_response = Response(200, json={"data": {"client_id": "test-client-id", "client_secret": "test-secret"}})
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = self.azure.generate_credentials(name="test-role")
         self.assertEqual(result, {"client_id": "test-client-id", "client_secret": "test-secret"})
@@ -134,8 +135,8 @@ class TestAsyncAzure(unittest.IsolatedAsyncioTestCase):
         )
 
     async def test_read_config_returns_response(self):
-        mock_response = {"data": {"subscription_id": "test-subscription-id"}}
-        self.mock_adapter.get.return_value = mock_response
+        mock_response = Response(200, json={"data": {"subscription_id": "test-subscription-id"}})
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = await self.azure.read_config()
         self.assertEqual(result, {"subscription_id": "test-subscription-id"})
@@ -177,8 +178,8 @@ class TestAsyncAzure(unittest.IsolatedAsyncioTestCase):
         )
 
     async def test_list_roles_returns_response(self):
-        mock_response = {"data": {"keys": ["role1", "role2"]}}
-        self.mock_adapter.list.return_value = mock_response
+        mock_response = Response(200, json={"data": {"keys": ["role1", "role2"]}})
+        self.mock_adapter.list.return_value = VaultxResponse(mock_response)
 
         result = await self.azure.list_roles()
         self.assertEqual(result, {"keys": ["role1", "role2"]})
@@ -187,8 +188,8 @@ class TestAsyncAzure(unittest.IsolatedAsyncioTestCase):
         )
 
     async def test_generate_credentials_returns_response(self):
-        mock_response = {"data": {"client_id": "test-client-id", "client_secret": "test-secret"}}
-        self.mock_adapter.get.return_value = mock_response
+        mock_response = Response(200, json={"data": {"client_id": "test-client-id", "client_secret": "test-secret"}})
+        self.mock_adapter.get.return_value = VaultxResponse(mock_response)
 
         result = await self.azure.generate_credentials(name="test-role")
         self.assertEqual(result, {"client_id": "test-client-id", "client_secret": "test-secret"})

@@ -2,7 +2,6 @@ from typing import Any, Optional
 
 from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import VaultApiBase
-from vaultx.exceptions import VaultxError
 
 
 class Mount(VaultApiBase):
@@ -29,10 +28,7 @@ class Mount(VaultApiBase):
         """
         secrets_engine_path = f"{mount_point}/"
         listed_engines = self.list_mounted_secrets_engines()
-        if isinstance(listed_engines, dict):
-            secrets_engines_list = listed_engines["data"]
-        else:
-            raise VaultxError("Unexpected return of non-json response")
+        secrets_engines_list = listed_engines["data"]
         mount_options = secrets_engines_list[secrets_engine_path].get("options")
         if mount_options is None:
             return default_value

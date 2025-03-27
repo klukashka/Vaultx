@@ -3,7 +3,7 @@ from unittest import mock
 
 from httpx import Response
 
-from vaultx import exceptions
+from vaultx.adapters import VaultxResponse
 from vaultx.api.async_system_backend.seal import Seal as AsyncSeal
 from vaultx.api.system_backend.seal import Seal
 
@@ -25,11 +25,6 @@ class TestSeal(unittest.TestCase):
         self.assertFalse(result)
         self.mock_adapter.get.assert_called_once_with(url="/v1/sys/seal-status")
 
-    def test_is_sealed_non_json_response(self):
-        self.mock_adapter.get.return_value = Response(500)
-        with self.assertRaises(exceptions.VaultxError):
-            self.seal.is_sealed()
-
     def test_read_seal_status(self):
         self.mock_adapter.get.return_value = {"sealed": True}
         result = self.seal.read_seal_status()
@@ -43,9 +38,9 @@ class TestSeal(unittest.TestCase):
         self.mock_adapter.put.assert_called_once_with(url="/v1/sys/seal")
 
     def test_submit_unseal_key(self):
-        self.mock_adapter.put.return_value = {"sealed": True}
+        self.mock_adapter.put.return_value = VaultxResponse(Response(200, json={"sealed": True}))
         result = self.seal.submit_unseal_key(key="test_key")
-        self.assertEqual(result, {"sealed": True})
+        self.assertEqual(result.value, {"sealed": True})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/unseal",
             json={"key": "test_key", "migrate": False},
@@ -70,9 +65,9 @@ class TestSeal(unittest.TestCase):
         self.assertEqual(self.mock_adapter.put.call_count, 2)
 
     def test_submit_unseal_keys_no_unseal(self):
-        self.mock_adapter.put.return_value = {"sealed": True}
+        self.mock_adapter.put.return_value = VaultxResponse(Response(200, json={"sealed": True}))
         result = self.seal.submit_unseal_keys(keys=["key1", "key2"])
-        self.assertEqual(result, {"sealed": True})
+        self.assertEqual(result.value, {"sealed": True})  # type: ignore
         self.assertEqual(self.mock_adapter.put.call_count, 2)
 
 
@@ -93,11 +88,6 @@ class TestAsyncSeal(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(result)
         self.mock_adapter.get.assert_called_once_with(url="/v1/sys/seal-status")
 
-    async def test_is_sealed_non_json_response(self):
-        self.mock_adapter.get.return_value = Response(500)
-        with self.assertRaises(exceptions.VaultxError):
-            await self.seal.is_sealed()
-
     async def test_read_seal_status(self):
         self.mock_adapter.get.return_value = {"sealed": True}
         result = await self.seal.read_seal_status()
@@ -111,9 +101,9 @@ class TestAsyncSeal(unittest.IsolatedAsyncioTestCase):
         self.mock_adapter.put.assert_called_once_with(url="/v1/sys/seal")
 
     async def test_submit_unseal_key(self):
-        self.mock_adapter.put.return_value = {"sealed": True}
+        self.mock_adapter.put.return_value = VaultxResponse(Response(200, json={"sealed": True}))
         result = await self.seal.submit_unseal_key(key="test_key")
-        self.assertEqual(result, {"sealed": True})
+        self.assertEqual(result.value, {"sealed": True})
         self.mock_adapter.put.assert_called_once_with(
             url="/v1/sys/unseal",
             json={"key": "test_key", "migrate": False},
@@ -138,7 +128,7 @@ class TestAsyncSeal(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.mock_adapter.put.call_count, 2)
 
     async def test_submit_unseal_keys_no_unseal(self):
-        self.mock_adapter.put.return_value = {"sealed": True}
+        self.mock_adapter.put.return_value = VaultxResponse(Response(200, json={"sealed": True}))
         result = await self.seal.submit_unseal_keys(keys=["key1", "key2"])
-        self.assertEqual(result, {"sealed": True})
+        self.assertEqual(result.value, {"sealed": True})  # type: ignore
         self.assertEqual(self.mock_adapter.put.call_count, 2)

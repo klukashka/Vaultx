@@ -34,3 +34,68 @@ jobs:
 
       - name: Run tests
         run: poetry run pytest tests/unit
+
+  integration_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.8"
+        vault-version:
+          - "vault-enterprise=1.6.*+ent"
+          - "vault-enterprise=1.7.*+ent"
+          - "vault=1.11.*"
+          - "vault=1.12.*"
+          - "vault=1.13.*"
+          - "vault=1.14.*"
+          - "vault=1.15.*"
+          - "vault=1.16.*"
+
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          show-progress: false
+
+      - name: Install Poetry
+        uses:  abatilo/actions-poetry@v3.0.2
+        with:
+          poetry-version: 1.8.3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        id: python
+        uses: actions/setup-python@v5.4.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+          cache: poetry
+
+      - name: Install dependencies
+        if: steps.python.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root --with dev
+
+      - name: Install library
+        run: poetry install --no-interaction
+
+      - name: Install Vault and Consul (for integration tests)
+        run: |
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          echo "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" \
+            | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+          sudo apt update \
+            -o Dir::Etc::sourceparts="-" \
+            -o APT::Get::List-Cleanup="0" \
+            -o Dir::Etc::sourcelist="sources.list.d/hashicorp.list"
+
+          sudo apt install \
+            consul=1.19.* \
+            ${{ matrix.vault-version }} \
+            ;
+
+          # We disble cap_ipc_lock here as its generally incompatabile with GitHub
+          # Actions' runtime environments.
+          sudo setcap cap_ipc_lock= /usr/bin/vault
+
+      - name: pytest tests/integration
+        run: poetry run pytest tests/integration

@@ -13,8 +13,8 @@ class VaultxIntegrationTestCase:
     """Base class intended to be used by sync vaultx integration test cases."""
 
     TEST_APPROLE_PATH: str
-    manager: ServerManager = ServerManager([], Client())  # dummy default attribute
-    client: Client = Client()  # dummy default attribute
+    manager: ServerManager
+    client: Client
     enable_vault_ha: bool = False
     use_env: bool = False
     server_retry_count: int = 2  # num retries != total tries
@@ -153,8 +153,8 @@ class AsyncVaultxIntegrationTestCase:
     """Base class intended to be used by async vaultx integration test cases."""
 
     TEST_APPROLE_PATH: str
-    manager: AsyncServerManager = AsyncServerManager([], Client())  # default attribute is a plug, dummy
-    client: AsyncClient = AsyncClient()  # default attribute is a plug, dummy
+    manager: AsyncServerManager
+    client: AsyncClient
     enable_vault_ha: bool = False
     use_env: bool = False
     server_retry_count: int = 2  # num retries != total tries

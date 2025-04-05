@@ -590,7 +590,7 @@ def get_config_vault_address(config_path: str) -> str:
     config_hcl = load_config_file(config_path)
     config = hcl.loads(config_hcl)
     try:
-        vault_address = f"https://{config["listener"]["tcp"]["address"]}"
+        vault_address = f'https://{config["listener"]["tcp"]["address"]}'
     except KeyError as error:
         logger.debug(
             "Unable to find explicit Vault address in config file {path}: {err}".format(

@@ -31,6 +31,26 @@ jobs:
       - name: Install dependencies
         run: poetry install --with dev
 
+      - name: Install Vault and Consul (for integration tests)
+        run: |
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          echo "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" \
+            | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+          sudo apt update \
+            -o Dir::Etc::sourceparts="-" \
+            -o APT::Get::List-Cleanup="0" \
+            -o Dir::Etc::sourcelist="sources.list.d/hashicorp.list"
+
+          sudo apt install \
+            consul=1.19.* \
+            ${{ matrix.vault-version }} \
+            ;
+
+          # We disble cap_ipc_lock here as its generally incompatabile with GitHub
+          # Actions' runtime environments.
+          sudo setcap cap_ipc_lock= /usr/bin/vault
+
       - name: Run tests with coverage
         run: poetry run pytest --cov=vaultx --cov-report=xml --cov-report=term
 

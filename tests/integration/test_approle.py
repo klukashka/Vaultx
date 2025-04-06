@@ -27,7 +27,7 @@ class TestApprole(VaultxIntegrationTestCase, TestCase):
             param(
                 "no secret ids",
                 num_secrets_to_create=0,
-                raises=exceptions.VaultxError,
+                raises=exceptions.HTTPError,
             ),
             param(
                 "one secret id",

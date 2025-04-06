@@ -484,8 +484,10 @@ class Client(MetaClient):
         try:
             self.lookup_token()
             return True
-        except exceptions.VaultxError:
-            return False
+        except exceptions.HTTPError as e:
+            if e.status_code in {400, 403, 404}:
+                return False
+            raise
 
     def auth_cubbyhole(self, token: str) -> VaultxResponse:
         """
@@ -878,8 +880,10 @@ class AsyncClient(MetaClient):
         try:
             await self.lookup_token()
             return True
-        except exceptions.VaultxError:
-            return False
+        except exceptions.HTTPError as e:
+            if e.status_code in {400, 403, 404}:
+                return False
+            raise
 
     async def auth_cubbyhole(self, token: str) -> VaultxResponse:
         """

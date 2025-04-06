@@ -385,9 +385,7 @@ class Client(MetaClient):
         policy = None
         try:
             response = self.sys.read_policy(name=name)
-            if isinstance(response, dict):
-                return response["data"]["rules"]
-            raise exceptions.VaultxError('Non-dict response in "get_policy" method')
+            return response.value["data"]["rules"]
         except exceptions.HTTPError as e:
             if e.status_code == 404:
                 return None
@@ -692,9 +690,7 @@ class AsyncClient(MetaClient):
         :return: Information about the current encryption key used by Vault.
         """
         response = await self.sys.get_encryption_key_status()
-        if isinstance(response, dict):
-            return response["data"]
-        raise exceptions.VaultxError('Non-dict response in "key_status" method')
+        return response.value["data"]
 
     @property
     async def rekey_status(self) -> VaultxResponse:
@@ -783,9 +779,7 @@ class AsyncClient(MetaClient):
         policy = None
         try:
             response = await self.sys.read_policy(name=name)
-            if isinstance(response, dict):
-                return response["data"]["rules"]
-            raise exceptions.VaultxError('Non-dict response in "get_policy" method')
+            return response.value["data"]["rules"]
         except exceptions.HTTPError as e:
             if e.status_code == 404:
                 return None

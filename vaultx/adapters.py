@@ -125,7 +125,7 @@ class Adapter:
             when sending requests to Vault, or a string pointing at the CA bundle to use for verification.
             See https://www.python-httpx.org/advanced/ssl/
         :param timeout: The timeout value for requests sent to Vault.
-        :param proxy: Proxies to use when preforming requests.
+        :param proxy: Proxies to use when performing requests.
             See: https://www.python-httpx.org/advanced/proxies/
         :param follow_redirects: Whether to follow redirects when sending requests to Vault.
         :param client: Optional client object to use when performing request.
@@ -157,10 +157,12 @@ class Adapter:
             "proxy": proxy,
         }
 
+    @exceptions.handle_unknown_exception
     def __enter__(self: "Adapter") -> "Adapter":
         self.client.__enter__()
         return self
 
+    @exceptions.handle_unknown_exception
     def __exit__(
         self,
         exc_type: Optional[type[BaseException]] = None,
@@ -245,8 +247,8 @@ class Adapter:
         """
         Perform a login request.
 
-        Associated request is typically to a path prefixed with "/v1/auth" and optionally stores the client token sent
-            in the resulting Vault response for use by the :py:meth:`vaultx.adapters.Adapter` instance
+        Associated request is typically sent to a path prefixed with "/v1/auth" and optionally stores the client token
+            sent in the resulting Vault response for use by the :py:meth:`vaultx.adapters.Adapter` instance
             under the _adapter Client attribute.
 
         :param url: Path to send the authentication request to.
@@ -287,7 +289,6 @@ class Adapter:
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri
             attribute.
         :param headers: Additional headers to include with the request.
-        :type headers: dict
         :param kwargs: Additional keyword arguments to include in the requests call.
         :param raise_exception: If True, raise an exception.
         """
@@ -432,7 +433,6 @@ class AsyncAdapter:
         :param token: Authentication token to include in requests sent to Vault.
         :param cert: Certificates for use in requests sent to the Vault instance. This should be a tuple with the
             certificate and then key.
-        :type cert: tuple
         :param verify: Either a boolean to indicate whether TLS verification should be performed
             when sending requests to Vault, or a string pointing at the CA bundle to use for verification.
             See https://www.python-httpx.org/advanced/ssl/
@@ -452,7 +452,6 @@ class AsyncAdapter:
 
         if not client:
             client = httpx.AsyncClient(cert=cert, verify=verify, proxy=proxy, transport=AiohttpTransport())
-            # client = httpx.AsyncClient(cert=cert, verify=verify, proxy=proxy)
 
         self.base_uri = base_uri
         self.token = token
@@ -628,7 +627,8 @@ class AsyncVaultxAdapter(AsyncAdapter):
         raise_exception: Optional[bool] = True,
         **kwargs: Optional[Any],
     ) -> VaultxResponse:
-        """Main method for routing HTTP requests to the configured Vault base_uri.
+        """
+        Main method for routing HTTP requests to the configured Vault base_uri.
 
         :param method: HTTP method to use with the request. E.g., GET, POST, etc.
         :param url: Partial URL path to send the request to. This will be joined to the end of the instance's base_uri

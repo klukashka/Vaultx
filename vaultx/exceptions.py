@@ -110,6 +110,8 @@ def handle_unknown_exception(  # noqa: C901
     def wrapper(*args: tp.Any, **kwargs: tp.Any) -> tp.Any:
         try:
             return obj(*args, **kwargs)
+        except HTTPError:
+            raise
         except VaultxError:
             raise
         except Exception as exc:

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional, Union
 
 from vaultx import utils
 from vaultx.adapters import VaultxResponse
@@ -24,7 +24,7 @@ class Audit(AsyncVaultApiBase):
         self,
         device_type: str,
         description: Optional[str] = None,
-        options: Optional[str] = None,
+        options: Optional[Union[str, Any]] = None,
         path: Optional[str] = None,
         local: Optional[bool] = None,
     ) -> VaultxResponse:

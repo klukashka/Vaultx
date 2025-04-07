@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 from vaultx import utils
 from vaultx.adapters import VaultxResponse
@@ -228,7 +228,7 @@ class Transform(VaultApiBase):
     def create_or_update_tokenization_transformation(
         self,
         name: str,
-        max_ttl: int = 0,
+        max_ttl: Union[str, int] = 0,
         mapping_mode: str = "default",
         allowed_roles: Optional[list] = None,
         stores: Optional[list] = None,

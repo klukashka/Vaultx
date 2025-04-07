@@ -454,7 +454,7 @@ class Gcp(VaultApiBase):
         name: str,
         service_account_email: str,
         token_scopes: Optional[list[str]] = None,
-        ttl: Optional[str] = None,
+        ttl: Optional[Union[str, int]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
     ) -> VaultxResponse:
         """

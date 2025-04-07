@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 from vaultx import utils
 from vaultx.adapters import VaultxResponse
@@ -23,14 +23,14 @@ class Token(VaultApiBase):
         no_parent: bool = False,
         no_default_policy: bool = False,
         renewable: bool = True,
-        ttl: Optional[str] = None,
+        ttl: Optional[Union[str, int]] = None,
         type_: Optional[str] = None,
         explicit_max_ttl: Optional[str] = None,
         display_name: str = "token",
         num_uses: int = 0,
         period: Optional[str] = None,
         entity_alias: Optional[str] = None,
-        wrap_ttl: Optional[str] = None,
+        wrap_ttl: Optional[Union[str, int]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
     ) -> VaultxResponse:
         """

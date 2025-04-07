@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from vaultx.adapters import VaultxResponse
 from vaultx.api.vault_api_base import AsyncVaultApiBase
@@ -141,8 +141,8 @@ class Mount(AsyncVaultApiBase):
     async def tune_mount_configuration(
         self,
         path: str,
-        default_lease_ttl: Optional[int] = None,
-        max_lease_ttl: Optional[int] = None,
+        default_lease_ttl: Optional[Union[str, int]] = None,
+        max_lease_ttl: Optional[Union[str, int]] = None,
         description: Optional[str] = None,
         audit_non_hmac_request_keys: Optional[list[str]] = None,
         audit_non_hmac_response_keys: Optional[str] = None,

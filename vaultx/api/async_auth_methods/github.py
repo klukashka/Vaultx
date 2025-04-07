@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 from vaultx import exceptions, utils
 from vaultx.adapters import VaultxResponse
@@ -19,8 +19,8 @@ class Github(AsyncVaultApiBase):
         self,
         organization: str,
         base_url: Optional[str] = None,
-        ttl: Optional[str] = None,
-        max_ttl: Optional[str] = None,
+        ttl: Optional[Union[str, int]] = None,
+        max_ttl: Optional[Union[str, int]] = None,
         mount_point: str = DEFAULT_MOUNT_POINT,
     ) -> VaultxResponse:
         """

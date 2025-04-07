@@ -44,7 +44,7 @@ class Mount(AsyncVaultApiBase):
         description: Optional[str] = None,
         config: Optional[dict[str, Any]] = None,
         plugin_name: Optional[str] = None,
-        options: Optional[dict[str, None]] = None,
+        options: Optional[dict[str, Any]] = None,
         local: bool = False,
         seal_wrap: bool = False,
         **kwargs,

@@ -781,7 +781,7 @@ class AsyncClient(MetaClient):
         policy = None
         try:
             response = await self.sys.read_policy(name=name)
-            return response.value["data"]["rules"]
+            policy = response.value["data"]["rules"]
         except exceptions.HTTPError as e:
             if e.status_code == 404:
                 return None

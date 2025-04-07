@@ -385,7 +385,7 @@ class Client(MetaClient):
         policy = None
         try:
             response = self.sys.read_policy(name=name)
-            return response.value["data"]["rules"]
+            policy = response.value["data"]["rules"]
         except exceptions.HTTPError as e:
             if e.status_code == 404:
                 return None

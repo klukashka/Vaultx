@@ -872,7 +872,6 @@ class AsyncClient(MetaClient):
             await self.auth.token.revoke_self()
         self.token = None
 
-    @exceptions.async_handle_unknown_exception
     async def is_authenticated(self) -> bool:
         """Helper method which returns the authentication status of the client"""
         if not self.token:

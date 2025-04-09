@@ -370,7 +370,7 @@ class VaultxAdapter(Adapter):
         return VaultxResponse(response)
 
 
-@exceptions.handle_unknown_exception
+@exceptions.async_handle_unknown_exception
 class AiohttpTransport(httpx.AsyncBaseTransport):
     """Class for providing httpx requests with aiohttp transport"""
 
@@ -401,6 +401,20 @@ class AiohttpTransport(httpx.AsyncBaseTransport):
             return httpx.Response(
                 status_code=aiohttp_response.status, headers=headers, content=content, request=request
             )
+
+    @exceptions.async_handle_unknown_exception
+    async def __aenter__(self):
+        await super().__aenter__()
+        return self
+
+    @exceptions.async_handle_unknown_exception
+    async def __aexit__(
+        self,
+        exc_type: Optional[type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[types.TracebackType] = None,
+    ) -> None:
+        await self.aclose()
 
     async def aclose(self):
         if not self._closed:
@@ -469,12 +483,12 @@ class AsyncAdapter:
             "proxy": proxy,
         }
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def __aenter__(self: "AsyncAdapter") -> "AsyncAdapter":
         await self.client.__aenter__()
         return self
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def __aexit__(
         self,
         exc_type: Optional[type[BaseException]] = None,
@@ -483,12 +497,12 @@ class AsyncAdapter:
     ) -> None:
         await self.client.__aexit__(exc_type, exc_value, traceback)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def close(self):
         """Close the AsyncClient's underlying TCP connections."""
         await self.client.aclose()
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def get(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async GET request.
@@ -499,7 +513,7 @@ class AsyncAdapter:
         """
         return await self.request("GET", url, **kwargs)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def post(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async POST request.
@@ -510,7 +524,7 @@ class AsyncAdapter:
         """
         return await self.request("POST", url, **kwargs)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def put(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async PUT request.
@@ -521,7 +535,7 @@ class AsyncAdapter:
         """
         return await self.request("PUT", url, **kwargs)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def delete(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async DELETE request.
@@ -532,7 +546,7 @@ class AsyncAdapter:
         """
         return await self.request("DELETE", url, **kwargs)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def list(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async LIST request.
@@ -543,7 +557,7 @@ class AsyncAdapter:
         """
         return await self.request("LIST", url, **kwargs)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def head(self, url: str, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async HEAD request.
@@ -554,7 +568,7 @@ class AsyncAdapter:
         """
         return await self.request("HEAD", url, **kwargs)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def login(self, url: str, use_token: bool = True, **kwargs: Optional[Any]) -> VaultxResponse:
         """
         Perform an async login request.
@@ -607,7 +621,7 @@ class AsyncAdapter:
         raise NotImplementedError()
 
 
-@exceptions.handle_unknown_exception
+@exceptions.async_handle_unknown_exception
 class AsyncVaultxAdapter(AsyncAdapter):
     """The AsyncVaultxAdapter adapter class. Mostly similar to the sync version."""
 

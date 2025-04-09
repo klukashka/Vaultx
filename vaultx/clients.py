@@ -516,7 +516,7 @@ class Client(MetaClient):
         return self._adapter.login(url=url, use_token=use_token, **kwargs)
 
 
-@exceptions.handle_unknown_exception
+@exceptions.async_handle_unknown_exception
 class AsyncClient(MetaClient):
     """Vaultx asynchronous client"""
 
@@ -593,12 +593,12 @@ class AsyncClient(MetaClient):
         self._secrets = api.AsyncSecretsEngines(adapter=self._adapter)
         self._sys = api.AsyncSystemBackend(adapter=self._adapter)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def __aenter__(self: "AsyncClient") -> "AsyncClient":
         await self._adapter.__aenter__()
         return self
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def __aexit__(
         self,
         exc_type: Optional[type[BaseException]] = None,
@@ -607,7 +607,7 @@ class AsyncClient(MetaClient):
     ) -> None:
         await self._adapter.__aexit__(exc_type, exc_value, traceback)
 
-    @exceptions.handle_unknown_exception
+    @exceptions.async_handle_unknown_exception
     async def close(self) -> None:
         await self._adapter.close()
 
@@ -872,6 +872,7 @@ class AsyncClient(MetaClient):
             await self.auth.token.revoke_self()
         self.token = None
 
+    @exceptions.async_handle_unknown_exception
     async def is_authenticated(self) -> bool:
         """Helper method which returns the authentication status of the client"""
         if not self.token:

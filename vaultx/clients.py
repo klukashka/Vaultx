@@ -212,7 +212,6 @@ class Client(MetaClient):
     ) -> None:
         self._adapter.__exit__(exc_type, exc_value, traceback)
 
-    @exceptions.handle_unknown_exception
     def close(self) -> None:
         self._adapter.close()
 
@@ -607,7 +606,6 @@ class AsyncClient(MetaClient):
     ) -> None:
         await self._adapter.__aexit__(exc_type, exc_value, traceback)
 
-    @exceptions.async_handle_unknown_exception
     async def close(self) -> None:
         await self._adapter.close()
 

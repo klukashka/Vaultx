@@ -3,7 +3,7 @@ from unittest import TestCase, skipIf
 from unittest.async_case import IsolatedAsyncioTestCase
 
 from tests import utils
-from tests.utils.vaultx_integration_test_case import VaultxIntegrationTestCase, AsyncVaultxIntegrationTestCase
+from tests.utils.vaultx_integration_test_case import AsyncVaultxIntegrationTestCase, VaultxIntegrationTestCase
 from vaultx import exceptions
 
 
@@ -433,7 +433,9 @@ class TestAsyncIntegration(AsyncVaultxIntegrationTestCase, IsolatedAsyncioTestCa
         if "userpass/" not in (await self.client.sys.list_auth_methods())["data"]:
             await self.client.sys.enable_auth_method("userpass")
 
-        await self.client.auth.userpass.create_or_update_user("testcreateuser", "testcreateuserpass", policies="not_root")
+        await self.client.auth.userpass.create_or_update_user(
+            "testcreateuser", "testcreateuserpass", policies="not_root"
+        )
 
         result = await self.client.auth.userpass.login("testcreateuser", "testcreateuserpass")
 
@@ -588,7 +590,9 @@ class TestAsyncIntegration(AsyncVaultxIntegrationTestCase, IsolatedAsyncioTestCa
         await self.prep_policy("testpolicy")
 
         # Create token role w/ policy
-        assert (await self.client.auth.token.create_or_update_role("testrole", allowed_policies="testpolicy")).status == 204
+        assert (
+            await self.client.auth.token.create_or_update_role("testrole", allowed_policies="testpolicy")
+        ).status == 204
 
         # Create token against role
         token = await self.client.auth.token.create(ttl="1h", role_name="testrole")

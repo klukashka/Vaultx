@@ -63,6 +63,30 @@ class HTTPError(Exception):
         return f"{class_name}(status_code={self.status_code!r}, detail={self.detail!r})"
 
 
+def set_decorated_attrs(
+    obj: tp.Union[tp.Callable[..., tp.Any], type],
+) -> tp.Union[tp.Callable[..., tp.Any], type]:
+    for attr_name, attr in obj.__dict__.items():
+        if attr_name != "__call__" and attr_name.startswith("__") and attr_name.endswith("__"):
+            continue
+
+        if isinstance(attr, staticmethod):
+            decorated_func = handle_unknown_exception(attr.__func__)
+            setattr(obj, attr_name, staticmethod(decorated_func))
+        elif isinstance(attr, classmethod):
+            decorated_func = handle_unknown_exception(attr.__func__)
+            setattr(obj, attr_name, classmethod(decorated_func))
+        elif isinstance(attr, property):
+            new_getter = handle_unknown_exception(attr.fget) if attr.fget is not None else None
+            new_setter = handle_unknown_exception(attr.fset) if attr.fset is not None else None
+            new_deleter = handle_unknown_exception(attr.fdel) if attr.fdel is not None else None
+            setattr(obj, attr_name, property(new_getter, new_setter, new_deleter))
+        elif callable(attr):
+            decorated = handle_unknown_exception(attr)
+            setattr(obj, attr_name, decorated)
+    return obj
+
+
 T = tp.TypeVar("T")
 P = ParamSpec("P")
 R = tp.TypeVar("R")
@@ -76,7 +100,7 @@ def handle_unknown_exception(obj: tp.Type[T]) -> tp.Type[T]: ...
 def handle_unknown_exception(obj: tp.Callable[P, R]) -> tp.Callable[P, R]: ...
 
 
-def handle_unknown_exception(  # noqa: C901
+def handle_unknown_exception(
     obj: tp.Union[tp.Callable[..., tp.Any], type],
 ) -> tp.Union[tp.Callable[..., tp.Any], type]:
     """
@@ -86,30 +110,47 @@ def handle_unknown_exception(  # noqa: C901
     When applied to a class, all callable attributes (methods, staticmethods and classmethods) will be wrapped.
     """
     if isinstance(obj, type):
-        for attr_name, attr in obj.__dict__.items():
-            if attr_name != "__call__" and attr_name.startswith("__") and attr_name.endswith("__"):
-                continue
-
-            if isinstance(attr, staticmethod):
-                decorated_func = handle_unknown_exception(attr.__func__)
-                setattr(obj, attr_name, staticmethod(decorated_func))
-            elif isinstance(attr, classmethod):
-                decorated_func = handle_unknown_exception(attr.__func__)
-                setattr(obj, attr_name, classmethod(decorated_func))
-            elif isinstance(attr, property):
-                new_getter = handle_unknown_exception(attr.fget) if attr.fget is not None else None
-                new_setter = handle_unknown_exception(attr.fset) if attr.fset is not None else None
-                new_deleter = handle_unknown_exception(attr.fdel) if attr.fdel is not None else None
-                setattr(obj, attr_name, property(new_getter, new_setter, new_deleter))
-            elif callable(attr):
-                decorated = handle_unknown_exception(attr)
-                setattr(obj, attr_name, decorated)
-        return obj
+        return set_decorated_attrs(obj)
 
     @functools.wraps(obj)
     def wrapper(*args: tp.Any, **kwargs: tp.Any) -> tp.Any:
         try:
             return obj(*args, **kwargs)
+        except HTTPError:
+            raise
+        except VaultxError:
+            raise
+        except Exception as exc:
+            raise VaultxError(message=f"An error occurred in {obj.__name__}: {str(exc)}") from exc
+
+    return wrapper
+
+
+@tp.overload
+def async_handle_unknown_exception(obj: tp.Type[T]) -> tp.Type[T]: ...
+
+
+@tp.overload
+def async_handle_unknown_exception(obj: tp.Callable[P, R]) -> tp.Callable[P, R]: ...
+
+
+def async_handle_unknown_exception(
+    obj: tp.Union[tp.Callable[..., tp.Any], type],
+) -> tp.Union[tp.Callable[..., tp.Any], type]:
+    """
+    Implemented for async instances.
+    A decorator that catches all exceptions in the decorated function and raises VaultxError instead.
+    Implemented to guarantee that all exceptions in the vaultx package are overridden by VaultxError.
+
+    When applied to a class, all callable attributes (methods, staticmethods and classmethods) will be wrapped.
+    """
+    if isinstance(obj, type):
+        return set_decorated_attrs(obj)
+
+    @functools.wraps(obj)
+    async def wrapper(*args: tp.Any, **kwargs: tp.Any) -> tp.Any:
+        try:
+            return await obj(*args, **kwargs)
         except HTTPError:
             raise
         except VaultxError:

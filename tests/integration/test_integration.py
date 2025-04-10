@@ -472,13 +472,12 @@ class TestAsyncIntegration(AsyncVaultxIntegrationTestCase, IsolatedAsyncioTestCa
         client = await utils.create_async_client(url=self.client.url, token="not-a-real-token")
         assert not await client.is_authenticated()
 
-    # TODO: Figure out why this tests does not pass and uncomment it then
-    # async def test_illegal_token(self):
-    #     client = await utils.create_async_client(url=self.client.url, token="token-with-new-line\n")
-    #     try:
-    #         await client.is_authenticated()
-    #     except exceptions.VaultxError as e:
-    #         assert "Illegal header value" in str(e)
+    async def test_illegal_token(self):
+        client = await utils.create_async_client(url=self.client.url, token="token-with-new-line\n")
+        try:
+            await client.is_authenticated()
+        except exceptions.VaultxError as e:
+            assert "header injection attack" in str(e)
 
     async def test_broken_token(self):
         client = await utils.create_async_client(url=self.client.url, token="\x1b")

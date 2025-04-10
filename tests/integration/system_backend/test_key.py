@@ -84,9 +84,9 @@ class TestKey(VaultxIntegrationTestCase, TestCase):
         keys = cls.manager.keys
 
         result = self.client.sys.rekey_multi(keys, nonce=result["nonce"])
-        self.assertTrue(result["complete"])
+        self.assertTrue(result["complete"])  # type: ignore
 
-        cls.manager.keys = result["keys"]
+        cls.manager.keys = result["keys"]  # type: ignore
         cls.manager.unseal()
 
     def test_rekey_verify_multi(self):
@@ -96,8 +96,8 @@ class TestKey(VaultxIntegrationTestCase, TestCase):
         self.assertFalse(self.client.sys.read_rekey_progress()["started"])
         result = self.client.sys.start_rekey(require_verification=True)
         result = self.client.sys.rekey_multi(cls.manager.keys, nonce=result["nonce"])
-        self.assertTrue(result["complete"])
-        cls.manager.keys = result["keys"]
+        self.assertTrue(result["complete"])  # type: ignore
+        cls.manager.keys = result["keys"]  # type: ignore
 
         # get the initial verification nonce
         result = self.client.sys.read_rekey_verify_progress()
@@ -110,7 +110,7 @@ class TestKey(VaultxIntegrationTestCase, TestCase):
 
         # finally complete the verification process
         result = self.client.sys.rekey_verify_multi(cls.manager.keys, nonce=result["nonce"])
-        self.assertTrue(result["complete"])
+        self.assertTrue(result["complete"])  # type: ignore
 
         # now we unseal
         cls.manager.unseal()
@@ -202,9 +202,9 @@ class TestAsyncKey(AsyncVaultxIntegrationTestCase, IsolatedAsyncioTestCase):
         keys = cls.manager.keys
 
         result = await self.client.sys.rekey_multi(keys, nonce=result["nonce"])
-        self.assertTrue(result["complete"])
+        self.assertTrue(result["complete"])  # type: ignore
 
-        cls.manager.keys = result["keys"]
+        cls.manager.keys = result["keys"]  # type: ignore
         cls.manager.unseal()
 
     async def test_rekey_verify_multi(self):
@@ -214,8 +214,8 @@ class TestAsyncKey(AsyncVaultxIntegrationTestCase, IsolatedAsyncioTestCase):
         self.assertFalse((await self.client.sys.read_rekey_progress())["started"])
         result = await self.client.sys.start_rekey(require_verification=True)
         result = await self.client.sys.rekey_multi(cls.manager.keys, nonce=result["nonce"])
-        self.assertTrue(result["complete"])
-        cls.manager.keys = result["keys"]
+        self.assertTrue(result["complete"])  # type: ignore
+        cls.manager.keys = result["keys"]  # type: ignore
 
         # get the initial verification nonce
         result = await self.client.sys.read_rekey_verify_progress()
@@ -228,7 +228,7 @@ class TestAsyncKey(AsyncVaultxIntegrationTestCase, IsolatedAsyncioTestCase):
 
         # finally complete the verification process
         result = await self.client.sys.rekey_verify_multi(cls.manager.keys, nonce=result["nonce"])
-        self.assertTrue(result["complete"])
+        self.assertTrue(result["complete"])  # type: ignore
 
         # now we unseal
         cls.manager.unseal()

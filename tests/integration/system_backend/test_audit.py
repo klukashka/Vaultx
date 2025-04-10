@@ -2,10 +2,10 @@ import logging
 from unittest import TestCase
 from unittest.async_case import IsolatedAsyncioTestCase
 
-from parameterized import parameterized, param
+from parameterized import param, parameterized
 
+from tests.utils.vaultx_integration_test_case import AsyncVaultxIntegrationTestCase, VaultxIntegrationTestCase
 from vaultx import exceptions
-from tests.utils.vaultx_integration_test_case import VaultxIntegrationTestCase, AsyncVaultxIntegrationTestCase
 
 
 class TestAudit(VaultxIntegrationTestCase, TestCase):

@@ -2,7 +2,7 @@ import logging
 from unittest import TestCase
 from unittest.async_case import IsolatedAsyncioTestCase
 
-from parameterized import param, parameterized
+from parameterized import param, parameterized  # type: ignore
 
 from tests.utils.vaultx_integration_test_case import AsyncVaultxIntegrationTestCase, VaultxIntegrationTestCase
 from vaultx import exceptions

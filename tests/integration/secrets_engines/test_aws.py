@@ -2,7 +2,7 @@ import json
 import logging
 from unittest import IsolatedAsyncioTestCase, TestCase
 
-from parameterized import param, parameterized
+from parameterized import param, parameterized  # type: ignore
 
 from tests.utils import vault_version_lt
 from tests.utils.vaultx_integration_test_case import (

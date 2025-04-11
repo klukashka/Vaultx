@@ -49,7 +49,19 @@ class SecretsEngines(VaultApiBase):
     """Secrets Engines."""
 
     _implemented_classes: tp.Final[dict] = {
+        "_aws": Aws,
+        "_azure": Azure,
+        "_gcp": Gcp,
+        "_active_directory": ActiveDirectory,
+        "_identity": Identity,
         "_kv": Kv,
+        "_ldap": Ldap,
+        "_pki": Pki,
+        "_transform": Transform,
+        "_transit": Transit,
+        "_database": Database,
+        "_rabbitmq": RabbitMQ,
+        "_ssh": Ssh,
     }
 
     def __init__(self, adapter: Adapter) -> None:

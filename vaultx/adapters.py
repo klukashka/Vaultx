@@ -61,6 +61,11 @@ class HttpxAdapterResponse(AdapterResponse):
         self._value = value
         self._raw = response
 
+    def __bool__(self) -> bool:
+        # if self.status == 204:
+        #     return True
+        return bool(self.raw)
+
     @property
     def raw(self) -> httpx.Response:
         return self._raw

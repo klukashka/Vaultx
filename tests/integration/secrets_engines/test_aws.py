@@ -1,15 +1,14 @@
-
 import json
 import logging
-from unittest import TestCase, IsolatedAsyncioTestCase
+from unittest import IsolatedAsyncioTestCase, TestCase
 
 from parameterized import param, parameterized
 
 from tests.utils import vault_version_lt
 from tests.utils.vaultx_integration_test_case import (
+    AsyncVaultxIntegrationTestCase,
     VaultxIntegrationTestCase,
     convert_python_ttl_value_to_expected_vault_response,
-    AsyncVaultxIntegrationTestCase,
 )
 from vaultx import exceptions
 

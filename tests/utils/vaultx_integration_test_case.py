@@ -283,7 +283,7 @@ class AsyncVaultxIntegrationTestCase:
     async def login_using_admin_approle_role(
         self, role_id: str, role_name: str = "test-admin-role", path: str = "approle"
     ) -> None:
-        secret_id = self.add_admin_approle_role(role_id=role_id, role_name=role_name, path=path)
+        secret_id = await self.add_admin_approle_role(role_id=role_id, role_name=role_name, path=path)
 
         await self.client.auth.approle.login(
             role_id=role_id,

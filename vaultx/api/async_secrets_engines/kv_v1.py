@@ -84,7 +84,7 @@ class KvV1(AsyncVaultApiBase):
                     mount_point=mount_point,
                 )
                 method = "PUT"
-            except exceptions.VaultxError:
+            except exceptions.HTTPError:
                 method = "POST"
 
         if method == "POST":

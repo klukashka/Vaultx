@@ -70,7 +70,7 @@ class TestKvV1(unittest.TestCase):
     def test_create_or_update_secret_without_method_uses_post_for_new_secret(self):
         mock_response = Response(204)
         self.mock_adapter.post.return_value = mock_response
-        self.mock_adapter.get.side_effect = exceptions.VaultxError("Secret not found")
+        self.mock_adapter.get.side_effect = exceptions.HTTPError(404)
 
         secret = {"key": "value"}
         result = self.kv_v1.create_or_update_secret(path="my-secret", secret=secret)
@@ -175,7 +175,7 @@ class TestAsyncKvV1(unittest.IsolatedAsyncioTestCase):
     async def test_create_or_update_secret_without_method_uses_post_for_new_secret(self):
         mock_response = Response(204)
         self.mock_adapter.post.return_value = mock_response
-        self.mock_adapter.get.side_effect = exceptions.VaultxError("Secret not found")
+        self.mock_adapter.get.side_effect = exceptions.HTTPError(404)
 
         secret = {"key": "value"}
         result = await self.kv_v1.create_or_update_secret(path="my-secret", secret=secret)
